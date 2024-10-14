@@ -42,7 +42,7 @@ import { ministry, year, zone } from "@/lib/constants";
 // import { useRouter } from "next/navigation";
 // import FlickeringGrid from "@/components/ui/flickering-grid";
 
-const accountFormSchema = z.object({
+export const accountFormSchema = z.object({
   name: z
     .string()
     .min(2, {
