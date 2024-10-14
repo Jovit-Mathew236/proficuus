@@ -23,7 +23,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
           <div className="space-y-0.5 flex ">
             <div>
               <h2 className="text-2xl font-bold tracking-tight">
-                PROFICUUS&apos; 24 Volunteers Registration
+                Call for the PROFICUUS&apos; 24 ARMY
               </h2>
               <p className="text-muted-foreground">
                 The king will reply:
