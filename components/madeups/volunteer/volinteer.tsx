@@ -114,6 +114,9 @@ const defaultValues: Partial<AccountFormValues> = {
 
 export function Volunteer() {
   const { toast } = useToast();
+  const [yearOpen, setYearOpen] = useState(false);
+  const [ministryOpen, setMinistryOpen] = useState(false);
+  const [zoneOpen, setZoneOpen] = useState(false);
   // const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -223,10 +226,6 @@ export function Volunteer() {
               <FormControl>
                 <Input placeholder="Your name" {...field} />
               </FormControl>
-              <FormDescription>
-                This is the name that will be displayed on your profile and in
-                emails.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -252,7 +251,7 @@ export function Volunteer() {
             render={({ field }) => (
               <FormItem className="flex w-1/2 flex-col">
                 <FormLabel>Year</FormLabel>
-                <Popover>
+                <Popover open={yearOpen} onOpenChange={setYearOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -283,6 +282,7 @@ export function Volunteer() {
                               key={year.value}
                               onSelect={() => {
                                 form.setValue("year", year.value);
+                                setYearOpen(false);
                               }}
                             >
                               <CheckIcon
@@ -312,7 +312,7 @@ export function Volunteer() {
             render={({ field }) => (
               <FormItem className="flex w-1/2 flex-col">
                 <FormLabel>Zone</FormLabel>
-                <Popover>
+                <Popover open={zoneOpen} onOpenChange={setZoneOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
@@ -343,6 +343,7 @@ export function Volunteer() {
                               key={zone.value}
                               onSelect={() => {
                                 form.setValue("zone", zone.value);
+                                setZoneOpen(false);
                               }}
                             >
                               <CheckIcon
@@ -494,7 +495,7 @@ export function Volunteer() {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Are you currently part of any ministry? </FormLabel>
-              <Popover>
+              <Popover open={ministryOpen} onOpenChange={setMinistryOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
@@ -526,6 +527,7 @@ export function Volunteer() {
                             key={ministry.value}
                             onSelect={() => {
                               form.setValue("ministry", ministry.value);
+                              setMinistryOpen(false);
                             }}
                           >
                             <CheckIcon
@@ -572,6 +574,7 @@ export function Volunteer() {
                   />
                 </div>
               </FormControl>
+              <FormDescription>This image is for your id card</FormDescription>
               <FormMessage />
 
               {imagePreview && ( // Render image preview if it exists
