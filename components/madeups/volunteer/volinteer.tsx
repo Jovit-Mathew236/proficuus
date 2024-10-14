@@ -213,7 +213,7 @@ export function Volunteer() {
         // height={800}
         // width={800}
       /> */}
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
         <FormField
           control={form.control}
           name="name"
@@ -245,12 +245,12 @@ export function Volunteer() {
           )}
         />
 
-        <div className="flex justify-between w-">
+        <div className="flex gap-3 w-full">
           <FormField
             control={form.control}
             name="year"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className="flex w-1/2 flex-col">
                 <FormLabel>Year</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
@@ -310,7 +310,7 @@ export function Volunteer() {
             control={form.control}
             name="zone"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem className="flex w-1/2 flex-col">
                 <FormLabel>Zone</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
