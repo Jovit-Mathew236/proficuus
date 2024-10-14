@@ -58,7 +58,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
                 width={1280}
                 height={791}
                 alt="Forms"
-                className="block"
+                className="block rounded-lg"
               />
             </aside>
             <div className="flex-1 lg:max-w-2xl">{children}</div>

@@ -470,7 +470,10 @@ export function Volunteer() {
           )}
         />
         {/* <Button type="submit"></Button> */}
-        <RainbowButton type="submit">
+        <RainbowButton
+          type="submit"
+          className="text-white bg-slate-900 dark:bg-white dark:text-slate-900"
+        >
           {loading ? "Loading..." : "Register as Volunteer 💪"}
         </RainbowButton>
       </form>
