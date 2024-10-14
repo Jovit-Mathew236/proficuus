@@ -89,7 +89,10 @@ const accountFormSchema = z.object({
     .email({
       message: "Invalid email address.",
     }),
-  availability: z.string({
+  program_availability: z.string({
+    required_error: "Availability is required.",
+  }),
+  meeting_availability: z.string({
     required_error: "Availability is required.",
   }),
   experience: z.string({
@@ -161,7 +164,8 @@ export function Volunteer() {
           phone: data.phone,
           alternativephone: data.alternativephone,
           email: data.email,
-          availability: data.availability,
+          program_availability: data.program_availability,
+          meeting_availability: data.meeting_availability,
           experience: data.experience,
           ministry: data.ministry,
           image: imageBase64,
@@ -176,12 +180,14 @@ export function Volunteer() {
       setLoading(false);
       // Add success notification or redirect here
       toast({
-        title: "User created successfully",
-        description: "We've created your account for you.",
+        title: "Registration completed successfully",
+        description: "We've completed your volunteer registration.",
         variant: "default",
       });
-      console.log("User created successfully:", result);
-      window.location.reload();
+      console.log("Registration completed successfully:", result);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
       // Add success notification or redirect here
     } catch (error) {
       setLoading(false);
@@ -238,123 +244,128 @@ export function Volunteer() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="year"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Year</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "w-[200px] justify-between",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value
-                        ? year.find((year) => year.value === field.value)?.label
-                        : "Select Year"}
-                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search language..." />
-                    <CommandList>
-                      <CommandEmpty>No Year found.</CommandEmpty>
-                      <CommandGroup>
-                        {year.map((year) => (
-                          <CommandItem
-                            value={year.label}
-                            key={year.value}
-                            onSelect={() => {
-                              form.setValue("year", year.value);
-                            }}
-                          >
-                            <CheckIcon
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                year.value === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {year.label}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
-        <FormField
-          control={form.control}
-          name="zone"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Zone</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "w-[200px] justify-between",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value
-                        ? zone.find((zone) => zone.value === field.value)?.label
-                        : "Select Zone"}
-                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search language..." />
-                    <CommandList>
-                      <CommandEmpty>No Zone found.</CommandEmpty>
-                      <CommandGroup>
-                        {zone.map((zone) => (
-                          <CommandItem
-                            value={zone.label}
-                            key={zone.value}
-                            onSelect={() => {
-                              form.setValue("zone", zone.value);
-                            }}
-                          >
-                            <CheckIcon
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                zone.value === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {zone.label}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="flex justify-between w-">
+          <FormField
+            control={form.control}
+            name="year"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Year</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-full justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? year.find((year) => year.value === field.value)
+                              ?.label
+                          : "Select Year"}
+                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput placeholder="Search language..." />
+                      <CommandList>
+                        <CommandEmpty>No Year found.</CommandEmpty>
+                        <CommandGroup>
+                          {year.map((year) => (
+                            <CommandItem
+                              value={year.label}
+                              key={year.value}
+                              onSelect={() => {
+                                form.setValue("year", year.value);
+                              }}
+                            >
+                              <CheckIcon
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  year.value === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {year.label}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="zone"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>Zone</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-full justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? zone.find((zone) => zone.value === field.value)
+                              ?.label
+                          : "Select Zone"}
+                        <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0">
+                    <Command>
+                      <CommandInput placeholder="Search language..." />
+                      <CommandList>
+                        <CommandEmpty>No Zone found.</CommandEmpty>
+                        <CommandGroup>
+                          {zone.map((zone) => (
+                            <CommandItem
+                              value={zone.label}
+                              key={zone.value}
+                              onSelect={() => {
+                                form.setValue("zone", zone.value);
+                              }}
+                            >
+                              <CheckIcon
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  zone.value === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {zone.label}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <FormField
           control={form.control}
@@ -397,10 +408,43 @@ export function Volunteer() {
         />
         <FormField
           control={form.control}
-          name="availability"
+          name="program_availability"
           render={({ field }) => (
             <FormItem className="space-y-3">
               <FormLabel>Will you be available on December 20 to 23?</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="flex flex-col space-y-1"
+                >
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="yes" />
+                    </FormControl>
+                    <FormLabel className="font-normal">Yes</FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="no" />
+                    </FormControl>
+                    <FormLabel className="font-normal">No</FormLabel>
+                  </FormItem>
+                </RadioGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="meeting_availability"
+          render={({ field }) => (
+            <FormItem className="space-y-3">
+              <FormLabel>
+                I will be available for the meeting on October 25 to 27
+                th.(Venue Sahrdaya MBA college)
+              </FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}

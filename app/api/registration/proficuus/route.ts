@@ -19,7 +19,8 @@ export async function POST(request: NextRequest) {
       phone,
       alternativephone,
       email,
-      availability,
+      program_availability,
+      meeting_availability,
       experience,
       ministry,
       image,
@@ -64,7 +65,8 @@ export async function POST(request: NextRequest) {
       zone,
       phone,
       alternativephone,
-      availability,
+      program_availability,
+      meeting_availability,
       experience,
       email,
       ministry,
@@ -81,9 +83,9 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.error("Error on registration", error);
     return NextResponse.json(
-      { message: "Error creating user" },
+      { message: "Error on registration" },
       { status: 500 }
     );
   }
