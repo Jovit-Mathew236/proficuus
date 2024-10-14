@@ -114,8 +114,15 @@ const CollisionMechanism = React.forwardRef<
       repeatDelay?: number;
     };
   }
->(({ parentRef, containerRef, beamOptions = {} }) => {
+>((props, ref) => {
+  const { containerRef, parentRef, beamOptions = {} } = props; // Destructure props
   const beamRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (ref && typeof ref !== "function") {
+      (ref as React.MutableRefObject<HTMLDivElement | null>).current =
+        beamRef.current;
+    }
+  }, [ref]);
   const [collision, setCollision] = useState<{
     detected: boolean;
     coordinates: { x: number; y: number } | null;
@@ -158,7 +165,7 @@ const CollisionMechanism = React.forwardRef<
     const animationInterval = setInterval(checkCollision, 50);
 
     return () => clearInterval(animationInterval);
-  }, [cycleCollisionDetected, containerRef]);
+  }, [cycleCollisionDetected, containerRef, parentRef]);
 
   useEffect(() => {
     if (collision.detected && collision.coordinates) {

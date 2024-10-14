@@ -257,7 +257,7 @@ export function VolunteerDashboard() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border max-w-xs sm:max-w-none">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
