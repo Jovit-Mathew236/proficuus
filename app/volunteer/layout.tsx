@@ -6,16 +6,9 @@ import { ModeToggle } from "@/components/theme-mode";
 // import { SidebarNav } from "@/components/madeups/volunteer/sidebar-nav";
 
 export const metadata: Metadata = {
-  title: "Forms",
-  description: "Advanced form example using react-hook-form and Zod.",
+  title: "PROFICUUS | Volunteer registration",
+  description: "Volunteer registration Form",
 };
-
-// const sidebarNavItems = [
-//   {
-//     title: "Account",
-//     href: "/examples/forms/account",
-//   },
-// ];
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
@@ -47,23 +40,21 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
               PROFICUUS&apos; 24 Volunteers Registration
             </h2>
             <p className="text-muted-foreground">
+              The king will reply:
               <b>
-                &quot; My grace is sufficient for you, for my power is made
-                perfect in weakness. &quot;
+                &quot;I truly want to express that whatever you did for even one
+                of my brothers and sisters, you did it for me.&quot;
               </b>{" "}
-              -2 Corinthians 12:9
+              (Mathew 25:40)
               <br /> <br />
-              This is a call for you to be part of the Mission of the Church, to
-              spread the good news to the ends of the world. PROFICUUS is a
-              program for the campus students from Medical and Engineering
-              Colleges in Kerala, organised by All Kerala Jesus Youth
-              Medical-Engineering Students Team(MEST). The program aims to pave
-              way for a God Encounter in their lives and provide a great
-              beginning of their spiritual journey. The program is for the
-              beginners in the movement, so that they would be elevated to next
-              step of their mission journey. Being a very fortunate person who
-              tasted the goodness of Lord, your call is to accompany our little
-              brothers and sisters in their spiritual growth.
+              <b>Hello there, PROFICUUS &apos;24 is here!! </b> <br /> <br />
+              And we are recruiting true-blue <b>SOLDIER</b> to the{" "}
+              <b>PROFICUUS ARMY</b>
+              Yes! We need <b>VOLUNTEERS</b>! 🙌🏼 Share &apos;
+              <b>the fuel within</b>&apos; and help your fellows embark this
+              journey with &apos;<b>lighted 𝗹𝗮𝗺𝗽𝘀</b>&apos;!🪔 Expecting your
+              faithful executions from beginning to the end! 🔥
+              PROFICUUS&apos;24 𝘋𝘦𝘤𝘦𝘮𝘣𝘦𝘳 20-2
               <br /> <br />
               Date of program : December 20 to 23
             </p>

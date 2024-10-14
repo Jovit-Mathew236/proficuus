@@ -27,6 +27,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -36,19 +37,10 @@ import {
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { useRef, useState } from "react";
 import Image from "next/image";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { year, zone } from "@/lib/constants";
+import { useRouter } from "next/navigation";
 // import FlickeringGrid from "@/components/ui/flickering-grid";
-
-const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const;
 
 const accountFormSchema = z.object({
   name: z
@@ -97,7 +89,13 @@ const accountFormSchema = z.object({
     .email({
       message: "Invalid email address.",
     }),
-  image: z.instanceof(File).optional(), // Add image field
+  availability: z.string({
+    required_error: "Availability is required.",
+  }),
+  experience: z.string({
+    required_error: "Experience is required.",
+  }),
+  image: z.instanceof(File), // Add image field
 });
 
 type AccountFormValues = z.infer<typeof accountFormSchema>;
@@ -110,6 +108,8 @@ const defaultValues: Partial<AccountFormValues> = {
 
 export function Volunteer() {
   const { toast } = useToast();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
@@ -132,6 +132,7 @@ export function Volunteer() {
   };
 
   const onSubmit = async (data: z.infer<typeof accountFormSchema>) => {
+    setLoading(true);
     try {
       let imageBase64 = "";
       if (data.image) {
@@ -166,13 +167,15 @@ export function Volunteer() {
       }
 
       const result = await response.json();
+      setLoading(false);
+      // Add success notification or redirect here
       toast({
         title: "User created successfully",
         description: "We've created your account for you.",
         variant: "default",
       });
       console.log("User created successfully:", result);
-
+      router.refresh();
       // Add success notification or redirect here
     } catch (error) {
       console.error("Error creating user:", error);
@@ -227,11 +230,56 @@ export function Volunteer() {
           control={form.control}
           name="year"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Year (Mention if Pass Out)</FormLabel>
-              <FormControl>
-                <Input placeholder="current year" {...field} />
-              </FormControl>
+            <FormItem className="flex flex-col">
+              <FormLabel>Year</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-[200px] justify-between",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value
+                        ? year.find((year) => year.value === field.value)?.label
+                        : "Select Year"}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search language..." />
+                    <CommandList>
+                      <CommandEmpty>No Year found.</CommandEmpty>
+                      <CommandGroup>
+                        {year.map((year) => (
+                          <CommandItem
+                            value={year.label}
+                            key={year.value}
+                            onSelect={() => {
+                              form.setValue("year", year.value);
+                            }}
+                          >
+                            <CheckIcon
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                year.value === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {year.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}
@@ -255,10 +303,8 @@ export function Volunteer() {
                       )}
                     >
                       {field.value
-                        ? languages.find(
-                            (language) => language.value === field.value
-                          )?.label
-                        : "Select language"}
+                        ? zone.find((zone) => zone.value === field.value)?.label
+                        : "Select Zone"}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
@@ -267,25 +313,25 @@ export function Volunteer() {
                   <Command>
                     <CommandInput placeholder="Search language..." />
                     <CommandList>
-                      <CommandEmpty>No language found.</CommandEmpty>
+                      <CommandEmpty>No Zone found.</CommandEmpty>
                       <CommandGroup>
-                        {languages.map((language) => (
+                        {zone.map((zone) => (
                           <CommandItem
-                            value={language.label}
-                            key={language.value}
+                            value={zone.label}
+                            key={zone.value}
                             onSelect={() => {
-                              form.setValue("zone", language.value);
+                              form.setValue("zone", zone.value);
                             }}
                           >
                             <CheckIcon
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                language.value === field.value
+                                zone.value === field.value
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
                             />
-                            {language.label}
+                            {zone.label}
                           </CommandItem>
                         ))}
                       </CommandGroup>
@@ -338,17 +384,74 @@ export function Volunteer() {
         />
         <FormField
           control={form.control}
+          name="availability"
+          render={({ field }) => (
+            <FormItem className="space-y-3">
+              <FormLabel>Will you be available on December 20 to 23?</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="flex flex-col space-y-1"
+                >
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="yes" />
+                    </FormControl>
+                    <FormLabel className="font-normal">Yes</FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="no" />
+                    </FormControl>
+                    <FormLabel className="font-normal">No</FormLabel>
+                  </FormItem>
+                </RadioGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="experience"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Have you attended any Jesus Youth programs before or Volunteered
+                in any programs or has been part of any other fellowship circles
+                or teams etc? Specify in brief
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="your answer" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="image"
           render={({ field }) => (
             <FormItem>
+              <FormLabel>Upload a casual single photo of yours</FormLabel>
               <FormControl>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleFileChange(e, field)} // Update handler to use the new function
-                  className="bg-[#F1F1F1] text-black h-12 border-none"
-                  ref={fileInputRef}
-                />
+                <div
+                  className="flex items-center justify-center w-full h-12 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition duration-200 bg-secondary"
+                  onClick={() => fileInputRef.current!.click()} // Trigger file input on div click
+                >
+                  <span className="text-foreground">
+                    Click to upload an image
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileChange(e, field)} // Update handler to use the new function
+                    className="hidden"
+                    ref={fileInputRef}
+                  />
+                </div>
               </FormControl>
               <FormMessage />
 
@@ -367,7 +470,9 @@ export function Volunteer() {
           )}
         />
         {/* <Button type="submit"></Button> */}
-        <RainbowButton type="submit">Register as Volunteer 💪</RainbowButton>
+        <RainbowButton type="submit">
+          {loading ? "Loading..." : "Register as Volunteer 💪"}
+        </RainbowButton>
       </form>
     </Form>
   );
