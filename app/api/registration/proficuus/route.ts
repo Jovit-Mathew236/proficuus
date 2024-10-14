@@ -21,6 +21,7 @@ export async function POST(request: NextRequest) {
       email,
       availability,
       experience,
+      ministry,
       image,
     } = await request.json();
 
@@ -66,6 +67,7 @@ export async function POST(request: NextRequest) {
       availability,
       experience,
       email,
+      ministry,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       ...(imageUrl ? { imageUrl } : {}), // Only include imageUrl if it's defined

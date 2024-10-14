@@ -163,6 +163,7 @@ export function Volunteer() {
           email: data.email,
           availability: data.availability,
           experience: data.experience,
+          ministry: data.ministry,
           image: imageBase64,
         }),
       });
