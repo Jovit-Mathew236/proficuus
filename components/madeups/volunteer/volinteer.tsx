@@ -158,6 +158,8 @@ export function Volunteer() {
           phone: data.phone,
           alternativephone: data.alternativephone,
           email: data.email,
+          availability: data.availability,
+          experience: data.experience,
           image: imageBase64,
         }),
       });

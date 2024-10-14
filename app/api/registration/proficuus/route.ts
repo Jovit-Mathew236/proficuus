@@ -11,8 +11,18 @@ cloudinary.v2.config({
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, collage, year, zone, phone, alternativephone, email, image } =
-      await request.json();
+    const {
+      name,
+      collage,
+      year,
+      zone,
+      phone,
+      alternativephone,
+      email,
+      availability,
+      experience,
+      image,
+    } = await request.json();
 
     let imageUrl: string | undefined;
 
@@ -53,6 +63,8 @@ export async function POST(request: NextRequest) {
       zone,
       phone,
       alternativephone,
+      availability,
+      experience,
       email,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
