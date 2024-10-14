@@ -38,8 +38,8 @@ import { RainbowButton } from "@/components/ui/rainbow-button";
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { year, zone } from "@/lib/constants";
-import { useRouter } from "next/navigation";
+import { ministry, year, zone } from "@/lib/constants";
+// import { useRouter } from "next/navigation";
 // import FlickeringGrid from "@/components/ui/flickering-grid";
 
 const accountFormSchema = z.object({
@@ -95,6 +95,9 @@ const accountFormSchema = z.object({
   experience: z.string({
     required_error: "Experience is required.",
   }),
+  ministry: z.string({
+    required_error: "this field is required.",
+  }),
   image: z.instanceof(File), // Add image field
 });
 
@@ -108,7 +111,7 @@ const defaultValues: Partial<AccountFormValues> = {
 
 export function Volunteer() {
   const { toast } = useToast();
-  const router = useRouter();
+  // const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const form = useForm<AccountFormValues>({
@@ -177,7 +180,7 @@ export function Volunteer() {
         variant: "default",
       });
       console.log("User created successfully:", result);
-      router.refresh();
+      window.location.reload();
       // Add success notification or redirect here
     } catch (error) {
       console.error("Error creating user:", error);
@@ -345,6 +348,7 @@ export function Volunteer() {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="phone"
@@ -432,6 +436,68 @@ export function Volunteer() {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="ministry"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Are you currently part of any ministry? </FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-[200px] justify-between",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value
+                        ? ministry.find(
+                            (ministry) => ministry.value === field.value
+                          )?.label
+                        : "Select ministry"}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search language..." />
+                    <CommandList>
+                      <CommandEmpty>No ministry found.</CommandEmpty>
+                      <CommandGroup>
+                        {ministry.map((ministry) => (
+                          <CommandItem
+                            value={ministry.label}
+                            key={ministry.value}
+                            onSelect={() => {
+                              form.setValue("ministry", ministry.value);
+                            }}
+                          >
+                            <CheckIcon
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                ministry.value === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {ministry.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="image"
@@ -474,6 +540,7 @@ export function Volunteer() {
         {/* <Button type="submit"></Button> */}
         <RainbowButton
           type="submit"
+          disabled={loading}
           className="text-white bg-slate-900 dark:bg-white dark:text-slate-900"
         >
           {loading ? "Loading..." : "Register as Volunteer 💪"}

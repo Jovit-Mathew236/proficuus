@@ -7,6 +7,16 @@ export const year = [
   { label: "Pass-out", value: "passout" },
 ] as const;
 
+export const ministry = [
+  { label: "General Team", value: "General Team" },
+  { label: "Media", value: "Media" },
+  { label: "Finance", value: "Finance" },
+  { label: "Mobilization", value: "Mobilization" },
+  { label: "Program", value: "Program" },
+  { label: "Intercession", value: "Intercession" },
+  { label: "No", value: "No" },
+];
+
 export const zone = [
   { label: "ALAPPUZHA", value: "ALAPPUZHA" },
   { label: "ANGAMALY", value: "ANGAMALY" },
