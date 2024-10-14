@@ -184,6 +184,12 @@ export function Volunteer() {
       window.location.reload();
       // Add success notification or redirect here
     } catch (error) {
+      setLoading(false);
+      toast({
+        title: "Error creating user",
+        description: "An error occurred while creating your account.",
+        variant: "destructive",
+      });
       console.error("Error creating user:", error);
       // Handle the error (e.g., show an error message to the user)
     }
