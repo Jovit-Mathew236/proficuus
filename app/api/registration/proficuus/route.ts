@@ -2,12 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import cloudinary from "cloudinary";
+import { EmailTemplate } from "@/components/email-template";
+import { Resend } from "resend";
 
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   try {
@@ -31,7 +34,6 @@ export async function POST(request: NextRequest) {
     if (image) {
       // Convert base64 to buffer
       const imageBuffer = Buffer.from(image.split(",")[1], "base64");
-
       // Upload image to Cloudinary
       imageUrl = await new Promise<string>((resolve, reject) => {
         const stream = cloudinary.v2.uploader.upload_stream(
@@ -48,7 +50,6 @@ export async function POST(request: NextRequest) {
             resolve(result.secure_url); // Ensure we resolve with a string
           }
         );
-
         // Stream the image buffer to Cloudinary
         stream.end(imageBuffer);
       });
@@ -78,8 +79,28 @@ export async function POST(request: NextRequest) {
     // Save user details to Firestore
     await setDoc(userDocRef, userData);
 
+    // Send email notification
+    try {
+      const { data, error } = await resend.emails.send({
+        from: "Proficuus <onboarding@proficuus.jymest.com>",
+        to: [email],
+        subject: "Registration Successful",
+        react: EmailTemplate({ firstName: name }),
+      });
+
+      if (error) {
+        return Response.json({ error }, { status: 500 });
+      }
+
+      if (!error) {
+        return Response.json(data);
+      }
+    } catch (error) {
+      return Response.json({ error }, { status: 500 });
+    }
+
     return NextResponse.json(
-      { message: "registration completed", imageUrl },
+      { message: "Registration completed", imageUrl },
       { status: 201 }
     );
   } catch (error) {
