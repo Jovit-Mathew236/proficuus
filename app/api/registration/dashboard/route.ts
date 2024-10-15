@@ -1,3 +1,4 @@
+export const fetchCache = "force-no-store";
 import { NextResponse } from "next/server";
 import { collection, getDocs, query, limit } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
