@@ -203,7 +203,10 @@ export function VolunteerDashboard() {
   React.useEffect(() => {
     const fetchVolunteers = async () => {
       try {
-        const response = await fetch("/api/registration/dashboard");
+        const response = await fetch("/api/registration/dashboard", {
+          next: { revalidate: 10 },
+          cache: "no-store",
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch volunteers.");
         }
