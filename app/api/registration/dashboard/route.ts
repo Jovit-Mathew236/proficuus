@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, limit } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 
 export async function GET() {
   try {
-    const querySnapshot = await getDocs(collection(db, "volunteers"));
+    // Create a query with a limit higher than your expected document count
+    const q = query(collection(db, "volunteers"), limit(100));
+
+    const querySnapshot = await getDocs(q);
     const volunteers = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -14,6 +17,10 @@ export async function GET() {
 
     // Disable caching by setting cache control headers
     response.headers.set("Cache-Control", "no-store, max-age=0");
+    // Add Vercel-specific header to prevent caching
+    response.headers.set("Vercel-CDN-Cache-Control", "no-store, max-age=0");
+    // Add a timestamp to force uniqueness
+    response.headers.set("Last-Modified", new Date().toUTCString());
 
     return response;
   } catch (error) {
