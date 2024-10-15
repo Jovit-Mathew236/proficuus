@@ -120,7 +120,11 @@ const columns: ColumnDef<Volunteer>[] = [
   {
     accessorKey: "phone",
     header: () => <div>Phone</div>,
-    cell: ({ row }) => <div>{row.getValue("phone")}</div>,
+    cell: ({ row }) => (
+      <div>
+        <a href={`tel:${row.getValue("phone")}`}>{row.getValue("phone")}</a>
+      </div>
+    ),
   },
   {
     accessorKey: "alternativephone",
@@ -166,6 +170,13 @@ const columns: ColumnDef<Volunteer>[] = [
               onClick={() => navigator.clipboard.writeText(volunteer.email)}
             >
               Copy Email
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                window.location.href = `https://wa.me/${volunteer.phone}`;
+              }}
+            >
+              Whatsapp Msg
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>View Details</DropdownMenuItem>
@@ -257,7 +268,7 @@ export function VolunteerDashboard() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border max-w-xs sm:max-w-none">
+      <div className="rounded-md border max-w-[355px] sm:max-w-none">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

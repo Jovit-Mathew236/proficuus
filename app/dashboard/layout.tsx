@@ -18,7 +18,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
     <>
       <BackgroundBeamsWithCollision className="h-full w-full">
-        <div className="space-y-6 p-10 pb-16">
+        <div className="space-y-6 p-5 pb-16">
           <div className="space-y-0.5 flex ">
             <div>
               <h2 className="text-2xl font-bold tracking-tight">
