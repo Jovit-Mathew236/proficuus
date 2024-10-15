@@ -10,7 +10,12 @@ export async function GET() {
       ...doc.data(),
     }));
 
-    return NextResponse.json(volunteers, { status: 200 });
+    const response = NextResponse.json(volunteers, { status: 200 });
+
+    // Disable caching by setting cache control headers
+    response.headers.set("Cache-Control", "no-store, max-age=0");
+
+    return response;
   } catch (error) {
     console.error("Error fetching volunteers", error);
     return NextResponse.json(
