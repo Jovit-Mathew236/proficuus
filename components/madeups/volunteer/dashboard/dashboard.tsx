@@ -216,6 +216,7 @@ export function VolunteerDashboard() {
 
     fetchVolunteers();
   }, []);
+  // console.log("volunteers", volunteers);
 
   const table = useReactTable({
     data: volunteers,
@@ -234,6 +235,8 @@ export function VolunteerDashboard() {
       columnVisibility,
       rowSelection,
     },
+    pageCount: Math.ceil(volunteers.length / 10), // Assuming 10 as page size
+    manualPagination: true, // Set to false if you want to manage pagination manually
   });
 
   return (
