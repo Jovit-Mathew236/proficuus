@@ -7,7 +7,7 @@ import { auth } from "@/lib/firebase/config";
 export default function LogoutButton() {
   const logout = () => {
     signOut(auth);
-    window.location.href = "/";
+    window.location.href = "/login";
   };
 
   return (
