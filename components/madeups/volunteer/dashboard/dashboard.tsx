@@ -1,6 +1,7 @@
 "use client";
 
-import * as React from "react";
+import React, { useRef } from "react";
+import { DownloadTableExcel } from "react-export-table-to-excel";
 import {
   CaretSortIcon,
   ChevronDownIcon,
@@ -188,6 +189,7 @@ const columns: ColumnDef<Volunteer>[] = [
 ];
 
 export function VolunteerDashboard() {
+  const tableRef = useRef(null);
   const [volunteers, setVolunteers] = React.useState<Volunteer[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -245,6 +247,16 @@ export function VolunteerDashboard() {
           }
           className="max-w-sm"
         />
+        <DownloadTableExcel
+          filename="Proficuus Volunteers"
+          sheet="Volunteers"
+          currentTableRef={tableRef.current}
+        >
+          <Button variant={"secondary"} className="mx-4">
+            {" "}
+            Export excel{" "}
+          </Button>
+        </DownloadTableExcel>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -269,7 +281,7 @@ export function VolunteerDashboard() {
         </DropdownMenu>
       </div>
       <div className="rounded-md border max-w-[355px] sm:max-w-none">
-        <Table>
+        <Table ref={tableRef}>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
