@@ -204,7 +204,6 @@ export function VolunteerDashboard() {
     const fetchVolunteers = async () => {
       try {
         const response = await fetch("/api/registration/dashboard", {
-          next: { revalidate: 10 },
           cache: "no-store",
         });
         if (!response.ok) {

@@ -46,7 +46,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
                 Date of program : December 20 to 23
               </p>
             </div>
-            <div>
+            <div className="absolute right-4 flex gap-4 items-center justify-center h-3">
               <ModeToggle />
             </div>
           </div>
