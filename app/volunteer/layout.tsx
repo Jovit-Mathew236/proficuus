@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { ModeToggle } from "@/components/theme-mode";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
-import { NeonGradientCard } from "@/components/ui/neon-gradient-card";
+// import { NeonGradientCard } from "@/components/ui/neon-gradient-card";
 // import { SidebarNav } from "@/components/madeups/volunteer/sidebar-nav";
 
 export const metadata: Metadata = {
@@ -54,15 +54,15 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
           <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
             <aside className="-mx-4 lg:w-1/2">
               {/* <SidebarNav items={sidebarNavItems} /> */}
-              <NeonGradientCard>
-                <Image
-                  src="/images/proficuus.png"
-                  width={1280}
-                  height={791}
-                  alt="Forms"
-                  className="block rounded-lg"
-                />
-              </NeonGradientCard>
+              {/* <NeonGradientCard> */}
+              <Image
+                src="/images/proficuus.png"
+                width={1280}
+                height={791}
+                alt="Forms"
+                className="block rounded-lg"
+              />
+              {/* </NeonGradientCard> */}
             </aside>
             <div className="flex-1 lg:max-w-2xl">{children}</div>
           </div>
