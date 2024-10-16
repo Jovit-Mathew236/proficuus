@@ -39,7 +39,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ministry, year, zone } from "@/lib/constants";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 // import FlickeringGrid from "@/components/ui/flickering-grid";
 
 export const accountFormSchema = z.object({
@@ -117,7 +117,7 @@ export function Volunteer() {
   const [yearOpen, setYearOpen] = useState(false);
   const [ministryOpen, setMinistryOpen] = useState(false);
   const [zoneOpen, setZoneOpen] = useState(false);
-  // const router = useRouter();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const form = useForm<AccountFormValues>({
@@ -189,8 +189,8 @@ export function Volunteer() {
       });
       console.log("Registration completed successfully:", result);
       setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+        router.push("/success");
+      }, 1000);
       // Add success notification or redirect here
     } catch (error) {
       setLoading(false);
