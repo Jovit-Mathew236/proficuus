@@ -176,7 +176,10 @@ export function Volunteer() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create user");
+        const result = await response.json();
+        throw new Error(
+          result.message || "An error occurred while creating your account."
+        );
       }
 
       const result = await response.json();
@@ -192,15 +195,16 @@ export function Volunteer() {
         router.push("/success");
       }, 1000);
       // Add success notification or redirect here
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       setLoading(false);
+      console.log(error);
       toast({
         title: "Error creating user",
-        description: `An error occurred while creating your account.${error}`,
+        description: error.message,
         variant: "destructive",
       });
       console.error("Error creating user:", error);
-      // Handle the error (e.g., show an error message to the user)
     }
   };
 

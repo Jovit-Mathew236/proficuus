@@ -12,6 +12,8 @@ cloudinary.v2.config({
 });
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10 MB
+
 export async function POST(request: NextRequest) {
   try {
     const {
@@ -34,6 +36,19 @@ export async function POST(request: NextRequest) {
     if (image) {
       // Convert base64 to buffer
       const imageBuffer = Buffer.from(image.split(",")[1], "base64");
+      const imageSize = Buffer.byteLength(imageBuffer);
+
+      // Check if image size exceeds the limit
+      if (imageSize > MAX_IMAGE_SIZE) {
+        return NextResponse.json(
+          {
+            message:
+              "Image size exceeds 10 MB. Please reduce the size and try again.",
+          },
+          { status: 400 }
+        );
+      }
+
       // Upload image to Cloudinary
       imageUrl = await new Promise<string>((resolve, reject) => {
         const stream = cloudinary.v2.uploader.upload_stream(
@@ -47,7 +62,7 @@ export async function POST(request: NextRequest) {
             if (!result || !result.secure_url) {
               return reject(new Error("Upload did not return a valid URL"));
             }
-            resolve(result.secure_url); // Ensure we resolve with a string
+            resolve(result.secure_url);
           }
         );
         // Stream the image buffer to Cloudinary
@@ -56,7 +71,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate a unique ID for the Firestore document
-    const userDocRef = doc(db, "volunteers", email); // Use email or another unique identifier
+    const userDocRef = doc(db, "volunteers", email);
 
     // Prepare the data to save
     const userData = {
@@ -73,7 +88,7 @@ export async function POST(request: NextRequest) {
       ministry,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      ...(imageUrl ? { imageUrl } : {}), // Only include imageUrl if it's defined
+      ...(imageUrl ? { imageUrl } : {}),
     };
 
     // Save user details to Firestore
@@ -89,34 +104,31 @@ export async function POST(request: NextRequest) {
       });
 
       if (error) {
-        return Response.json({ error }, { status: 500 });
+        return Response.json(
+          { error, message: "Error on sending email" },
+          { status: 500 }
+        );
       }
-
       if (!error) {
-        return Response.json(data);
+        return Response.json({ data }, { status: 200 });
       }
+      return NextResponse.json(
+        { message: "Registration completed", imageUrl },
+        { status: 201 }
+      );
     } catch (error) {
-      return Response.json({ error }, { status: 500 });
+      return NextResponse.json(
+        { error, message: "Error on sending email 2" },
+        { status: 500 }
+      );
     }
 
-    return NextResponse.json(
-      { message: "Registration completed", imageUrl },
-      { status: 201 }
-    );
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
     console.error("Error on registration", error);
     return NextResponse.json(
-      { message: "Error on registration" },
+      { message: `Error on registration: ${error.message}` },
       { status: 500 }
     );
   }
 }
-
-// Uncomment the following block if you need to handle large file uploads
-// export const config = {
-//   api: {
-//     bodyParser: {
-//       sizeLimit: "10mb",
-//     },
-//   },
-// };
