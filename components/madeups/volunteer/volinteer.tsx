@@ -196,7 +196,7 @@ export function Volunteer() {
       setLoading(false);
       toast({
         title: "Error creating user",
-        description: "An error occurred while creating your account.",
+        description: `An error occurred while creating your account.${error}`,
         variant: "destructive",
       });
       console.error("Error creating user:", error);
