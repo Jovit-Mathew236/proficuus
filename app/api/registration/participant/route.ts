@@ -4,7 +4,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/config";
 import cloudinary from "cloudinary";
 import { Resend } from "resend";
-import { EmailTemplate } from "@/components/email-template";
+import { EmailTemplateParticipant } from "@/components/email-template-participant";
 
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
         from: "Proficuus <onboarding@proficuus.jymest.com>",
         to: [email],
         subject: "Registration Successful",
-        react: EmailTemplate({
+        react: EmailTemplateParticipant({
           firstName: name,
         }),
       });
