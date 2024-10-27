@@ -1,15 +1,16 @@
 import { Metadata } from "next";
-
-import { Separator } from "@/components/ui/separator";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+// import { Separator } from "@/components/ui/separator";
 import { ModeToggle } from "@/components/theme-mode";
-import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
+// import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { AuthProvider } from "@/lib/provider/authProvider";
-import LogoutButton from "@/components/ui/logoutButton";
+// import LogoutButton from "@/components/ui/logoutButton";
+import { AppSidebar } from "@/components/app-sidebar";
 // import { SidebarNav } from "@/components/madeups/volunteer/sidebar-nav";
 
 export const metadata: Metadata = {
   title: "PROFICUUS | Volunteer registration",
-  description: "Volunteer registration Form",
+  description: "Volunteer registration Dashboard",
 };
 
 interface SettingsLayoutProps {
@@ -20,8 +21,23 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
     <>
       <AuthProvider>
-        <BackgroundBeamsWithCollision className="h-full w-full">
-          <div className="space-y-6 p-5 pb-16">
+        {/* <BackgroundBeamsWithCollision className="h-full w-full"> */}
+        <SidebarProvider>
+          <AppSidebar />
+          <main>
+            <div className="flex sm:hidden bg-secondary h-10  justify-between w-screen px-5 py-2">
+              <SidebarTrigger className="" />
+              <p>Admin dashboard</p>
+              <ModeToggle className="h-auto" />
+            </div>
+            <div className="space-y-6 p-5 pb-16">
+              <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+                <div className="flex-1">{children}</div>
+              </div>
+            </div>
+          </main>
+        </SidebarProvider>
+        {/* <div className="space-y-6 p-5 pb-16">
             <div className="space-y-0.5 flex ">
               <div>
                 <h2 className="text-2xl mt-9 font-bold tracking-tight">
@@ -57,8 +73,8 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
             <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
               <div className="flex-1">{children}</div>
             </div>
-          </div>
-        </BackgroundBeamsWithCollision>
+          </div> */}
+        {/* </BackgroundBeamsWithCollision> */}
       </AuthProvider>
     </>
   );

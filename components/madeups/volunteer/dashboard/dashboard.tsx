@@ -2,6 +2,7 @@
 
 import React, { useRef } from "react";
 import { DownloadTableExcel } from "react-export-table-to-excel";
+import { useSidebar } from "@/components/ui/sidebar";
 import {
   CaretSortIcon,
   ChevronDownIcon,
@@ -241,6 +242,8 @@ export function VolunteerDashboard() {
     manualPagination: true, // Set to false if you want to manage pagination manually
   });
 
+  const { state } = useSidebar();
+
   return (
     <div className="w-full overflow-x-auto">
       <div className="flex items-center py-4">
@@ -285,7 +288,13 @@ export function VolunteerDashboard() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border max-w-[90vw] sm:max-w-[95vw] lg:max-w-[98vw] xl:max-w-none">
+      <div
+        className={`rounded-md border max-w-[90vw] sm:[95vw] ${
+          state === "expanded"
+            ? "lg:max-w-[calc(100vw-19rem)]"
+            : "lg:max-w-[calc(100vw)]"
+        } `}
+      >
         <Table ref={tableRef}>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
