@@ -91,6 +91,7 @@ export async function POST(request: NextRequest) {
       experience,
       email,
       uid: user.uid,
+      paymentUpload: false,
       paymentVerified: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

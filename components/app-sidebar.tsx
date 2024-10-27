@@ -3,6 +3,7 @@ import {
   ChevronDown,
   ChevronsLeftRight,
   ChevronUp,
+  Home,
   ListTreeIcon,
   ShieldPlus,
   User2,
@@ -33,11 +34,15 @@ import { Button } from "./ui/button";
 import { ModeToggle } from "./theme-mode";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
-
-// import { Button } from "./ui/button";
+import { usePathname } from "next/navigation";
 
 // Menu items.
 const items = [
+  {
+    title: "Home",
+    url: "/dashboard",
+    icon: Home,
+  },
   {
     title: "Volunteers",
     url: "/dashboard/proficuus24/volunteers",
@@ -52,7 +57,8 @@ const items = [
 
 export function AppSidebar() {
   const { user } = useAuth();
-  const { toggleSidebar } = useSidebar();
+  const { toggleSidebar, state } = useSidebar();
+  const pathname = usePathname();
 
   const logout = () => {
     signOut(auth);
@@ -85,12 +91,6 @@ export function AppSidebar() {
 
           <SidebarMenuItem>
             <SidebarMenuButton onClick={() => toggleSidebar()} asChild>
-              {/* <Button
-                variant={"ghost"}
-                className="flex justify-center items-center"
-              >
-                
-              </Button> */}
               <a>
                 <ChevronsLeftRight />
                 <span>Collapse</span>
@@ -107,7 +107,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild isActive={pathname === item.url}>
                     <a href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
@@ -122,7 +122,11 @@ export function AppSidebar() {
 
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem className="flex ">
+          <SidebarMenuItem
+            className={`flex ${
+              state === "collapsed" ? "flex-col-reverse" : ""
+            }`}
+          >
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>

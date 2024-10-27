@@ -154,7 +154,7 @@ export function Volunteer() {
         });
       }
 
-      const response = await fetch("/api/registration/proficuus", {
+      const response = await fetch("/api/registration/proficuus24/volunteers", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

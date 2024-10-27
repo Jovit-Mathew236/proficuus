@@ -148,24 +148,27 @@ export function Participant() {
         });
       }
 
-      const response = await fetch("/api/registration/participant", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: data.name,
-          collage: data.collage,
-          year: data.year,
-          zone: data.zone,
-          phone: data.phone,
-          alternativephone: data.alternativephone,
-          email: data.email,
-          expectation: data.expectation,
-          experience: data.experience,
-          image: imageBase64,
-        }),
-      });
+      const response = await fetch(
+        "/api/registration/proficuus24/participants",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: data.name,
+            collage: data.collage,
+            year: data.year,
+            zone: data.zone,
+            phone: data.phone,
+            alternativephone: data.alternativephone,
+            email: data.email,
+            expectation: data.expectation,
+            experience: data.experience,
+            image: imageBase64,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const result = await response.json();

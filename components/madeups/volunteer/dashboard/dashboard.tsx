@@ -204,9 +204,12 @@ export function VolunteerDashboard() {
   React.useEffect(() => {
     const fetchVolunteers = async () => {
       try {
-        const response = await fetch("/api/registration/dashboard", {
-          cache: "no-store",
-        });
+        const response = await fetch(
+          "/api/registration/proficuus24/dashboard",
+          {
+            cache: "no-store",
+          }
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch volunteers.");
         }
