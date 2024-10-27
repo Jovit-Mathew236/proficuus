@@ -31,6 +31,7 @@
     "cloudinary": "^2.5.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
+    "cookies-next": "^4.3.0",
     "date-fns": "^4.1.0",
     "firebase": "^10.14.1",
     "firebase-admin": "^12.6.0",

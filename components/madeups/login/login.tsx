@@ -33,7 +33,7 @@ export function Login() {
     useSignInWithEmailAndPassword(auth);
   const [errorMessage, setErrorMessage] = useState("");
   const { toast } = useToast();
-
+  const allowedEmails = ["admin@jymest.com"];
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -52,20 +52,43 @@ export function Login() {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setErrorMessage(""); // Reset error message
-    try {
-      await signInWithEmailAndPassword(data.email, data.password);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+    if (!allowedEmails.includes(data.email)) {
       toast({
-        title: "Login Successful",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">Please relax with jesus😉</code>
-          </pre>
-        ),
+        title: "This email is not allowed",
+        description: "Please use another email",
+        variant: "destructive",
       });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      setErrorMessage(error.message);
+      return; // Exit early if the email is not allowed
+    }
+
+    try {
+      // Attempt to sign in the user
+      const userCredential = await signInWithEmailAndPassword(
+        data.email,
+        data.password
+      );
+
+      // If sign in is successful, userCredential will contain user data
+      if (userCredential) {
+        toast({
+          title: "Login Successful",
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">Please relax with Jesus😉</code>
+            </pre>
+          ),
+        });
+        router.push("/dashboard"); // Redirect to the dashboard on success
+      }
+    } catch (error) {
+      // Handle errors (e.g., wrong credentials, etc.)
+      setErrorMessage((error as Error).message); // Set the error message
+      toast({
+        title: "Login Failed",
+        description: (error as Error).message,
+        variant: "destructive",
+      });
     }
   };
 
