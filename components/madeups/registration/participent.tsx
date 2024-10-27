@@ -227,82 +227,6 @@ export function Participant() {
           )}
         />
 
-        {/* <FormField
-          control={form.control}
-          name="collage"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>College</FormLabel>
-              <FormControl>
-                <Input placeholder="Your name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
-
-        <FormField
-          control={form.control}
-          name="collage"
-          render={({ field }) => (
-            <FormItem className="flex w-full flex-col">
-              <FormLabel>College</FormLabel>
-              <Popover open={collageOpen} onOpenChange={setCollageOpen}>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      className={cn(
-                        "w-full justify-between",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value
-                        ? collage.find(
-                            (collage) => collage.value === field.value
-                          )?.label
-                        : "Select Collage"}
-                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder="Search Collage..." />
-                    <CommandList>
-                      <CommandEmpty>No collage found.</CommandEmpty>
-                      <CommandGroup>
-                        {collage.map((collage) => (
-                          <CommandItem
-                            value={collage.label}
-                            key={collage.value}
-                            onSelect={() => {
-                              form.setValue("collage", collage.value);
-                              setCollageOpen(false);
-                            }}
-                          >
-                            <CheckIcon
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                collage.value === field.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {collage.label}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <div className="flex gap-3 w-full">
           <FormField
             control={form.control}
@@ -426,6 +350,72 @@ export function Participant() {
             )}
           />
         </div>
+
+        <FormField
+          control={form.control}
+          name="collage"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-col">
+              <FormLabel>College</FormLabel>
+              <Popover open={collageOpen} onOpenChange={setCollageOpen}>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      className={cn(
+                        "w-full justify-between",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value
+                        ? collage.find(
+                            (collage) => collage.value === field.value
+                          )?.label
+                        : "Select Collage"}
+                      <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-full p-0">
+                  <Command>
+                    <CommandInput placeholder="Search Collage..." />
+                    <CommandList>
+                      <CommandEmpty>No collage found.</CommandEmpty>
+                      <CommandGroup>
+                        {collage
+                          .filter(
+                            (c) => c.zone.toUpperCase() === form.watch("zone")
+                          ) // Update this line
+                          .map((collage) => (
+                            <CommandItem
+                              value={collage.label}
+                              key={collage.value}
+                              onSelect={() => {
+                                form.setValue("collage", collage.value);
+                                setCollageOpen(false);
+                              }}
+                            >
+                              <CheckIcon
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  collage.value === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {collage.label}
+                            </CommandItem>
+                          ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
