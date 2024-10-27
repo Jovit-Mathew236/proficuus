@@ -90,6 +90,8 @@ export async function POST(request: NextRequest) {
       expectation,
       experience,
       email,
+      uid: user.uid,
+      paymentVerified: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       ...(imageUrl ? { imageUrl } : {}),
