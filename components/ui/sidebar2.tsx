@@ -9,6 +9,7 @@ interface Links {
   label: string;
   href: string;
   icon: React.JSX.Element | React.ReactNode;
+  action?: () => void;
 }
 
 interface SidebarContextProps {
@@ -155,18 +156,29 @@ export const MobileSidebar = ({
 export const SidebarLink = ({
   link,
   className,
+  action, // Accept action directly as a prop
   ...props
 }: {
   link: Links;
   className?: string;
+  action?: () => void; // Add action here
   props?: LinkProps;
 }) => {
   const { open, animate } = useSidebar();
+
+  const handleClick = () => {
+    if (action) {
+      action(); // Call action if it exists
+    }
+  };
+
   return (
     <Link
       href={link.href}
+      onClick={handleClick} // Call handleClick on click
       className={cn(
-        "flex items-center justify-start gap-2 group/sidebar p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700", // Added hover effect
+        "flex items-center justify-start gap-2 group/sidebar rounded-md hover:bg-gray-200 dark:hover:bg-gray-700",
+        open && "p-2",
         className
       )}
       {...props}

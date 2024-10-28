@@ -79,7 +79,9 @@ export function Login() {
             </pre>
           ),
         });
-        router.push("/dashboard"); // Redirect to the dashboard on success
+        // router.push("/dashboard"); // Redirect to the dashboard on success
+      } else {
+        throw new Error("Invalid credentials");
       }
     } catch (error) {
       // Handle errors (e.g., wrong credentials, etc.)
