@@ -33,7 +33,7 @@ export function Login() {
     useSignInWithEmailAndPassword(auth);
   const [errorMessage, setErrorMessage] = useState("");
   const { toast } = useToast();
-  const allowedEmails = ["admin@jymest.com"];
+  // const allowedEmails = ["admin@jymest.com"];
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -53,14 +53,14 @@ export function Login() {
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setErrorMessage(""); // Reset error message
 
-    if (!allowedEmails.includes(data.email)) {
-      toast({
-        title: "This email is not allowed",
-        description: "Please use another email",
-        variant: "destructive",
-      });
-      return; // Exit early if the email is not allowed
-    }
+    // if (!allowedEmails.includes(data.email)) {
+    //   toast({
+    //     title: "This email is not allowed",
+    //     description: "Please use another email",
+    //     variant: "destructive",
+    //   });
+    //   return; // Exit early if the email is not allowed
+    // }
 
     try {
       // Attempt to sign in the user

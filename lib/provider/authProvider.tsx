@@ -6,6 +6,7 @@ import { auth } from "@/lib/firebase/config"; // Adjust this import path as need
 import { useRouter } from "next/navigation";
 import { db } from "@/lib/firebase/config"; // Import Firestore instance
 import { doc, getDoc } from "firebase/firestore"; // Import Firestore functions
+import { setCookie } from "nookies"; // Install nookies if you haven't already
 
 interface AuthContextType {
   user: User | null;
@@ -33,25 +34,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       setUser(user);
-      setLoading(true); // Start loading
+      setLoading(true);
       if (!user) {
         router.push("/login");
-      }
-      if (user) {
-        const userDoc = doc(db, "users", user.uid); // Adjust collection name as needed
+      } else {
+        // Set the cookie with the user email
+        setCookie(null, "user_email", user.email || "", {
+          path: "/",
+          maxAge: 30 * 24 * 60 * 60, // Cookie expires in 30 days
+          secure: process.env.NODE_ENV === "production", // Use secure cookie in production
+          sameSite: "lax",
+        });
+
+        const userDoc = doc(db, "users", user.uid);
         const docSnap = await getDoc(userDoc);
 
         if (docSnap.exists()) {
           const userData = docSnap.data();
-          setUsername(userData.username || null); // Set username if exists
-          setUserImage(userData.imageUrl || null); // Set userImage if exists
+          setUsername(userData.username || null);
+          setUserImage(userData.imageUrl || null);
         } else {
           console.error("No such document!");
         }
-        // router.push("/admin"); // Redirect after fetching user data
       }
-
-      setLoading(false); // Stop loading
+      setLoading(false);
     });
 
     return () => unsubscribe();
