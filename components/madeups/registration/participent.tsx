@@ -39,6 +39,10 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { collage, year, zone } from "@/lib/constants";
 import { useRouter } from "next/navigation";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns/format";
 // import FlickeringGrid from "@/components/ui/flickering-grid";
 
 export const accountFormSchema = z.object({
@@ -59,6 +63,16 @@ export const accountFormSchema = z.object({
   zone: z.string({
     required_error: "Please select a Zone.",
   }),
+  gender: z.string({
+    required_error: "Gender is required.",
+  }),
+  dob: z
+    .date({
+      required_error: "Date of birth is required.",
+    })
+    .max(new Date(), {
+      message: "Date of birth must be in the past.",
+    }),
   phone: z
     .string()
     .regex(/^\d+$/, {
@@ -80,7 +94,8 @@ export const accountFormSchema = z.object({
     })
     .max(15, {
       message: "Alternative phone number must not exceed 15 digits.",
-    }),
+    })
+    .optional(),
   email: z
     .string({
       required_error: "Email is required.",
@@ -114,6 +129,9 @@ export function Participant() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [otherCollage, setOtherCollage] = useState("");
+  const [isOtherSelected, setIsOtherSelected] = useState(false);
+
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues,
@@ -221,10 +239,86 @@ export function Participant() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Name *</FormLabel>
               <FormControl>
                 <Input placeholder="Your name" {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="gender"
+          render={({ field }) => (
+            <FormItem className="space-y-3">
+              <FormLabel>Gender</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="flex flex-col space-y-1"
+                >
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="male" />
+                    </FormControl>
+                    <FormLabel className="font-normal">Male</FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="female" />
+                    </FormControl>
+                    <FormLabel className="font-normal">Female</FormLabel>
+                  </FormItem>
+                </RadioGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="dob"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Date of birth</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    captionLayout="dropdown-buttons"
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date("1900-01-01")
+                    }
+                    initialFocus
+                    fromYear={1960}
+                    toYear={2030}
+                  />
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}
@@ -236,7 +330,7 @@ export function Participant() {
             name="year"
             render={({ field }) => (
               <FormItem className="flex w-1/2 flex-col">
-                <FormLabel>Year</FormLabel>
+                <FormLabel>Year *</FormLabel>
                 <Popover open={yearOpen} onOpenChange={setYearOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -262,26 +356,28 @@ export function Participant() {
                       <CommandList>
                         <CommandEmpty>No Year found.</CommandEmpty>
                         <CommandGroup>
-                          {year.map((year) => (
-                            <CommandItem
-                              value={year.label}
-                              key={year.value}
-                              onSelect={() => {
-                                form.setValue("year", year.value);
-                                setYearOpen(false);
-                              }}
-                            >
-                              <CheckIcon
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  year.value === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {year.label}
-                            </CommandItem>
-                          ))}
+                          {year
+                            .filter((year) => year.value != "passout")
+                            .map((year) => (
+                              <CommandItem
+                                value={year.label}
+                                key={year.value}
+                                onSelect={() => {
+                                  form.setValue("year", year.value);
+                                  setYearOpen(false);
+                                }}
+                              >
+                                <CheckIcon
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    year.value === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {year.label}
+                              </CommandItem>
+                            ))}
                         </CommandGroup>
                       </CommandList>
                     </Command>
@@ -297,7 +393,7 @@ export function Participant() {
             name="zone"
             render={({ field }) => (
               <FormItem className="flex w-1/2 flex-col">
-                <FormLabel>Zone</FormLabel>
+                <FormLabel>Zone *</FormLabel>
                 <Popover open={zoneOpen} onOpenChange={setZoneOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -359,7 +455,7 @@ export function Participant() {
           name="collage"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col">
-              <FormLabel>College</FormLabel>
+              <FormLabel>College *</FormLabel>
               <Popover open={collageOpen} onOpenChange={setCollageOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -372,24 +468,23 @@ export function Participant() {
                       )}
                     >
                       {field.value
-                        ? collage.find(
-                            (collage) => collage.value === field.value
-                          )?.label
-                        : "Select Collage"}
+                        ? collage.find((c) => c.value === field.value)?.label ||
+                          otherCollage
+                        : "Select College"}
                       <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
                   <Command>
-                    <CommandInput placeholder="Search Collage..." />
+                    <CommandInput placeholder="Search College..." />
                     <CommandList>
-                      <CommandEmpty>No collage found.</CommandEmpty>
+                      <CommandEmpty>No college found.</CommandEmpty>
                       <CommandGroup>
                         {collage
                           .filter(
                             (c) => c.zone.toUpperCase() === form.watch("zone")
-                          ) // Update this line
+                          )
                           .map((collage) => (
                             <CommandItem
                               value={collage.label}
@@ -397,6 +492,7 @@ export function Participant() {
                               onSelect={() => {
                                 form.setValue("collage", collage.value);
                                 setCollageOpen(false);
+                                setIsOtherSelected(false); // Reset "Other" selection
                               }}
                             >
                               <CheckIcon
@@ -410,8 +506,38 @@ export function Participant() {
                               {collage.label}
                             </CommandItem>
                           ))}
+                        <CommandItem
+                          value="Other"
+                          onSelect={() => {
+                            setIsOtherSelected(true);
+                            setOtherCollage(""); // Reset input when selected
+                          }}
+                        >
+                          Select Other
+                        </CommandItem>
                       </CommandGroup>
                     </CommandList>
+                    {isOtherSelected && (
+                      <div className="mt-2">
+                        <input
+                          type="text"
+                          placeholder="Enter your college name"
+                          value={otherCollage}
+                          onChange={(e) => setOtherCollage(e.target.value)}
+                          className="border rounded p-2 w-full"
+                        />
+                        <Button
+                          onClick={() => {
+                            form.setValue("collage", otherCollage);
+                            field.value = otherCollage;
+                            setCollageOpen(false);
+                          }}
+                          className="mt-2"
+                        >
+                          Confirm
+                        </Button>
+                      </div>
+                    )}
                   </Command>
                 </PopoverContent>
               </Popover>
@@ -425,7 +551,7 @@ export function Participant() {
           name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Phone Number</FormLabel>
+              <FormLabel>Phone Number *</FormLabel>
               <FormControl>
                 <Input placeholder="your phone number" {...field} />
               </FormControl>
@@ -451,7 +577,7 @@ export function Participant() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email ID</FormLabel>
+              <FormLabel>Email ID *</FormLabel>
               <FormControl>
                 <Input placeholder="your Email id" {...field} />
               </FormControl>
@@ -465,7 +591,7 @@ export function Participant() {
           name="expectation"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>What do you expect from Proficuus 24?</FormLabel>
+              <FormLabel>What do you expect from Proficuus 24? *</FormLabel>
               <FormControl>
                 <Input placeholder="your answer" {...field} />
               </FormControl>
@@ -480,7 +606,7 @@ export function Participant() {
             <FormItem>
               <FormLabel>
                 Have you attended any Jesus Youth programs before or other
-                fellowship circles or teams etc? Specify in brief
+                fellowship circles or teams etc? Specify in brief *
               </FormLabel>
               <FormControl>
                 <Input placeholder="your answer" {...field} />
@@ -495,7 +621,7 @@ export function Participant() {
           name="image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Upload a casual single photo of yours</FormLabel>
+              <FormLabel>Upload a casual single photo of yours *</FormLabel>
               <FormControl>
                 <div
                   className="flex items-center justify-center w-full h-12 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition duration-200 bg-secondary"

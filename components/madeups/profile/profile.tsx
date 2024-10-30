@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar2";
 import {
   IconArrowLeft,
@@ -8,36 +8,36 @@ import {
   IconSettings,
   IconUserBolt,
 } from "@tabler/icons-react";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { RainbowButton } from "@/components/ui/rainbow-button";
-import { useToast } from "@/hooks/use-toast";
+// import {
+//   Form,
+//   FormControl,
+//   FormDescription,
+//   FormField,
+//   FormItem,
+//   FormLabel,
+//   FormMessage,
+// } from "@/components/ui/form";
+// import { z } from "zod";
+// import { useForm } from "react-hook-form";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import { RainbowButton } from "@/components/ui/rainbow-button";
+// import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/provider/authProvider";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 import { Ticket } from "@/components/ticket";
-const FormSchema = z.object({
-  image: z.instanceof(File), // Add image field
-});
+// const FormSchema = z.object({
+//   image: z.instanceof(File), // Add image field
+// });
 
-type FormValues = z.infer<typeof FormSchema>;
+// type FormValues = z.infer<typeof FormSchema>;
 
 // This can come from your database or API.
-const defaultValues: Partial<FormValues> = {};
+// const defaultValues: Partial<FormValues> = {};
 export function Profile() {
   const links = [
     // {
@@ -159,31 +159,31 @@ export const LogoIcon = () => {
 // Dummy dashboard component with content
 const Dashboard = () => {
   const { user } = useAuth();
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const [userData, setUserData] = useState<any>();
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  // const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [uploadState, setUploadState] = useState(false);
+  // const [uploadState, setUploadState] = useState(false);
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(FormSchema),
-    defaultValues,
-  });
+  // const form = useForm<FormValues>({
+  //   resolver: zodResolver(FormSchema),
+  //   defaultValues,
+  // });
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  // const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: any
-  ) => {
-    if (e.target.files) {
-      const file = e.target.files[0];
-      field.onChange(file);
-      const previewUrl = URL.createObjectURL(file);
-      setImagePreview(previewUrl);
-    }
-  };
+  // const handleFileChange = (
+  //   e: React.ChangeEvent<HTMLInputElement>,
+  //   field: any
+  // ) => {
+  //   if (e.target.files) {
+  //     const file = e.target.files[0];
+  //     field.onChange(file);
+  //     const previewUrl = URL.createObjectURL(file);
+  //     setImagePreview(previewUrl);
+  //   }
+  // };
 
   useEffect(() => {
     const fetchUserWithId = async () => {
@@ -221,54 +221,54 @@ const Dashboard = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  const onSubmit = async (data: FormValues) => {
-    setLoading(true);
-    try {
-      let imageBase64 = "";
-      if (data.image) {
-        const reader = new FileReader();
-        imageBase64 = await new Promise((resolve, reject) => {
-          reader.onload = () => resolve(reader.result as string);
-          reader.onerror = reject;
-          reader.readAsDataURL(data.image as File);
-        });
-      }
+  // const onSubmit = async (data: FormValues) => {
+  //   setLoading(true);
+  //   try {
+  //     let imageBase64 = "";
+  //     if (data.image) {
+  //       const reader = new FileReader();
+  //       imageBase64 = await new Promise((resolve, reject) => {
+  //         reader.onload = () => resolve(reader.result as string);
+  //         reader.onerror = reject;
+  //         reader.readAsDataURL(data.image as File);
+  //       });
+  //     }
 
-      const response = await fetch("/api/profile/payment-image", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          image: imageBase64,
-          uid: user?.uid,
-        }),
-      });
+  //     const response = await fetch("/api/profile/payment-image", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         image: imageBase64,
+  //         uid: user?.uid,
+  //       }),
+  //     });
 
-      if (!response.ok) {
-        const result = await response.json();
-        throw new Error(
-          result.message || "An error occurred while uploading the image."
-        );
-      }
-      setUploadState(true);
-      setLoading(false);
+  //     if (!response.ok) {
+  //       const result = await response.json();
+  //       throw new Error(
+  //         result.message || "An error occurred while uploading the image."
+  //       );
+  //     }
+  //     setUploadState(true);
+  //     setLoading(false);
 
-      toast({
-        title: "Image uploaded successfully",
-        description: "Wait some time we're verifying it",
-        variant: "default",
-      });
-    } catch (error: any) {
-      setLoading(false);
-      console.error("Error uploading image:", error);
-      toast({
-        title: "Error uploading image",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-  };
+  //     toast({
+  //       title: "Image uploaded successfully",
+  //       description: "Wait some time we're verifying it",
+  //       variant: "default",
+  //     });
+  //   } catch (error: any) {
+  //     setLoading(false);
+  //     console.error("Error uploading image:", error);
+  //     toast({
+  //       title: "Error uploading image",
+  //       description: error.message,
+  //       variant: "destructive",
+  //     });
+  //   }
+  // };
 
   return (
     <div className="flex flex-col p-5 md:flex-row md:p-10 md:rounded-tl-2xl border border-primary-foreground bg-background flex-1 w-full h-full gap-4">
@@ -309,10 +309,8 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Right Column with Two Cards */}
       <div className="flex flex-col w-full md:w-2/3 gap-6">
-        {/* My Payment Card */}
-        <div className="flex flex-col bg-primary-foreground rounded-2xl overflow-hidden shadow-md p-6">
+        {/* <div className="flex flex-col bg-primary-foreground rounded-2xl overflow-hidden shadow-md p-6">
           <h3 className="text-lg font-semibold mb-4">My Payment</h3>
           <div className="flex justify-between items-center mb-4">
             <p>Payment Screenshot upload</p>
@@ -340,7 +338,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* My Bills Card */}
         <div className="flex flex-col bg-primary-foreground rounded-2xl overflow-hidden shadow-md p-6">
           <h3 className="text-lg font-semibold mb-4">My Payment Upload</h3>
           <Form {...form}>
@@ -400,7 +397,7 @@ const Dashboard = () => {
               </RainbowButton>
             </form>
           </Form>
-        </div>
+        </div> */}
 
         <div className="flex flex-col bg-primary-foreground rounded-2xl overflow-hidden shadow-md p-6">
           <h3 className="text-lg font-semibold mb-4">Your Ticket</h3>
