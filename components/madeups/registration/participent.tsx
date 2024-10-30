@@ -175,6 +175,8 @@ export function Participant() {
           },
           body: JSON.stringify({
             name: data.name,
+            dob: data.dob,
+            gender: data.gender,
             collage: data.collage,
             year: data.year,
             zone: data.zone,

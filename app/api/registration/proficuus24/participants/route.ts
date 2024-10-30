@@ -20,6 +20,8 @@ export async function POST(request: NextRequest) {
   try {
     const {
       name,
+      dob,
+      gender,
       collage,
       year,
       zone,
@@ -83,6 +85,8 @@ export async function POST(request: NextRequest) {
     // Prepare the data to save
     const userData = {
       name,
+      dob,
+      gender,
       collage,
       year,
       zone,
