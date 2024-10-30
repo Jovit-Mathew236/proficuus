@@ -28,9 +28,8 @@ jobs:
           cache: 'npm' # Enable built-in npm caching
       
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v1 # Official Bun setup action
-        with:
-          bun-version: latest
+        run: |
+            curl -fsSL https://bun.sh/install | bash -e
       
       - name: Setup Pages
         uses: actions/configure-pages@v5
