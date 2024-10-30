@@ -1,5 +1,6 @@
 # Sample workflow for building and deploying a Next.js site to GitHub Pages
 name: Deploy Next.js site to Pages
+
 on:
   push:
     branches: ["main"]
@@ -18,44 +19,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: 'npm' # Enable built-in npm caching
-      
-      - name: Setup Bun
-        run: |
-            curl -fsSL https://bun.sh/install | bash -e
-      
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+          cache: 'npm'  # Enable built-in npm caching
+
+      - name: Install dependencies (using npm)
+        run: npm install --frozen-lockfile
+
+      - uses: actions/configure-pages@v5
         with:
           static_site_generator: next
-      
-      - name: Restore cache
-        uses: actions/cache@v4
+
+      - uses: actions/cache@v4
         with:
           path: |
             .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('bun.lockb', 'package.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json', 'package.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('bun.lockb', 'package.json') }}-
-      
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-      
+            ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json', 'package.json') }}-
+
       - name: Build with Next.js
-        run: bun run build
+        run: npm run build
         env:
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
-      
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+
+      - uses: actions/upload-artifact@v3
         with:
+          name: nextjs-build-artifact
           path: ./out
 
   deploy:
@@ -65,6 +58,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: nextjs-build-artifact
+
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          source: ./out
+          token: ${{ secrets.GITHUB_TOKEN }}
+          folder: ${{ github.ref }}  # Optional: Deploy to a specific branch
