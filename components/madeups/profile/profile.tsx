@@ -85,7 +85,7 @@ export function Profile() {
   return (
     <div
       className={cn(
-        "rounded-md flex flex-col md:flex-row bg-gray-100 dark:bg-neutral-800 w-full flex-1  mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden",
+        "md:rounded-md flex flex-col md:flex-row bg-gray-100 dark:bg-neutral-800 w-full flex-1  mx-auto border border-neutral-200 dark:border-neutral-700 overflow-hidden",
         "md:h-[100vh] h-min-[100vh]" // for your use case, use `h-screen` instead of `h-[60vh]`
       )}
     >
@@ -164,6 +164,7 @@ const Dashboard = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [uploadState, setUploadState] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -250,7 +251,7 @@ const Dashboard = () => {
           result.message || "An error occurred while uploading the image."
         );
       }
-
+      setUploadState(true);
       setLoading(false);
 
       toast({
@@ -270,7 +271,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col p-5 md:flex-row md:p-10 rounded-tl-2xl border border-primary-foreground bg-background flex-1 w-full h-full gap-4">
+    <div className="flex flex-col p-5 md:flex-row md:p-10 md:rounded-tl-2xl border border-primary-foreground bg-background flex-1 w-full h-full gap-4">
       {/* Left Profile Card */}
       <div className="flex flex-col w-full md:w-1/3 bg-primary-foreground rounded-2xl overflow-hidden shadow-md p-6">
         <div className="flex flex-col items-center">
@@ -322,7 +323,7 @@ const Dashboard = () => {
                   : "bg-gradient-to-r from-pink-500 to-orange-500"
               }`}
             >
-              {userData?.paymentUpload ? "Uploaded" : "Pending"}
+              {userData?.paymentUpload || uploadState ? "Uploaded" : "Pending"}
             </button>
           </div>
           <div className="flex justify-between items-center">
@@ -403,19 +404,23 @@ const Dashboard = () => {
 
         <div className="flex flex-col bg-primary-foreground rounded-2xl overflow-hidden shadow-md p-6">
           <h3 className="text-lg font-semibold mb-4">Your Ticket</h3>
-          <div className="flex justify-center items-center blur-xl">
+          <div
+            className={`flex justify-center items-center ${
+              userData?.paymentVerified ? "" : "blur-xl"
+            }`}
+          >
             <Ticket
               name={
-                (userData?.paymentVerified ?? userData?.name) || "Loading..."
+                (userData?.paymentVerified && userData?.name) || "Loading..."
               }
               zone={
-                (userData?.paymentVerified ?? userData?.zone) || "Loading..."
+                (userData?.paymentVerified && userData?.zone) || "Loading..."
               }
               collage={
-                (userData?.paymentVerified ?? userData?.collage) || "Loading..."
+                (userData?.paymentVerified && userData?.collage) || "Loading..."
               }
               userId={
-                (userData?.paymentVerified ?? userData?.userId) || "Loading..."
+                (userData?.paymentVerified && userData?.userId) || "Loading..."
               }
             />
           </div>

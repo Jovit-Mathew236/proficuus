@@ -89,7 +89,7 @@ export const DesktopSidebar = ({
   return (
     <motion.div
       className={cn(
-        "h-full px-4 py-4 hidden md:flex md:flex-col bg-gray-50 dark:bg-gray-900 w-[300px] flex-shrink-0 rounded-lg", // Added rounded-lg for border radius
+        "h-full px-4 py-4 hidden md:flex md:flex-col bg-gray-50 dark:bg-gray-900 w-[300px] flex-shrink-0 md:rounded-lg", // Added rounded-lg for border radius
         className
       )}
       animate={{
@@ -113,7 +113,7 @@ export const MobileSidebar = ({
   return (
     <div
       className={cn(
-        "h-10 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-gray-50 dark:bg-gray-900 w-full rounded-lg", // Added rounded-lg for border radius
+        "h-10 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-gray-50 dark:bg-gray-900 w-full md:rounded-lg", // Added rounded-lg for border radius
         className
       )}
       {...props}
@@ -135,7 +135,7 @@ export const MobileSidebar = ({
               ease: "easeInOut",
             }}
             className={cn(
-              "fixed h-full w-full inset-0 bg-white dark:bg-gray-900 p-10 z-[100] flex flex-col justify-between rounded-lg", // Added rounded-lg for border radius
+              "fixed h-full w-full inset-0 bg-white dark:bg-gray-900 p-10 z-[100] flex flex-col justify-between md:rounded-lg", // Added rounded-lg for border radius
               className
             )}
           >
