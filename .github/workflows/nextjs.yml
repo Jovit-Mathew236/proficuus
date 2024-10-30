@@ -18,35 +18,32 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: "20"
-          cache: 'bun'
-
-      - run: bun install --frozen-lockfile
-
-      - uses: actions/configure-pages@v5
-        with:
-          static_site_generator: next
-
-      - uses: actions/cache@v4
+          bun-version: latest
+      
+      - name: Restore cache
+        uses: actions/cache@v4
         with:
           path: |
             .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('bun.lockb', 'package.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/bun.lockb', '**/package.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('bun.lockb', 'package.json') }}-
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/bun.lockb', '**/package.json') }}-
+
+      - name: Install dependencies
+        run: bun install
 
       - name: Build with Next.js
         run: bun run build
-        env:
-          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
 
-      - uses: actions/upload-artifact@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: nextjs-build-artifact
           path: ./out
 
   deploy:
@@ -56,14 +53,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: nextjs-build-artifact
-
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          source: ./out
-          token: ${{ secrets.GITHUB_TOKEN }}
-          folder: ${{ github.ref }}  # Optional: Deploy to a specific branch
