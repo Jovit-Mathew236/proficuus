@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/config";
 import cloudinary from "cloudinary";
 import { Resend } from "resend";
@@ -15,6 +15,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10 MB
 
+// POST request for user registration
 export async function POST(request: NextRequest) {
   try {
     const {
@@ -126,7 +127,7 @@ export async function POST(request: NextRequest) {
         { status: 201 }
       );
     } catch (error) {
-      console.error("Error details:", error); // Log the error for debugging
+      console.error("Error details:", error);
       return NextResponse.json(
         {
           error: (error as Error).message || error,
@@ -141,6 +142,27 @@ export async function POST(request: NextRequest) {
     console.error("Error on registration", error);
     return NextResponse.json(
       { message: `Error on registration: ${error.message}` },
+      { status: 500 }
+    );
+  }
+}
+
+// GET request to return all participant data
+export async function GET() {
+  try {
+    const participantsRef = collection(db, "participants");
+    const snapshot = await getDocs(participantsRef);
+
+    const participants = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return NextResponse.json(participants, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching participants:", error);
+    return NextResponse.json(
+      { message: `Error fetching participants: ${(error as Error).message}` },
       { status: 500 }
     );
   }
