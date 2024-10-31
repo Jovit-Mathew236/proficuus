@@ -53,10 +53,14 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: bun run build
 
+      - name: List build directory
+        run: ls -la out/ # Check if the build output exists
+
       - name: Upload artifact
+        if: success() && github.event_name == 'push' # Only upload on successful push
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: out # Adjust this if your output directory is different
 
   deploy:
     environment:
