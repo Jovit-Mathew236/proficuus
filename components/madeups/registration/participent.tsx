@@ -110,7 +110,9 @@ export const accountFormSchema = z.object({
   experience: z.string({
     required_error: "Experience is required.",
   }),
-  image: z.instanceof(File), // Add image field
+  image: z.any().refine((value) => value instanceof File, {
+    message: "A valid file is required.",
+  }),
 });
 
 type AccountFormValues = z.infer<typeof accountFormSchema>;
