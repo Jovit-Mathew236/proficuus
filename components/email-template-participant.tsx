@@ -300,17 +300,24 @@ export const EmailTemplateParticipant: React.FC<
               𝗩𝗲𝗻𝘂𝗲: 𝘚𝘢𝘩𝘳𝘥𝘢𝘺𝘢 𝘊𝘰𝘭𝘭𝘦𝘨𝘦 𝘰𝘧 𝘌𝘯𝘨𝘪𝘯𝘦𝘦𝘳𝘪𝘯𝘨 & 𝘛𝘦𝘤𝘩𝘯𝘰𝘭𝘰𝘨𝘺, 𝘒𝘰𝘥𝘢𝘬𝘢𝘳𝘢,
               𝘛𝘩𝘳𝘪𝘴𝘴𝘶𝘳
             </p>
-            <p>
+            <div
+              style={{
+                marginTop: "1rem",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3924.897530313934!2d76.28601117604977!3d10.350077989774016!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba7f83ea70195f7%3A0xae0a5203144d6996!2sSahrdaya%20College%20of%20Advanced%20Studies%20Kodakara%20Thrissur%20Kerala!5e0!3m2!1sen!2sin!4v1730385221231!5m2!1sen!2sin"
-                width="600"
+                width="100%"
                 height="450"
-                style={{ border: "0" }} // Use an object here
+                style={{ border: "0", borderRadius: "0.5rem" }} // Adjusted styling
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
-            </p>
+            </div>
           </div>
         </div>
       </div>
