@@ -51,16 +51,18 @@ jobs:
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-        run: bun run build
+        run: |
+          bun run build
+          bun run export  # Ensure this step is included for static export
 
       - name: List build directory
-        run: ls -la out/ # Check if the build output exists
+        run: ls -la out/ # Should now reflect the contents of out if export was successful
 
       - name: Upload artifact
-        if: success() && github.event_name == 'push' # Only upload on successful push
+        if: success() && github.event_name == 'push'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: out # Adjust this if your output directory is different
+          path: out
 
   deploy:
     environment:
