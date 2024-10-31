@@ -2,6 +2,7 @@
 const nextConfig = {
   output: "export",
   // distDir: ".next",
+  basePath: "/proficuus",
   images: {
     unoptimized: true,
     remotePatterns: [
