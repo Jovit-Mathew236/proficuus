@@ -157,7 +157,7 @@ export function Volunteer() {
       try {
         const compressedFile = await imageCompression(file, {
           maxSizeMB: 4,
-          // maxWidthOrHeight: 1024,
+          maxWidthOrHeight: 1024,
           useWebWorker: true,
           fileType: file.type,
           onProgress: progressHandler,
