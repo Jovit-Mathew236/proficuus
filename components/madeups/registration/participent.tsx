@@ -643,7 +643,10 @@ export function Participant() {
                   />
                 </div>
               </FormControl>
-              <FormDescription>This image is for your id card</FormDescription>
+              <FormDescription>
+                This image is for your id card{" "}
+                <span className="text-red-500">AND UPLOAD A MAX 4 MB File</span>
+              </FormDescription>
               <FormMessage />
 
               {imagePreview && ( // Render image preview if it exists

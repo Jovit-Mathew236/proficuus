@@ -413,23 +413,16 @@ const Dashboard = () => {
         <div className="flex flex-col bg-primary-foreground rounded-2xl overflow-hidden shadow-md p-6">
           <h3 className="text-lg font-semibold mb-4">Your Ticket</h3>
           <div
-            className={`flex justify-center items-center ${
-              userData?.paymentVerified ? "" : "blur-xl"
-            }`}
+            className="flex justify-center items-center"
+            // className={`flex justify-center items-center
+            //   ${userData?.paymentVerified ? "" : "blur-xl"}
+            //   `}
           >
             <Ticket
-              name={
-                (userData?.paymentVerified && userData?.name) || "Loading..."
-              }
-              zone={
-                (userData?.paymentVerified && userData?.zone) || "Loading..."
-              }
-              collage={
-                (userData?.paymentVerified && userData?.collage) || "Loading..."
-              }
-              userId={
-                (userData?.paymentVerified && userData?.userId) || "Loading..."
-              }
+              name={userData?.name || "Loading..."}
+              zone={userData?.zone || "Loading..."}
+              collage={userData?.collage || "Loading..."}
+              userId={userData?.userId || "Loading..."}
             />
           </div>
         </div>

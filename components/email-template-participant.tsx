@@ -66,7 +66,6 @@
 //     </div>
 //   );
 // };
-
 /* eslint-disable react/no-unescaped-entities */
 import * as React from "react";
 
@@ -156,8 +155,6 @@ export const EmailTemplateParticipant: React.FC<
 
         <div
           style={{
-            // display: "flex",
-            // flexDirection: "column",
             gap: "1.5rem",
             color: "#4b5563",
           }}
@@ -266,6 +263,52 @@ export const EmailTemplateParticipant: React.FC<
             >
               Login to Your Profile
             </a>
+          </div>
+
+          {/* Additional Content */}
+          <div
+            style={{
+              marginTop: "1.5rem",
+              color: "#4b5563",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "1.125rem",
+                fontWeight: "600",
+                color: "#1f2937",
+                marginBottom: "0.5rem",
+              }}
+            >
+              𝓑𝓮𝓵𝓸𝓿𝓮𝓭 {firstName},
+            </h3>
+            <p>Welcome aboard Young Lantern!!🏮</p>
+            <p>
+              We're extremely thrilled to have you here & looking forward to
+              meet you at PROFICUUS'24.
+            </p>
+            <p>
+              No one has ever seen God; but if we Love one another, God lives in
+              us & His Love is perfected in us! (1 John 4:12)
+            </p>
+            <p>
+              Dearest one in Christ, get ready to share His amazing love to each
+              and every soul you meet.
+            </p>
+            <p>See you soon at Proficuus'24... 𝓙𝓮𝓼𝓾𝓼 𝓵𝓸𝓿𝓮𝓼 𝔂𝓸𝓾</p>
+            <p>
+              𝗩𝗲𝗻𝘂𝗲: 𝘚𝘢𝘩𝘳𝘥𝘢𝘺𝘢 𝘊𝘰𝘭𝘭𝘦𝘨𝘦 𝘰𝘧 𝘌𝘯𝘨𝘪𝘯𝘦𝘦𝘳𝘪𝘯𝘨 & 𝘛𝘦𝘤𝘩𝘯𝘰𝘭𝘰𝘨𝘺, 𝘒𝘰𝘥𝘢𝘬𝘢𝘳𝘢,
+              𝘛𝘩𝘳𝘪𝘴𝘴𝘶𝘳
+            </p>
+            <p>
+              <a
+                href="https://maps.app.goo.gl/qTMK9fbjYaT7DrZw7"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View Location
+              </a>
+            </p>
           </div>
         </div>
       </div>
