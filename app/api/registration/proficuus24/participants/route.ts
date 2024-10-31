@@ -91,7 +91,8 @@ export async function POST(request: NextRequest) {
       year,
       zone,
       phone,
-      alternativephone,
+      // Only include alternativephone if it's provided
+      ...(alternativephone && { alternativephone }),
       expectation,
       experience,
       email,
