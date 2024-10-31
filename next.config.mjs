@@ -2,9 +2,9 @@
 const isProd = process.env.NODE_ENV === "production";
 const nextConfig = {
   output: "export",
-  basePath: isProd ? "/proficuus" : "",
+  basePath: isProd ? "/" : "",
   publicRuntimeConfig: {
-    basePath: isProd ? "/proficuus" : "",
+    basePath: isProd ? "/" : "",
   },
   images: {
     unoptimized: true,
