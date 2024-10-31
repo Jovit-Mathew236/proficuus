@@ -7,7 +7,7 @@ import { auth } from "@/lib/firebase/config";
 export default function LogoutButton() {
   const logout = () => {
     signOut(auth);
-    window.location.href = "/login";
+    window.location.href = "/proficuus24/login";
   };
 
   return (

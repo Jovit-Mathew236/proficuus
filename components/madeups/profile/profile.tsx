@@ -79,7 +79,7 @@ export function Profile() {
   const logout = async () => {
     try {
       await signOut(auth); // Perform Firebase sign-out
-      window.location.href = "/login"; // Redirect to login
+      window.location.href = "/proficuus24/login"; // Redirect to login
     } catch (error) {
       console.error("Logout error:", error);
     }

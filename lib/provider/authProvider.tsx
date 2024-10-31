@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(user);
       setLoading(true);
       if (!user) {
-        router.push("/login");
+        router.push("/proficuus24/login");
       } else {
         // Set the cookie with the user email
         setCookie(null, "user_email", user.email || "", {

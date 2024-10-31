@@ -11,12 +11,12 @@ export function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/dashboard") &&
     userEmail !== "admin@jymest.com"
   ) {
-    return NextResponse.redirect(new URL("/profile", request.url));
+    return NextResponse.redirect(new URL("/proficuus24/profile", request.url));
   }
 
   // Redirect admin users from /profile to /dashboard
   if (
-    request.nextUrl.pathname.startsWith("/profile") &&
+    request.nextUrl.pathname.startsWith("/proficuus24/profile") &&
     userEmail === "admin@jymest.com"
   ) {
     return NextResponse.redirect(new URL("/dashboard", request.url));

@@ -62,7 +62,7 @@ export function AppSidebar() {
 
   const logout = () => {
     signOut(auth);
-    window.location.href = "/login";
+    window.location.href = "/proficuus24/login";
   };
 
   return (

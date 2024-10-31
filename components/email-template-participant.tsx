@@ -239,12 +239,12 @@ export const EmailTemplateParticipant: React.FC<
               </li>
             </ul>
             <a
-              href="https://proficuus.jymest.com/profile"
+              href="https://www.jymest.com/proficuus24/profile"
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                backgroundColor: "#adadada3",
-                color: "#f8fafc",
+                backgroundColor: "#1f2937",
+                color: "#fff",
                 padding: "0.75rem 2rem",
                 borderRadius: "0.5rem",
                 border: "none",
@@ -301,13 +301,15 @@ export const EmailTemplateParticipant: React.FC<
               𝘛𝘩𝘳𝘪𝘴𝘴𝘶𝘳
             </p>
             <p>
-              <a
-                href="https://maps.app.goo.gl/qTMK9fbjYaT7DrZw7"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View Location
-              </a>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3924.897530313934!2d76.28601117604977!3d10.350077989774016!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba7f83ea70195f7%3A0xae0a5203144d6996!2sSahrdaya%20College%20of%20Advanced%20Studies%20Kodakara%20Thrissur%20Kerala!5e0!3m2!1sen!2sin!4v1730385221231!5m2!1sen!2sin"
+                width="600"
+                height="450"
+                style={{ border: "0" }} // Use an object here
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </p>
           </div>
         </div>
