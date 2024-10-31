@@ -40,6 +40,8 @@ import Image from "next/image";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ministry, year, zone } from "@/lib/constants";
 import { useRouter } from "next/navigation";
+import { Progress } from "@/components/ui/progress";
+import imageCompression from "browser-image-compression";
 // import FlickeringGrid from "@/components/ui/flickering-grid";
 
 export const accountFormSchema = z.object({
@@ -122,24 +124,75 @@ export function Volunteer() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [compressionProgressProfile, setCompressionProgressProfile] =
+    useState<number>(0);
+  const [updateButtonDisable, setUpdateButtonDisable] =
+    useState<boolean>(false);
+
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues,
   });
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const handleFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+    formKey: typeof defaultValues & keyof AccountFormValues,
+    progressHandler: (progress: number) => void,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     field: any
   ) => {
-    if (e.target.files) {
-      const file = e.target.files[0];
-      field.onChange(file);
+    setUpdateButtonDisable(true);
 
-      // Create a preview URL
+    const file = event.target.files ? event.target.files[0] : null;
+    field.onChange(file);
+
+    // Create a preview URL
+
+    // const file = event.target.files ? event.target.files[0] : null;
+    if (file) {
       const previewUrl = URL.createObjectURL(file);
       setImagePreview(previewUrl);
+      try {
+        const compressedFile = await imageCompression(file, {
+          maxSizeMB: 4,
+          // maxWidthOrHeight: 1024,
+          useWebWorker: true,
+          fileType: file.type,
+          onProgress: progressHandler,
+        });
+
+        const compressedFileWithOriginalName = new File(
+          [compressedFile],
+          file.name,
+          {
+            type: file.type,
+          }
+        );
+        form.setValue(formKey, compressedFileWithOriginalName);
+        // console.log(compressedFileWithOriginalName, compressedFile);
+      } catch (error) {
+        console.error("Image compression error:", error);
+      }
+    } else {
+      form.setValue(formKey, "");
+      setUpdateButtonDisable(false);
     }
+  };
+
+  const imageLoaderProfile = (progress: number) => {
+    setCompressionProgressProfile(progress);
+    if (progress === 100) {
+      setUpdateButtonDisable(false);
+    }
+  };
+  const handleProfileImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    field: any
+  ) => {
+    handleImageUpload(event, "image", imageLoaderProfile, field);
   };
 
   const onSubmit = async (data: z.infer<typeof accountFormSchema>) => {
@@ -563,7 +616,7 @@ export function Volunteer() {
           name="image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Upload a casual single photo of yours</FormLabel>
+              <FormLabel>Upload a casual single photo of yours *</FormLabel>
               <FormControl>
                 <div
                   className="flex items-center justify-center w-full h-12 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 transition duration-200 bg-secondary"
@@ -575,13 +628,17 @@ export function Volunteer() {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => handleFileChange(e, field)} // Update handler to use the new function
+                    onChange={(e) => handleProfileImageUpload(e, field)} // Update handler to use the new function
                     className="hidden"
                     ref={fileInputRef}
                   />
                 </div>
               </FormControl>
-              <FormDescription>This image is for your id card</FormDescription>
+              <FormDescription>
+                This image is for your id card{" "}
+                {/* <span className="text-red-500">AND UPLOAD A MAX 4 MB File</span> */}
+              </FormDescription>
+              <Progress value={compressionProgressProfile} />
               <FormMessage />
 
               {imagePreview && ( // Render image preview if it exists
@@ -601,7 +658,7 @@ export function Volunteer() {
         {/* <Button type="submit"></Button> */}
         <RainbowButton
           type="submit"
-          disabled={loading}
+          disabled={loading || updateButtonDisable}
           className="text-white bg-slate-900 dark:bg-white dark:text-slate-900"
         >
           {loading ? "Loading..." : "Register as Volunteer 💪"}

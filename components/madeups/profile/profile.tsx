@@ -110,7 +110,7 @@ export function Profile() {
                 href: "#",
                 icon: (
                   <Image
-                    src="https://assets.aceternity.com/manu.png"
+                    src="/images/logo.png"
                     className="h-7 w-7 flex-shrink-0 rounded-full"
                     width={50}
                     height={50}
@@ -156,7 +156,7 @@ export const LogoIcon = () => {
       className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
     >
       <Image
-        src="images/logo.png"
+        src="/images/logo.png"
         // src={`${basePath}/images/logo.png`}
         alt="logo"
         width={50}
