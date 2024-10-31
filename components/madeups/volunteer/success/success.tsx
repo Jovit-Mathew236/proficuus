@@ -3,6 +3,10 @@ import { Button } from "@/components/ui/button";
 import confetti from "canvas-confetti";
 import Image from "next/image";
 import React, { useEffect } from "react";
+import getConfig from "next/config";
+
+const { publicRuntimeConfig } = getConfig();
+const { basePath } = publicRuntimeConfig;
 
 const Success = () => {
   useEffect(() => {
@@ -54,7 +58,7 @@ const Success = () => {
         </Button>
       </div>
       <Image
-        src="/images/bgwelcome.png"
+        src={`${basePath}/images/bgwelcome.png`}
         alt="success background"
         layout="fill"
         objectFit="cover"

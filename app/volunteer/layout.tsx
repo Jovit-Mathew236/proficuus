@@ -6,7 +6,10 @@ import { ModeToggle } from "@/components/theme-mode";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 // import { NeonGradientCard } from "@/components/ui/neon-gradient-card";
 // import { SidebarNav } from "@/components/madeups/volunteer/sidebar-nav";
+import getConfig from "next/config";
 
+const { publicRuntimeConfig } = getConfig();
+const { basePath } = publicRuntimeConfig;
 export const metadata: Metadata = {
   title: "PROFICUUS | Volunteer registration",
   description: "Volunteer registration Form",
@@ -56,7 +59,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
               {/* <SidebarNav items={sidebarNavItems} /> */}
               {/* <NeonGradientCard> */}
               <Image
-                src="/images/proficuus.png"
+                src={`${basePath}/images/proficuus.png`}
                 width={1280}
                 height={791}
                 alt="Forms"

@@ -30,6 +30,10 @@ import { useAuth } from "@/lib/provider/authProvider";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 import { Ticket } from "@/components/ticket";
+import getConfig from "next/config";
+
+const { publicRuntimeConfig } = getConfig();
+const { basePath } = publicRuntimeConfig;
 // const FormSchema = z.object({
 //   image: z.instanceof(File), // Add image field
 // });
@@ -128,7 +132,12 @@ export const Logo = () => {
       href="#"
       className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
     >
-      <Image src="/images/logo.png" alt="logo" width={50} height={50} />
+      <Image
+        src={`${basePath}/images/logo.png`}
+        alt="logo"
+        width={50}
+        height={50}
+      />
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -146,7 +155,7 @@ export const LogoIcon = () => {
       className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
     >
       <Image
-        src="/images/logo.png"
+        src={`${basePath}/images/logo.png`}
         alt="logo"
         width={50}
         height={50}

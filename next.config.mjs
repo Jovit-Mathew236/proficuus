@@ -1,14 +1,17 @@
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === "production";
 const nextConfig = {
   output: "export",
-  // distDir: ".next",
-  basePath: "/proficuus",
+  basePath: isProd ? "/proficuus" : "",
+  publicRuntimeConfig: {
+    basePath: isProd ? "/proficuus" : "",
+  },
   images: {
     unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**", // Matches all hostnames
+        hostname: "**",
       },
     ],
   },
