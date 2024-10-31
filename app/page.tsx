@@ -1,9 +1,9 @@
 // import Image from "next/image";
 import Iphone15Pro from "@/components/ui/iphone-15-pro";
-import getConfig from "next/config";
+// import getConfig from "next/config";
 
-const { publicRuntimeConfig } = getConfig();
-const { basePath } = publicRuntimeConfig;
+// const { publicRuntimeConfig } = getConfig();
+// const { basePath } = publicRuntimeConfig;
 
 // import { NeonGradientCard } from "@/components/ui/neon-gradient-card";
 export default function Home() {
@@ -62,7 +62,8 @@ export default function Home() {
 
           <Iphone15Pro
             className="size-1/2 md:size-1/5"
-            src={`${basePath}/images/proficuus.png`}
+            // src={`${basePath}/images/proficuus.png`}
+            src="/images/proficuus.png"
           />
 
           {/* <Image

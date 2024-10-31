@@ -1,12 +1,12 @@
 /** @type {import('next').NextConfig} */
-const isProd = process.env.NODE_ENV === "production";
+// const isProd = process.env.NODE_ENV === "production";
 
 const nextConfig = {
   // output: "export",
-  basePath: isProd ? "" : "",
-  publicRuntimeConfig: {
-    basePath: isProd ? "" : "",
-  },
+  // basePath: isProd ? "" : "",
+  // publicRuntimeConfig: {
+  //   basePath: isProd ? "" : "",
+  // },
   images: {
     unoptimized: true,
     remotePatterns: [

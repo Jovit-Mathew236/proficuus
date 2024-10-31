@@ -2,10 +2,10 @@
 import Image from "next/image";
 import React, { useRef } from "react";
 import QrCreator from "qr-creator";
-import getConfig from "next/config";
+// import getConfig from "next/config";
 
-const { publicRuntimeConfig } = getConfig();
-const { basePath } = publicRuntimeConfig;
+// const { publicRuntimeConfig } = getConfig();
+// const { basePath } = publicRuntimeConfig;
 interface TicketDataProps {
   name: string;
   zone: string;
@@ -58,7 +58,8 @@ export const Ticket: React.FC<Readonly<TicketDataProps>> = ({
           <div className="w-14 h-14 rounded-lg" ref={qrCodeRef}></div>
         </div>
         <Image
-          src={`${basePath}/images/ticket.png`}
+          src="/images/ticket.png"
+          // src={`${basePath}/images/ticket.png`}
           alt="Ticket Image"
           width={1000}
           height={1000}

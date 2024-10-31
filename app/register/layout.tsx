@@ -5,10 +5,10 @@ import { Separator } from "@/components/ui/separator";
 import { ModeToggle } from "@/components/theme-mode";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { Card, CardContent } from "@/components/ui/card";
-import getConfig from "next/config";
+// import getConfig from "next/config";
 
-const { publicRuntimeConfig } = getConfig();
-const { basePath } = publicRuntimeConfig;
+// const { publicRuntimeConfig } = getConfig();
+// const { basePath } = publicRuntimeConfig;
 export const metadata: Metadata = {
   title: "PROFICUUS | Participants registration",
   description: "Volunteer registration Form",
@@ -74,7 +74,8 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
               <CardContent className="p-1">
                 <div className="relative rounded-lg overflow-hidden">
                   <Image
-                    src={`${basePath}/images/proficuus.png`}
+                    src="/images/proficuus.png"
+                    // src={`${basePath}/images/proficuus.png`}
                     width={1280}
                     height={791}
                     alt="Proficuus"
