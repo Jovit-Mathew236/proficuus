@@ -28,33 +28,37 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
             <div className="flex justify-between items-start">
               <div className="max-w-3xl">
                 <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-4">
-                  Be dressed ready for service and keep your lamps burning
+                  "Be dressed ready for service and keep your lamps
+                  burning"🪔(LUKE 12:35)
                 </h2>
                 <div className="prose prose-sm dark:prose-invert">
                   <p className="text-muted-foreground leading-relaxed">
-                    The king will reply:{" "}
-                    <span className="font-semibold text-foreground">
-                      "I truly want to express that whatever you did for even
-                      one of my brothers and sisters, you did it for me."
-                    </span>{" "}
-                    (Mathew 25:40)
+                    Hello there ,Young lantern!! Yeah you!📸🤩
                   </p>
 
                   <div className="mt-6 space-y-4">
                     <p className="font-bold text-lg text-foreground">
-                      Hello there, PROFICUUS '24 is here!!
+                      𝗜𝗴𝗻𝗶𝘁𝗲 𝘁𝗵𝗮𝘁 𝗘𝗺𝗯𝗲𝗿 𝗜𝗻𝘀𝗶𝗱𝗲 <br />
+                      𝗦𝗲𝘁 𝗔𝗯𝗹𝗮𝘇𝗲 𝘆𝗼𝘂𝗿 𝗛𝗲𝗮𝗿𝘁❤‍🔥 <br />
+                      𝗕𝗲 𝘁𝗵𝗲 𝗹𝗮𝗺𝗽 𝗼𝗻 𝘁𝗵𝗲 𝘁𝗮𝗯𝗹𝗲
+                      <br />
+                      𝗟𝗲𝘁 𝘆𝗼𝘂𝗿 𝗹𝗶𝗴𝗵𝘁 𝘀𝗵𝗶𝗻𝗲 𝗯𝗿𝗶𝗴𝗵𝘁✨
                     </p>
                     <p className="text-muted-foreground">
-                      We are recruiting true-blue{" "}
-                      <span className="font-bold">SOLDIER</span> to the{" "}
-                      <span className="font-bold">PROFICUUS ARMY</span>! Yes! We
-                      need <span className="font-bold">VOLUNTEERS</span>! 🙌🏼
+                      <span className="font-bold text-foreground">
+                        𝙋𝙧𝙤𝙛𝙞𝙘𝙪𝙪𝙨'24 is 𝗵𝗲𝗿𝗲...
+                      </span>
+                      Time to get your skates on!! <br />
+                      <span className="font-bold text-foreground">
+                        𝗗𝗮𝘁𝗲𝘀: 𝗗𝗲𝗰𝗲𝗺𝗯𝗲𝗿 𝟮𝟬-𝟮𝟯
+                      </span>{" "}
                     </p>
-                    <p className="text-muted-foreground">
-                      Share 'the fuel within' and help your fellows embark this
-                      journey with 'lighted lamps'!🪔 Expecting your faithful
-                      executions from beginning to the end! 🔥
+                    <p className="font-semibold text-foreground">
+                      𝗦𝘁𝗲𝗽 𝗼𝗻!!🥳 <br /> 𝗦𝗹𝗼𝘁𝘀 𝗮𝗿𝗲 𝗼𝗽𝗲𝗻...!🎰 <br /> 𝗧𝗶𝗰𝗸𝗲𝘁𝘀 𝗮𝗿𝗲
+                      𝗼𝘂𝘁..! 🎟 <br />
+                      👉🏼𝗛𝘂𝗿𝗿𝘆 𝘂𝗽 & 𝗚𝗿𝗮𝗯 𝘁𝗵𝗲𝗺 𝗯𝗲𝗳𝗼𝗿𝗲 𝗰𝗹𝗼𝘀𝘂𝗿𝗲
                     </p>
+                    <br />
                     <p className="font-semibold text-foreground">
                       PROFICUUS'24 - December 20-23
                     </p>
