@@ -57,6 +57,7 @@ export type Participant = {
   paymentUpload: boolean;
   paymentVerified: boolean;
   isCoordinator: boolean;
+  imageUrl: string;
 };
 
 export function ParticipantsDashboard() {
