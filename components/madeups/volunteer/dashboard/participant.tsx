@@ -6,7 +6,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import {
   CaretSortIcon,
   ChevronDownIcon,
-  DotsHorizontalIcon,
+  // DotsHorizontalIcon,
 } from "@radix-ui/react-icons";
 import {
   ColumnDef,
@@ -26,9 +26,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -40,33 +37,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/input-otp";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+
 import { useToast } from "@/hooks/use-toast";
+import ParticipantActions, { FormSchema } from "./participant-actions";
 
 export type Participant = {
   name: string;
@@ -84,11 +59,6 @@ export type Participant = {
   isCoordinator: boolean;
 };
 
-const FormSchema = z.object({
-  pin: z.string().min(6, {
-    message: "Your one-time password must be 6 characters.",
-  }),
-});
 export function ParticipantsDashboard() {
   const tableRef = useRef(null);
   const [participants, setParticipants] = React.useState<Participant[]>([]);
@@ -100,12 +70,6 @@ export function ParticipantsDashboard() {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      pin: "",
-    },
-  });
 
   async function onSubmit(
     data: z.infer<typeof FormSchema>,
@@ -283,95 +247,11 @@ export function ParticipantsDashboard() {
       id: "actions",
       cell: ({ row }) => {
         const participant = row.original;
-
         return (
-          <Dialog>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <DotsHorizontalIcon className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem
-                  onClick={() =>
-                    navigator.clipboard.writeText(participant.email)
-                  }
-                >
-                  Copy Email
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    window.location.href = `https://wa.me/${participant.phone}`;
-                  }}
-                >
-                  Whatsapp Msg
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                {/* <DropdownMenuItem
-                onClick={() => handleTogglePaymentVerified(participant)}
-              >
-                {participant.paymentVerified ? "verified" : "Mark as Verified"}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator /> */}
-                <DialogTrigger asChild>
-                  <DropdownMenuItem
-                  // onClick={() => handleToggleIsCoordinator(participant)}
-                  >
-                    {participant.isCoordinator
-                      ? "Coordinator"
-                      : "Mark as coordinator"}
-                  </DropdownMenuItem>
-                </DialogTrigger>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Edit profile</DialogTitle>
-                <DialogDescription>Type your secret code</DialogDescription>
-              </DialogHeader>
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit((data) =>
-                    onSubmit(data, participant)
-                  )}
-                  className="w-2/3 space-y-6"
-                >
-                  <FormField
-                    control={form.control}
-                    name="pin"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>One-Time Password</FormLabel>
-                        <FormControl>
-                          <InputOTP maxLength={6} {...field}>
-                            <InputOTPGroup>
-                              <InputOTPSlot index={0} />
-                              <InputOTPSlot index={1} />
-                              <InputOTPSlot index={2} />
-                            </InputOTPGroup>
-                            <InputOTPSeparator />
-                            <InputOTPGroup>
-                              <InputOTPSlot index={3} />
-                              <InputOTPSlot index={4} />
-                              <InputOTPSlot index={5} />
-                            </InputOTPGroup>
-                          </InputOTP>
-                        </FormControl>
-                        <FormDescription>
-                          Please enter the one-time password sent to your phone.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit">Submit</Button>
-                </form>
-              </Form>
-            </DialogContent>
-          </Dialog>
+          <ParticipantActions
+            participant={participant}
+            onSubmit={onSubmit} // Pass the onSubmit function here
+          />
         );
       },
     },
