@@ -40,6 +40,33 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useToast } from "@/hooks/use-toast";
 
 export type Participant = {
   name: string;
@@ -54,8 +81,14 @@ export type Participant = {
   uid: string;
   paymentUpload: boolean;
   paymentVerified: boolean;
+  isCoordinator: boolean;
 };
 
+const FormSchema = z.object({
+  pin: z.string().min(6, {
+    message: "Your one-time password must be 6 characters.",
+  }),
+});
 export function ParticipantsDashboard() {
   const tableRef = useRef(null);
   const [participants, setParticipants] = React.useState<Participant[]>([]);
@@ -66,20 +99,28 @@ export function ParticipantsDashboard() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const { toast } = useToast();
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      pin: "",
+    },
+  });
 
-  const handleTogglePaymentVerified = async (participant: Participant) => {
-    if (participant.paymentUpload) {
-      // const updatedValue = !participant.paymentVerified;
-
+  async function onSubmit(
+    data: z.infer<typeof FormSchema>,
+    participant: Participant
+  ) {
+    if (data.pin == "122524") {
       try {
-        const response = await fetch("/api/profile/update-payment", {
+        const response = await fetch("/api/profile/update-is-coordinator", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             uid: participant.uid,
-            paymentVerified: true,
+            isCoordinator: true,
           }),
         });
 
@@ -89,16 +130,54 @@ export function ParticipantsDashboard() {
 
         setParticipants((prevParticipants) =>
           prevParticipants.map((p) =>
-            p.email === participant.email ? { ...p, paymentVerified: true } : p
+            p.email === participant.email ? { ...p, isCoordinator: true } : p
           )
         );
       } catch (err) {
         console.error(err);
       }
     } else {
-      alert("Payment must be uploaded to change verification status.");
+      toast({
+        title: "Wrong OTP",
+        description: "Please enter the correct OTP",
+        variant: "destructive",
+        duration: 2000,
+      });
     }
-  };
+  }
+
+  // const handleTogglePaymentVerified = async (participant: Participant) => {
+  //   if (participant.paymentUpload) {
+  //     // const updatedValue = !participant.paymentVerified;
+
+  //     try {
+  //       const response = await fetch("/api/profile/update-payment", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           uid: participant.uid,
+  //           paymentVerified: true,
+  //         }),
+  //       });
+
+  //       if (!response.ok) {
+  //         throw new Error("Failed to update payment verification.");
+  //       }
+
+  //       setParticipants((prevParticipants) =>
+  //         prevParticipants.map((p) =>
+  //           p.email === participant.email ? { ...p, paymentVerified: true } : p
+  //         )
+  //       );
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   } else {
+  //     alert("Payment must be uploaded to change verification status.");
+  //   }
+  // };
 
   const columns: ColumnDef<Participant>[] = [
     {
@@ -134,6 +213,11 @@ export function ParticipantsDashboard() {
         </Button>
       ),
       cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    },
+    {
+      accessorKey: "email",
+      header: () => <div>Email</div>,
+      cell: ({ row }) => <div>{row.getValue("email")}</div>,
     },
     {
       accessorKey: "collage",
@@ -174,18 +258,25 @@ export function ParticipantsDashboard() {
       header: () => <div>Experience</div>,
       cell: ({ row }) => <div>{row.getValue("experience")}</div>,
     },
+    // {
+    //   accessorKey: "paymentUpload",
+    //   header: () => <div>Payment Uploaded</div>,
+    //   cell: ({ row }) => (
+    //     <div>{row.getValue("paymentUpload") ? "Yes" : "No"}</div>
+    //   ),
+    // },
+    // {
+    //   accessorKey: "paymentVerified",
+    //   header: () => <div>Payment Verified</div>,
+    //   cell: ({ row }) => (
+    //     <div>{row.getValue("paymentVerified") ? "Yes" : "No"}</div>
+    //   ),
+    // },
     {
-      accessorKey: "paymentUpload",
-      header: () => <div>Payment Uploaded</div>,
+      accessorKey: "isCoordinator",
+      header: () => <div>Is coordinator</div>,
       cell: ({ row }) => (
-        <div>{row.getValue("paymentUpload") ? "Yes" : "No"}</div>
-      ),
-    },
-    {
-      accessorKey: "paymentVerified",
-      header: () => <div>Payment Verified</div>,
-      cell: ({ row }) => (
-        <div>{row.getValue("paymentVerified") ? "Yes" : "No"}</div>
+        <div>{row.getValue("isCoordinator") ? "Yes" : "No"}</div>
       ),
     },
     {
@@ -194,35 +285,93 @@ export function ParticipantsDashboard() {
         const participant = row.original;
 
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <DotsHorizontalIcon className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(participant.email)}
-              >
-                Copy Email
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  window.location.href = `https://wa.me/${participant.phone}`;
-                }}
-              >
-                Whatsapp Msg
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
+          <Dialog>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <DotsHorizontalIcon className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem
+                  onClick={() =>
+                    navigator.clipboard.writeText(participant.email)
+                  }
+                >
+                  Copy Email
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    window.location.href = `https://wa.me/${participant.phone}`;
+                  }}
+                >
+                  Whatsapp Msg
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                {/* <DropdownMenuItem
                 onClick={() => handleTogglePaymentVerified(participant)}
               >
                 {participant.paymentVerified ? "verified" : "Mark as Verified"}
               </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              <DropdownMenuSeparator /> */}
+                <DialogTrigger asChild>
+                  <DropdownMenuItem
+                  // onClick={() => handleToggleIsCoordinator(participant)}
+                  >
+                    {participant.isCoordinator
+                      ? "Coordinator"
+                      : "Mark as coordinator"}
+                  </DropdownMenuItem>
+                </DialogTrigger>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Edit profile</DialogTitle>
+                <DialogDescription>Type your secret code</DialogDescription>
+              </DialogHeader>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit((data) =>
+                    onSubmit(data, participant)
+                  )}
+                  className="w-2/3 space-y-6"
+                >
+                  <FormField
+                    control={form.control}
+                    name="pin"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>One-Time Password</FormLabel>
+                        <FormControl>
+                          <InputOTP maxLength={6} {...field}>
+                            <InputOTPGroup>
+                              <InputOTPSlot index={0} />
+                              <InputOTPSlot index={1} />
+                              <InputOTPSlot index={2} />
+                            </InputOTPGroup>
+                            <InputOTPSeparator />
+                            <InputOTPGroup>
+                              <InputOTPSlot index={3} />
+                              <InputOTPSlot index={4} />
+                              <InputOTPSlot index={5} />
+                            </InputOTPGroup>
+                          </InputOTP>
+                        </FormControl>
+                        <FormDescription>
+                          Please enter the one-time password sent to your phone.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit">Submit</Button>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
         );
       },
     },

@@ -99,6 +99,7 @@ export async function POST(request: NextRequest) {
       uid: user.uid,
       paymentUpload: false,
       paymentVerified: false,
+      isCoordinator: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       ...(imageUrl ? { imageUrl } : {}),
