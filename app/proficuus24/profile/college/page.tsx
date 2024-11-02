@@ -1,8 +1,8 @@
-import { Profile } from "@/components/madeups/profile/profile";
+import { CollegeData } from "@/components/madeups/profile/college-wise-data/data-table";
 import React from "react";
 
 const Home = () => {
-  return <Profile />;
+  return <CollegeData />;
 };
 
 export default Home;

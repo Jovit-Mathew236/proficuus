@@ -32,7 +32,7 @@ export function ProfileSidebar() {
   const links = [
     {
       label: "Profile",
-      href: "#",
+      href: "/proficuus24/profile",
       icon: (
         <IconUserBolt className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
       ),
