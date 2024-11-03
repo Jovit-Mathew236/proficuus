@@ -9,16 +9,15 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
-import { useAuth } from "@/lib/provider/authProvider";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 import { motion } from "framer-motion";
 import { useUser } from "@/lib/context/userContext";
+import { ModeToggle } from "@/components/theme-mode";
 
 export function ProfileSidebar() {
   const [open, setOpen] = useState(false);
   const { userData, error, loading } = useUser();
-  const { username } = useAuth();
 
   const logout = async () => {
     try {
@@ -77,14 +76,20 @@ export function ProfileSidebar() {
             ))}
           </div>
         </div>
-        <div>
+        <div
+          className={`flex  justify-center ${
+            open ? "items-start" : "items-center flex-col gap-6"
+          } w-full gap-2`}
+        >
+          <ModeToggle className="justify-center items-center h-full" />
           <SidebarLink
+            className="w-full"
             link={{
-              label: username || "User",
+              label: userData?.name || "User",
               href: "#",
               icon: (
                 <Image
-                  src="/images/logo.png"
+                  src={userData?.imageUrl || "/images/avatar.png"}
                   className="h-7 w-7 flex-shrink-0 rounded-full"
                   width={50}
                   height={50}

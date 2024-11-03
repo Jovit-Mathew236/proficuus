@@ -435,4 +435,14 @@ export const collage = [
     value: "Mar Ephraem College of Engineering and Technology",
     zone: "Neyyatinkara",
   },
+  {
+    label: "Government Medical College, Idukki",
+    value: "Government Medical College, Idukki",
+    zone: "Idukki",
+  },
+  {
+    label: "Government Medical College,kollam",
+    value: "Government Medical College,kollam",
+    zone: "Kollam",
+  },
 ] as const;
