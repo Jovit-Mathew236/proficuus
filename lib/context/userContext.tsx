@@ -2,7 +2,7 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useAuth } from "@/lib/provider/authProvider";
-import { Participant } from "@/components/madeups/volunteer/dashboard/participant";
+import { Participant } from "@/components/madeups/volunteer/dashboard/participants";
 
 type UserContextType = {
   userData: Participant | null;

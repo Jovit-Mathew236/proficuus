@@ -34,7 +34,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Participant } from "./participant";
+import { Participant } from "./participants";
 
 export const FormSchema = z.object({
   pin: z

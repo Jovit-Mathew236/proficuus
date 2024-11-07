@@ -36,7 +36,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Participant } from "../../volunteer/dashboard/participant";
+import { Participant } from "../../volunteer/dashboard/participants";
 import { useUser } from "@/lib/context/userContext";
 
 export function CollegeData() {
