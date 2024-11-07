@@ -102,6 +102,12 @@ export function VolunteerDashboard() {
             p.email === participant.email ? { ...p, isCoordinator: true } : p
           )
         );
+        toast({
+          title: "Success",
+          description: "Coordinator Updated Successfully",
+          variant: "default",
+          duration: 2000,
+        });
       } catch (err) {
         console.error(err);
       }
