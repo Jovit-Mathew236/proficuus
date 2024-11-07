@@ -37,7 +37,7 @@ export const zone = [
   { label: "CHERTHALA", value: "CHERTHALA" },
   { label: "ERNAKULAM", value: "ERNAKULAM" },
   { label: "IDUKKI", value: "IDUKKI" },
-  { label: "IRINJALAKKUDA", value: "IRINJALAKKUDA" },
+  { label: "IRINJALAKUDA", value: "IRINJALAKUDA" },
   { label: "KANJIRAPPALLY", value: "KANJIRAPPALLY" },
   { label: "KANNUR", value: "KANNUR" },
   { label: "KASARGOD", value: "KASARGOD" },
