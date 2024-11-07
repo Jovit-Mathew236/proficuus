@@ -318,7 +318,7 @@ export const EmailTemplateParticipant: React.FC<
                 }}
               >
                 <img
-                  src="https://wwww.jymest.com/images/map.png" // Replace with your desired image URL
+                  src="https://www.jymest.com/images/map.png" // Replace with your desired image URL
                   alt="View on Google Maps"
                   style={{
                     width: "100%",
