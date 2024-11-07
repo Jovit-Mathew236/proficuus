@@ -1,4 +1,4 @@
-import { VolunteerDashboard } from "@/components/madeups/volunteer/dashboard/volunteers";
+import { VolunteerDashboard } from "@/components/madeups/dashboard/volunteers";
 import React from "react";
 
 const page = () => {

@@ -26,6 +26,9 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  // DropdownMenuItem,
+  // DropdownMenuLabel,
+  // DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -37,64 +40,65 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
+import VolunteersActions, { FormSchema } from "./volunteers-actions";
 import { z } from "zod";
-
 import { useToast } from "@/hooks/use-toast";
-import ParticipantActions, { FormSchema } from "./participant-actions";
 
-export type Participant = {
+export type Volunteer = {
+  email: string;
   name: string;
   collage: string;
   year: number;
   zone: string;
   phone: string;
-  alternativephone: string;
-  expectation: string;
   experience: string;
-  email: string;
-  uid: string;
-  paymentUpload: boolean;
-  paymentVerified: boolean;
-  isCoordinator: boolean;
-  imageUrl: string;
+  alternativephone: string;
+  meeting_availability: string;
+  program_availability: string;
+  ministry: string;
+  isCoordinator?: boolean;
+  // imageUrl?: string;
 };
 
-export function ParticipantsDashboard() {
+export function VolunteerDashboard() {
   const tableRef = useRef(null);
-  const [participants, setParticipants] = React.useState<Participant[]>([]);
+  const [volunteers, setVolunteers] = React.useState<Volunteer[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const { toast } = useToast();
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const { toast } = useToast();
-
   async function onSubmit(
     data: z.infer<typeof FormSchema>,
-    participant: Participant
+    participant: Volunteer
   ) {
     if (data.pin == "122524") {
       try {
-        const response = await fetch("/api/profile/update-is-coordinator", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            uid: participant.uid,
-            isCoordinator: true,
-          }),
-        });
+        const response = await fetch(
+          "/api/profile/volunteers/update-is-coordinator",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              collage: data.collage,
+              email: participant.email,
+              phone: participant.phone,
+              isCoordinator: true,
+            }),
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to update payment verification.");
         }
 
-        setParticipants((prevParticipants) =>
-          prevParticipants.map((p) =>
+        setVolunteers((prevVolunteers) =>
+          prevVolunteers.map((p) =>
             p.email === participant.email ? { ...p, isCoordinator: true } : p
           )
         );
@@ -103,7 +107,7 @@ export function ParticipantsDashboard() {
       }
     } else {
       toast({
-        title: "Wrong OTP",
+        title: "Wrong Password",
         description: "Please enter the correct OTP",
         variant: "destructive",
         duration: 2000,
@@ -111,40 +115,7 @@ export function ParticipantsDashboard() {
     }
   }
 
-  // const handleTogglePaymentVerified = async (participant: Participant) => {
-  //   if (participant.paymentUpload) {
-  //     // const updatedValue = !participant.paymentVerified;
-
-  //     try {
-  //       const response = await fetch("/api/profile/update-payment", {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify({
-  //           uid: participant.uid,
-  //           paymentVerified: true,
-  //         }),
-  //       });
-
-  //       if (!response.ok) {
-  //         throw new Error("Failed to update payment verification.");
-  //       }
-
-  //       setParticipants((prevParticipants) =>
-  //         prevParticipants.map((p) =>
-  //           p.email === participant.email ? { ...p, paymentVerified: true } : p
-  //         )
-  //       );
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   } else {
-  //     alert("Payment must be uploaded to change verification status.");
-  //   }
-  // };
-
-  const columns: ColumnDef<Participant>[] = [
+  const columns: ColumnDef<Volunteer>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -181,13 +152,18 @@ export function ParticipantsDashboard() {
     },
     {
       accessorKey: "email",
-      header: () => <div>Email</div>,
-      cell: ({ row }) => <div>{row.getValue("email")}</div>,
-    },
-    {
-      accessorKey: "collage",
-      header: () => <div>Collage</div>,
-      cell: ({ row }) => <div>{row.getValue("collage")}</div>,
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Email
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("email")}</div>
+      ),
     },
     {
       accessorKey: "year",
@@ -198,6 +174,11 @@ export function ParticipantsDashboard() {
       accessorKey: "zone",
       header: () => <div>Zone</div>,
       cell: ({ row }) => <div>{row.getValue("zone")}</div>,
+    },
+    {
+      accessorKey: "collage",
+      header: () => <div>Collage</div>,
+      cell: ({ row }) => <div>{row.getValue("collage")}</div>,
     },
     {
       accessorKey: "phone",
@@ -214,43 +195,33 @@ export function ParticipantsDashboard() {
       cell: ({ row }) => <div>{row.getValue("alternativephone")}</div>,
     },
     {
-      accessorKey: "expectation",
-      header: () => <div>Expectation</div>,
-      cell: ({ row }) => <div>{row.getValue("expectation")}</div>,
+      accessorKey: "ministry",
+      header: () => <div>Ministry</div>,
+      cell: ({ row }) => <div>{row.getValue("ministry")}</div>,
     },
     {
       accessorKey: "experience",
       header: () => <div>Experience</div>,
       cell: ({ row }) => <div>{row.getValue("experience")}</div>,
     },
-    // {
-    //   accessorKey: "paymentUpload",
-    //   header: () => <div>Payment Uploaded</div>,
-    //   cell: ({ row }) => (
-    //     <div>{row.getValue("paymentUpload") ? "Yes" : "No"}</div>
-    //   ),
-    // },
-    // {
-    //   accessorKey: "paymentVerified",
-    //   header: () => <div>Payment Verified</div>,
-    //   cell: ({ row }) => (
-    //     <div>{row.getValue("paymentVerified") ? "Yes" : "No"}</div>
-    //   ),
-    // },
     {
-      accessorKey: "isCoordinator",
-      header: () => <div>Is coordinator</div>,
-      cell: ({ row }) => (
-        <div>{row.getValue("isCoordinator") ? "Yes" : "No"}</div>
-      ),
+      accessorKey: "meeting_availability",
+      header: () => <div>Meeting Availability</div>,
+      cell: ({ row }) => <div>{row.getValue("meeting_availability")}</div>,
     },
+    {
+      accessorKey: "program_availability",
+      header: () => <div>Program Availability</div>,
+      cell: ({ row }) => <div>{row.getValue("program_availability")}</div>,
+    },
+
     {
       id: "actions",
       cell: ({ row }) => {
-        const participant = row.original;
+        const volunteer = row.original;
         return (
-          <ParticipantActions
-            participant={participant}
+          <VolunteersActions
+            volunteer={volunteer}
             onSubmit={onSubmit} // Pass the onSubmit function here
           />
         );
@@ -258,31 +229,32 @@ export function ParticipantsDashboard() {
     },
   ];
 
-  // Fetch participant data
+  // Fetch volunteer data
   React.useEffect(() => {
-    const fetchParticipants = async () => {
+    const fetchVolunteers = async () => {
       try {
         const response = await fetch(
-          "/api/registration/proficuus24/participants",
+          "/api/registration/proficuus24/dashboard",
           {
             cache: "no-store",
           }
         );
         if (!response.ok) {
-          throw new Error("Failed to fetch participants.");
+          throw new Error("Failed to fetch volunteers.");
         }
         const data = await response.json();
-        setParticipants(data);
+        setVolunteers(data);
       } catch (err) {
         console.error(err);
       }
     };
 
-    fetchParticipants();
+    fetchVolunteers();
   }, []);
+  // console.log("volunteers", volunteers);
 
   const table = useReactTable({
-    data: participants,
+    data: volunteers,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -298,14 +270,14 @@ export function ParticipantsDashboard() {
       columnVisibility,
       rowSelection,
     },
-    pageCount: Math.ceil(participants.length / 10),
-    manualPagination: true,
+    pageCount: Math.ceil(volunteers.length / 10), // Assuming 10 as page size
+    manualPagination: true, // Set to false if you want to manage pagination manually
   });
 
   const { state } = useSidebar();
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full h-full pb-4">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter emails..."
@@ -316,12 +288,13 @@ export function ParticipantsDashboard() {
           className="max-w-sm"
         />
         <DownloadTableExcel
-          filename="Proficuus Participants"
-          sheet="Participants"
+          filename="Proficuus Volunteers"
+          sheet="Volunteers"
           currentTableRef={tableRef.current}
         >
-          <Button variant="secondary" className="mx-4">
-            Export Excel
+          <Button variant={"secondary"} className="mx-4">
+            {" "}
+            Export excel{" "}
           </Button>
         </DownloadTableExcel>
         <DropdownMenu>
@@ -348,7 +321,7 @@ export function ParticipantsDashboard() {
         </DropdownMenu>
       </div>
       <div
-        className={`rounded-md border max-w-[90vw] sm:[95vw] ${
+        className={`rounded-md h-full overflow-scroll border max-w-[90vw] sm:[95vw] ${
           state === "expanded"
             ? "lg:max-w-[calc(100vw-19rem)]"
             : "lg:max-w-[calc(100vw)]"

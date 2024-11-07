@@ -2,6 +2,7 @@
 
 import React, { useRef } from "react";
 import { DownloadTableExcel } from "react-export-table-to-excel";
+import { useSidebar } from "@/components/ui/sidebar";
 import {
   CaretSortIcon,
   ChevronDownIcon,
@@ -36,13 +37,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Participant } from "../../dashboard/participants";
-import { useUser } from "@/lib/context/userContext";
 
-export function CollegeData() {
+import { z } from "zod";
+
+import { useToast } from "@/hooks/use-toast";
+import ParticipantActions, { FormSchema } from "./participant-actions";
+
+export type Participant = {
+  name: string;
+  collage: string;
+  year: number;
+  zone: string;
+  phone: string;
+  alternativephone: string;
+  expectation: string;
+  experience: string;
+  email: string;
+  uid: string;
+  paymentUpload: boolean;
+  paymentVerified: boolean;
+  isCoordinator: boolean;
+  imageUrl: string;
+};
+
+export function ParticipantsDashboard() {
   const tableRef = useRef(null);
-  const { userData, error, loading } = useUser();
-
   const [participants, setParticipants] = React.useState<Participant[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -51,6 +70,79 @@ export function CollegeData() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const { toast } = useToast();
+
+  async function onSubmit(
+    data: z.infer<typeof FormSchema>,
+    participant: Participant
+  ) {
+    if (data.pin == "122524") {
+      try {
+        const response = await fetch("/api/profile/update-is-coordinator", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            uid: participant.uid,
+            isCoordinator: true,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to update payment verification.");
+        }
+
+        setParticipants((prevParticipants) =>
+          prevParticipants.map((p) =>
+            p.email === participant.email ? { ...p, isCoordinator: true } : p
+          )
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      toast({
+        title: "Wrong Password",
+        description: "Please enter the correct Password",
+        variant: "destructive",
+        duration: 2000,
+      });
+    }
+  }
+
+  // const handleTogglePaymentVerified = async (participant: Participant) => {
+  //   if (participant.paymentUpload) {
+  //     // const updatedValue = !participant.paymentVerified;
+
+  //     try {
+  //       const response = await fetch("/api/profile/update-payment", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           uid: participant.uid,
+  //           paymentVerified: true,
+  //         }),
+  //       });
+
+  //       if (!response.ok) {
+  //         throw new Error("Failed to update payment verification.");
+  //       }
+
+  //       setParticipants((prevParticipants) =>
+  //         prevParticipants.map((p) =>
+  //           p.email === participant.email ? { ...p, paymentVerified: true } : p
+  //         )
+  //       );
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   } else {
+  //     alert("Payment must be uploaded to change verification status.");
+  //   }
+  // };
 
   const columns: ColumnDef<Participant>[] = [
     {
@@ -131,29 +223,54 @@ export function CollegeData() {
       header: () => <div>Experience</div>,
       cell: ({ row }) => <div>{row.getValue("experience")}</div>,
     },
+    // {
+    //   accessorKey: "paymentUpload",
+    //   header: () => <div>Payment Uploaded</div>,
+    //   cell: ({ row }) => (
+    //     <div>{row.getValue("paymentUpload") ? "Yes" : "No"}</div>
+    //   ),
+    // },
+    // {
+    //   accessorKey: "paymentVerified",
+    //   header: () => <div>Payment Verified</div>,
+    //   cell: ({ row }) => (
+    //     <div>{row.getValue("paymentVerified") ? "Yes" : "No"}</div>
+    //   ),
+    // },
+    {
+      accessorKey: "isCoordinator",
+      header: () => <div>Is coordinator</div>,
+      cell: ({ row }) => (
+        <div>{row.getValue("isCoordinator") ? "Yes" : "No"}</div>
+      ),
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        const participant = row.original;
+        return (
+          <ParticipantActions
+            participant={participant}
+            onSubmit={onSubmit} // Pass the onSubmit function here
+          />
+        );
+      },
+    },
   ];
 
   // Fetch participant data
   React.useEffect(() => {
     const fetchParticipants = async () => {
       try {
-        const response = await fetch("/api/profile/collage-wise-data", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            uid: userData?.uid,
-            email: userData?.email,
-            collegeName: userData?.collage,
-          }),
-        });
-
+        const response = await fetch(
+          "/api/registration/proficuus24/participants",
+          {
+            cache: "no-store",
+          }
+        );
         if (!response.ok) {
-          // Check if response is not okay (status not in the range 200-299)
           throw new Error("Failed to fetch participants.");
         }
-
         const data = await response.json();
         setParticipants(data);
       } catch (err) {
@@ -162,7 +279,7 @@ export function CollegeData() {
     };
 
     fetchParticipants();
-  }, [userData?.collage, userData?.uid]);
+  }, []);
 
   const table = useReactTable({
     data: participants,
@@ -185,10 +302,10 @@ export function CollegeData() {
     manualPagination: true,
   });
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  const { state } = useSidebar();
+
   return (
-    <div className="flex flex-col p-5 md:p-10 md:rounded-tl-2xl border border-primary-foreground bg-background flex-1 w-full h-full gap-4">
+    <div className="w-full h-full pb-4">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter emails..."
@@ -230,7 +347,13 @@ export function CollegeData() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className={`rounded-md border max-w-[90vw] sm:w-full`}>
+      <div
+        className={`rounded-md h-full overflow-scroll border max-w-[90vw] sm:[95vw] ${
+          state === "expanded"
+            ? "lg:max-w-[calc(100vw-19rem)]"
+            : "lg:max-w-[calc(100vw)]"
+        } `}
+      >
         <Table ref={tableRef}>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

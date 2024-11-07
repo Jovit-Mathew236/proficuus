@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Dialog,
@@ -50,7 +51,7 @@ type Props = {
   ) => void;
 };
 
-const ParticipantActions = ({ participant, onSubmit }: Props) => {
+const ParticipantActions = async ({ participant, onSubmit }: Props) => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: { pin: "" },

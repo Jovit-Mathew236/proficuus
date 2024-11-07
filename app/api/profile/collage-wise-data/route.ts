@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const { collegeName, uid } = await request.json();
+    const { collegeName, email } = await request.json();
 
     if (!collegeName) {
       return NextResponse.json(
@@ -13,18 +13,38 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if the user is a coordinator
-    const userRef = query(
+    // Check if the user is a coordinator in either "participants" or "volunteers"
+    const userQueryParticipants = query(
       collection(db, "participants"),
-      where("uid", "==", uid)
+      where("email", "==", email)
     );
-    const userSnapshot = await getDocs(userRef);
+    const userQueryVolunteers = query(
+      collection(db, "volunteers"),
+      where("email", "==", email)
+    );
 
-    if (userSnapshot.empty) {
+    // Get user data from both collections in parallel
+    const [userSnapshotParticipants, userSnapshotVolunteers] =
+      await Promise.all([
+        getDocs(userQueryParticipants),
+        getDocs(userQueryVolunteers),
+      ]);
+
+    let userDoc = null;
+
+    // Check if user is found in "participants" collection
+    if (!userSnapshotParticipants.empty) {
+      userDoc = userSnapshotParticipants.docs[0].data();
+    }
+    // Check if user is found in "volunteers" collection
+    else if (!userSnapshotVolunteers.empty) {
+      userDoc = userSnapshotVolunteers.docs[0].data();
+    }
+
+    if (!userDoc) {
       return NextResponse.json({ message: "User not found." }, { status: 404 });
     }
 
-    const userDoc = userSnapshot.docs[0].data();
     if (!userDoc.isCoordinator) {
       return NextResponse.json(
         { message: "User is not a coordinator." },

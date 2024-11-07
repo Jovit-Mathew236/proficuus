@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { useUser } from "@/lib/context/userContext";
 import { Ticket } from "@/components/ticket";
-import { Participant } from "../volunteer/dashboard/participants";
+import { Participant } from "../dashboard/participants";
 
 export const Profile = () => {
   const { userData, error, loading } = useUser();

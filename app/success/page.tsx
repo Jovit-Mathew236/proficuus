@@ -1,4 +1,4 @@
-import Success from "@/components/madeups/volunteer/success/success";
+import Success from "@/components/madeups/registration/success/success";
 import React from "react";
 
 const page = () => {

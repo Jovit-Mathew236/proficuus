@@ -1,8 +1,7 @@
-// /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useAuth } from "@/lib/provider/authProvider";
-import { Participant } from "@/components/madeups/volunteer/dashboard/participants";
+import { Participant } from "@/components/madeups/dashboard/participants";
 
 type UserContextType = {
   userData: Participant | null;
@@ -23,14 +22,19 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchUserWithId = async () => {
-      if (!user?.uid) return;
+    const fetchUserData = async () => {
+      if (!user?.uid && !user?.email) return; // Either UID or email must be available
 
       setLoading(true);
       setError(null);
+      console.log(user);
 
       try {
-        const response = await fetch(`/api/profile?uid=${user.uid}`, {
+        // Determine if we should use `uid` or `email` for the API call
+        const queryParam = `email=${user.email}`;
+        // user?.email !== "" ? `` : `uid=${user.uid}`;
+
+        const response = await fetch(`/api/profile?${queryParam}`, {
           method: "GET",
           headers: {
             "Cache-Control": "no-cache",
@@ -43,18 +47,17 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         }
 
         const data = await response.json();
-        setUserData(data);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
+        setUserData(data); // Assuming the response contains user data in the format you need
+      } catch (error) {
         console.error("Failed to fetch user data:", error);
-        setError(error.message);
+        setError((error as Error).message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUserWithId();
-  }, [user?.uid]);
+    fetchUserData();
+  }, [user?.uid, user?.email, user]); // Dependency array updated to listen to both uid and email
 
   return (
     <UserContext.Provider value={{ userData, error, loading }}>
