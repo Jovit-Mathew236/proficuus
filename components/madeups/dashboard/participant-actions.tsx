@@ -51,7 +51,7 @@ type Props = {
   ) => void;
 };
 
-const ParticipantActions = async ({ participant, onSubmit }: Props) => {
+const ParticipantActions = ({ participant, onSubmit }: Props) => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: { pin: "" },

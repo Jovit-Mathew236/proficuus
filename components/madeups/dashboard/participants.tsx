@@ -259,6 +259,7 @@ export function ParticipantsDashboard() {
             participant={participant}
             onSubmit={onSubmit} // Pass the onSubmit function here
           />
+          // <></>
         );
       },
     },
