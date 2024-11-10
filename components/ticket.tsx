@@ -26,7 +26,7 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
           radius: 0.5,
           ecLevel: "H",
           fill: "#112C70",
-          background: "#ffffff",
+          background: null,
           size: 100,
         },
         qrCodeRef.current
@@ -122,7 +122,7 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
 
               <div className="ml-0 md:ml-8">
                 <div className="bg-gray-50 p-2 rounded-lg shadow-inner">
-                  <div ref={qrCodeRef} className="w-24 h-24" />
+                  <div ref={qrCodeRef} />
                 </div>
                 <div className="text-xs text-gray-500 mt-2 text-center">
                   Scan to verify

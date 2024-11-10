@@ -210,15 +210,22 @@ export function VolunteerDashboard() {
       header: () => <div>Experience</div>,
       cell: ({ row }) => <div>{row.getValue("experience")}</div>,
     },
-    {
-      accessorKey: "meeting_availability",
-      header: () => <div>Meeting Availability</div>,
-      cell: ({ row }) => <div>{row.getValue("meeting_availability")}</div>,
-    },
+    // {
+    //   accessorKey: "meeting_availability",
+    //   header: () => <div>Meeting Availability</div>,
+    //   cell: ({ row }) => <div>{row.getValue("meeting_availability")}</div>,
+    // },
     {
       accessorKey: "program_availability",
       header: () => <div>Program Availability</div>,
       cell: ({ row }) => <div>{row.getValue("program_availability")}</div>,
+    },
+    {
+      accessorKey: "isCoordinator",
+      header: () => <div>Is coordinator</div>,
+      cell: ({ row }) => (
+        <div>{row.getValue("isCoordinator") ? "Yes" : "No"}</div>
+      ),
     },
 
     {
