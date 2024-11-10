@@ -6,6 +6,8 @@ import { useUser } from "@/lib/context/userContext";
 import { Ticket } from "@/components/ticket";
 import { Participant } from "../dashboard/participants";
 import html2canvas from "html2canvas";
+import GitHubButton from "@/components/ui/liquid-btn";
+import { Download } from "lucide-react";
 
 export const Profile = () => {
   const { userData, error, loading } = useUser();
@@ -102,15 +104,19 @@ export const Profile = () => {
               />
             </div>
           </div>
-
           {/* Download Button */}
           <div className="flex justify-center mt-7">
-            <button
+            <GitHubButton
+              title="Download Ticket" // Dynamic title
+              onClick={handleDownloadTicket} // Action when clicked
+              Icon={Download}
+            />{" "}
+            {/* <button
               onClick={handleDownloadTicket}
               className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition"
             >
               Download Ticket
-            </button>
+            </button> */}
           </div>
         </div>{" "}
       </div>

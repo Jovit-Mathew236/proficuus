@@ -2,7 +2,6 @@ import Image from "next/image";
 import React, { useRef, useEffect } from "react";
 import QrCreator from "qr-creator";
 
-// Define the props for the Ticket component
 interface TicketProps {
   name: string;
   zone: string;
@@ -20,18 +19,15 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
 
   useEffect(() => {
     if (qrCodeRef.current) {
-      // Clear previous QR code
       qrCodeRef.current.innerHTML = "";
-
-      // Render the new QR code with the userId as the content
       QrCreator.render(
         {
-          text: userId, // QR code text is the userId
-          radius: 0.5, // Adjust the radius of the QR code corners
-          ecLevel: "H", // Error correction level
-          fill: "#112C70", // QR code color (primary color)
-          background: "#ffffff", // background color
-          size: 120, // Size of the QR code
+          text: userId,
+          radius: 0.5,
+          ecLevel: "H",
+          fill: "#112C70",
+          background: "#ffffff",
+          size: 100,
         },
         qrCodeRef.current
       );
@@ -39,72 +35,105 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
   }, [userId]);
 
   return (
-    <div className="w-full max-w-[600px] mx-auto border-2 border-gray-300 rounded-lg rounded-b-none md:rounded-l-lg md:rounded-r-none md:border-r-2 bg-transparent">
-      <div className="flex flex-col md:flex-row">
-        {/* Left Section of the Ticket */}
-        <div
-          style={{
-            backgroundColor: "#112C70", // primary color
-            color: "white",
-          }}
-          className="rounded-lg rounded-b-none md:rounded-l-lg md:rounded-r-none border-0 md:border-r-0 pt-8 pb-4 px-8 md:px-12"
-        >
-          <div className="text-sm mb-4">
-            <strong>An awakening call for budding professionals</strong>
-          </div>
+    <div className="relative w-full max-w-[800px] mx-auto sm:p-4">
+      {/* Background Element */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-blue-900 blur-xl opacity-20 rounded-3xl" />
 
-          <div className="text-5xl md:text-6xl mb-2">
-            Proficuus&apos;24 &gt;&gt;&gt;
-          </div>
+      {/* Main Ticket Container */}
+      <div className="relative bg-transparent">
+        {/* Ticket Content */}
+        <div className="flex flex-col md:flex-row rounded-2xl overflow-hidden">
+          {/* Left/Top Section */}
+          <div className="relative w-full md:w-[65%] bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 p-6 md:p-8">
+            {/* Decorative Circle */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-500/20 to-transparent rounded-full -translate-y-32 translate-x-32" />
 
-          <div className="flex items-center mb-4 text-lg">
-            <span>TRISSUR</span>
-            <span className="mx-3">/</span>
-            <span>DEC 20 - 23, 2024</span>
-          </div>
+            <div className="relative">
+              <div className="text-white/80 text-sm mb-3">
+                An awakening call for budding professionals
+              </div>
 
-          <div
-            style={{
-              backgroundColor: "#BB63FF", // secondary color
-              color: "white",
-            }}
-            className="w-full flex items-center px-[7px] py-1 rounded-full"
-          >
-            <div className="bg-white rounded-full border border-gray-400">
-              <Image
-                className="object-contain rounded-full"
-                src="/favicon.ico" // Use the default favicon or another icon if needed
-                alt={collage}
-                width={50}
-                height={50}
-              />
+              <div className="text-4xl md:text-5xl mb-3 font-bold text-white">
+                Proficuus&apos;24 &gt;&gt;&gt;
+              </div>
+
+              <p className="text-white/80 text-sm mb-3">
+                Sahrdaya College of Engineering and Technology (Autonomous){" "}
+              </p>
+              <div className="flex items-center mb-4 text-base md:text-lg text-white/90">
+                <span>TRISSUR</span>
+                <div className="w-1.5 h-1.5 mx-3 rounded-full bg-purple-400" />
+                <span>DEC 20 - 23, 2024</span>
+              </div>
+
+              <div className="bg-purple-500 rounded-xl p-3 shadow-lg max-w-[400px]">
+                <div className="flex items-center gap-3">
+                  <div className="bg-white p-1 rounded-full shadow-inner">
+                    <Image
+                      className="object-contain rounded-full"
+                      src="/favicon.ico"
+                      alt={collage}
+                      width={32}
+                      height={32}
+                    />
+                  </div>
+                  <div className="text-sm text-white leading-snug">
+                    &quot;Be dressed ready for service and keep your lamps
+                    burning&quot;
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="pl-3 text-sm">
-              “Be dressed ready for service and keep your lamps burning”
-            </div>
           </div>
-        </div>
 
-        {/* Right Section of the Ticket (QR Code and User Info) */}
-        <div
-          // style={{
-          //   borderTop: `8px dashed #112C70`, // primary color for border
-          // }}
-          className="bg-white py-8 px-4 text-black text-center md:text-left border-t-8  md:border-l-8 md:border-t-0 border-dashed border-[#112C70]"
-        >
-          <div className="text-lg font-semibold">{name}</div>
-          <div className="text-sm text-gray-500">{collage}</div>
-          <div className="text-sm text-gray-500">{zone}</div>
+          {/* Right/Bottom Section with Subtract Effect */}
+          <div className="relative w-full md:w-[35%] bg-white">
+            {/* Top Subtract (for mobile) */}
+            <div className="block md:hidden">
+              <div className="absolute z-20 -top-4 left-0 -translate-x-1/2">
+                <div className="w-8 h-8 bg-primary-foreground rounded-full" />
+              </div>
+              <div className="absolute z-20 -top-4 right-0 translate-x-1/2">
+                <div className="w-8 h-8 bg-primary-foreground rounded-full" />
+              </div>
+              <div className="absolute -top-[2px] left-0 right-0 border-t-8 border-dashed border-blue-900/30" />
+            </div>
 
-          {/* QR Code Section */}
-          <div className="mt-4">
-            <div
-              className="w-28 h-28 mx-auto rounded-lg "
-              ref={qrCodeRef}
-            ></div>
+            {/* Left Subtract (for desktop) */}
+            <div className="hidden md:block">
+              <div className="absolute left-0 top-0 w-8 h-full">
+                <div className="absolute z-20 -left-4 -top-4">
+                  <div className="w-8 h-8 bg-primary-foreground rounded-full" />
+                </div>
+                <div className="absolute z-20 -left-4 -bottom-4">
+                  <div className="w-8 h-8 bg-primary-foreground rounded-full" />
+                </div>
+                <div className="absolute left-0 top-0 w-full h-full border-l-8 border-dashed border-blue-900/30" />
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-6 md:p-8 flex flex-col items-center md:items-start gap-6">
+              <div className="ml-0 md:ml-8 text-center md:text-left">
+                <div className="text-xl font-bold text-blue-900">{name}</div>
+                <div className="text-sm text-gray-600">{collage}</div>
+                <div className="text-sm text-purple-600">{zone}</div>
+              </div>
+
+              <div className="ml-0 md:ml-8">
+                <div className="bg-gray-50 p-2 rounded-lg shadow-inner">
+                  <div ref={qrCodeRef} className="w-24 h-24" />
+                </div>
+                <div className="text-xs text-gray-500 mt-2 text-center">
+                  Scan to verify
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
+export default Ticket;
