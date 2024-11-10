@@ -8,6 +8,7 @@ import { Participant } from "../dashboard/participents/participants";
 import html2canvas from "html2canvas";
 import GitHubButton from "@/components/ui/liquid-btn";
 import { Download } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export const Profile = () => {
   const { userData, error, loading } = useUser();
@@ -66,9 +67,12 @@ export const Profile = () => {
           <p className="text-lg font-semibold mt-4">
             {userData?.name || "Loading..."}
           </p>
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-sm text-gray-500 mt-1">
             {userData?.email || "Loading..."}
           </p>
+          <Badge className="mt-2">
+            {userData?.uid ? "Participant" : "Coordinator"}
+          </Badge>
         </div>
         <div className="mt-6 gap-4">
           <div className="grid grid-cols-2 gap-4 bg-primary-foreground dark:bg-gray-800 p-4 rounded-lg shadow-lg">
