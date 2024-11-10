@@ -8,6 +8,8 @@ import Footer from "./modules/Footer";
 import { ModeToggle } from "@/components/theme-mode";
 import MainEvents from "./modules/mainEvents";
 import { ReactLenis } from "lenis/react";
+import { Sparkles } from "@/components/ui/sparkles";
+import CountdownTimer from "./modules/CountdownTimer";
 // Define types for events
 interface Event {
   title: string;
@@ -117,8 +119,8 @@ const Home: React.FC = () => {
             </section>
 
             {/* Blog Section */}
-            <section className="bg-gray-100 dark:bg-gray-900 py-20 text-black h-screen sticky top-0 rounded-tr-2xl rounded-tl-2xl overflow-hidden ">
-              <div className="container mx-auto">
+            <section className="bg-gray-100 dark:bg-gray-900 py-20 text-black h-auto sticky top-0 rounded-tr-2xl rounded-tl-2xl overflow-hidden ">
+              <div className="container mx-auto p-8">
                 <h2 className="text-3xl font-semibold text-center text-gray-900 dark:text-white mb-10">
                   Our Latest Blog Posts
                 </h2>
@@ -159,6 +161,27 @@ const Home: React.FC = () => {
 
             <section className="bg-gray-100 dark:bg-black w-full sticky top-0">
               <MainEvents />
+            </section>
+
+            <section className="bg-gray-900 text-black grid place-content-center h-[600px] sticky top-0 rounded-tr-2xl rounded-tl-2xl overflow-hidden">
+              <h1 className="text-white text-xl font-semibold m-auto">
+                Proficuus&apos;24 is coming soon
+              </h1>
+              <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:54px_54px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+
+              <CountdownTimer
+                targetDate={new Date("2024-12-19T23:59:59")}
+                // labels={["Days", "Hours", "Minutes", "Seconds"]}
+              />
+              <div className="absolute bottom-0 z-[2] h-[500px] w-screen overflow-hidden [mask-image:radial-gradient(100%_50%,white,transparent)] before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,#3273ff,transparent_90%)] before:opacity-40 after:absolute">
+                <Sparkles
+                  density={1800}
+                  speed={1.2}
+                  color="#48b6ff"
+                  direction="top"
+                  className="absolute inset-x-0 bottom-0 h-full w-full "
+                />
+              </div>
             </section>
 
             {/* Footer */}
