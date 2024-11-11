@@ -46,7 +46,7 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
             <p className="mb-2 font-thin">
-              <strong>Steve lastname</strong> - Proficuus&apos;24 Coordinator
+              <strong>Steve Paul</strong> - Proficuus&apos;24 Coordinator
             </p>
             <p className="mb-2 font-thin">
               <a
@@ -91,8 +91,8 @@ const Footer: React.FC = () => {
             className="m-auto mb-2 w-8 h-auto"
           />
           <p className="mt-4 text-sm font-thin">
-            Copyright © Jesus Youth Medical and Engineering Students Ministry-
-            All Rights Reserved
+            Copyright © Jesus Youth Medical Engineering Students Team - All
+            Rights Reserved
           </p>
         </div>
       </div>

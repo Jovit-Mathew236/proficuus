@@ -47,19 +47,21 @@ export default function CountdownTimer({ targetDate }: CountdownProps) {
     <div className="flex flex-col items-center p-2 bg-blue z-50 backdrop-blur-sm rounded-lg">
       <div
         key={value}
-        className="text-4xl md:text-[100px] font-bold text-white tabular-nums transition-all duration-500 ease-in-out transform scale-100 opacity-100"
+        className="text-4xl md:text-6xl lg:text-8xl xl:text-[100px] font-bold text-white tabular-nums transition-all duration-500 ease-in-out transform scale-100 opacity-100"
         style={{ animation: "popIn 0.5s ease-out" }}
       >
         {value.toString().padStart(2, "0")}
       </div>
-      <div className="text-xs text-primary-foreground mt-1">{label}</div>
+      <div className="text-xs sm:text-sm md:text-lg lg:text-xl xl:text-2xl text-white mt-1">
+        {label}
+      </div>
     </div>
   );
 
   return (
-    <Card className="w-full max-w-md mx-auto  bg-transparent border-none">
+    <Card className="w-full  mx-auto  bg-transparent border-none">
       <CardContent className="p-6 bg-transparent">
-        <div className="flex  justify-between space-x-2">
+        <div className="flex gap-2 justify-between space-x-2">
           <TimeUnit value={timeLeft.days} label="Days" />
           <TimeUnit value={timeLeft.hours} label="Hours" />
           <TimeUnit value={timeLeft.minutes} label="Minutes" />
