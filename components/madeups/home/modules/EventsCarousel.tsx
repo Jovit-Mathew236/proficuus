@@ -38,7 +38,7 @@ const EventsCarousel: React.FC<EventsCarouselProps> = ({ events }) => {
                   alt={event.title}
                   className="h-full object-cover rounded-lg w-full"
                 />
-                <div className="absolute bottom-0 bg-black bg-opacity-50 text-white p-4">
+                <div className="absolute w-full bg-slate-50/10 backdrop-blur-md bottom-0 bg-black bg-opacity-50 text-white p-4">
                   <h3 className="text-xl font-bold">{event.title}</h3>
                   <p className="text-sm">{event.description}</p>
                 </div>

@@ -5,7 +5,7 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="py-10 dark:bg-gray-800 bg-opacity-30 backdrop-blur-md dark:text-white">
+    <footer className="py-10 dark:bg-gray-800 bg-slate-50/90 bg-opacity-30 backdrop-blur-md dark:text-white  rounded-tr-2xl rounded-tl-2xl">
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
         <div className="flex flex-col items-center mb-8">
           <Image

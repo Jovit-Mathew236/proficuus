@@ -17,8 +17,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "PROFICUUS",
-  description: "An awaking call for budding professionals",
+  title: "JY MEST",
+  description: "Jesus Youth Medical and Engineering Student Team",
 };
 
 export default function RootLayout({
