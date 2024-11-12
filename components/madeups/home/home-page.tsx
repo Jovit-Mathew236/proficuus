@@ -13,6 +13,7 @@ import CountdownTimer from "./modules/CountdownTimer";
 import { RandomizedTextEffect } from "@/components/ui/text-randomized.tsx";
 import { ArrowRight } from "lucide-react";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
+import Ripple from "@/components/ui/ripple";
 // Define types for events
 interface Event {
   title: string;
@@ -49,9 +50,9 @@ const Home: React.FC = () => {
     <>
       {/* Dark mode toggle */}
       <ReactLenis root>
-        <section className=" h-screen  w-full sticky top-0">
+        <section className=" h-auto  w-full sticky -top-36">
           <ModeToggle className="right-10 top-10 absolute z-50" />{" "}
-          <div className="dark:bg-black">
+          <div className="">
             {/* Hero Section */}
             <div className="relative isolate px-6 pt-14 lg:px-8">
               <div
@@ -87,7 +88,7 @@ const Home: React.FC = () => {
                        Jesus Youth Medical Engineering Students Team is a stream team under the Kerala campus ministry that addresses medical engineering campuses. The main programs initiated by the MEST team are Proficuus, Footprints, Discovery, Insight and Catalyst
                       `}
                       duration={1}
-                      className="mt-8 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8"
+                      className="mt-8 text-pretty text-lg font-thin md:font-medium text-gray-500 sm:text-xl/8"
                     />
                     {/* <p className="mt-8 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8">
                       Jesus Youth Medical Engineering Students Team is a stream
@@ -96,22 +97,22 @@ const Home: React.FC = () => {
                       by the MEST team are Proficuus, Footprints, Discovery,
                       Insight and Catalyst
                     </p> */}
-                    <div className="mt-10 flex items-center gap-x-6">
-                      {/* <a
-                            href="/proficuus24/register"
-                            className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                          > */}
-                      <div className="group relative cursor-pointer p-2 w-56 border bg-primary rounded-full overflow-hidden text-white text-center font-semibold">
-                        <span className="translate-x-1 group-hover:translate-x-12 group-hover:opacity-0 transition-all duration-300 inline-block">
-                          Register For Proficuus
-                        </span>
-                        <div className="flex gap-2 text-white z-10 items-center absolute top-0 h-full w-full justify-center translate-x-12 opacity-0 group-hover:-translate-x-1 group-hover:opacity-100 transition-all duration-300">
-                          <span>Register For Proficuus</span>
-                          <ArrowRight />
+                    <div className="mt-10 flex flex-wrap justify-center sm:justify-normal items-center gap-x-6">
+                      <a
+                        href="/proficuus24/register"
+                        // className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      >
+                        <div className="group relative cursor-pointer p-2 w-60 border bg-primary rounded-full overflow-hidden text-white text-center font-semibold">
+                          <span className="translate-x-1 group-hover:translate-x-12 group-hover:opacity-0 transition-all duration-300 inline-block">
+                            Register For Proficuus
+                          </span>
+                          <div className="flex gap-2 text-foreground z-10 items-center absolute top-0 h-full w-full justify-center translate-x-12 opacity-0 group-hover:-translate-x-1 group-hover:opacity-100 transition-all duration-300">
+                            <span>Register For Proficuus</span>
+                            <ArrowRight />
+                          </div>
+                          <div className="absolute top-[40%] left-[5%] h-2 w-2 group-hover:h-full group-hover:w-full rounded-lg bg-background dark:bg-background scale-[1] dark:group-hover:bg-background group-hover:bg-background group-hover:scale-[1.8] transition-all duration-300 group-hover:top-[0%] group-hover:left-[0%] "></div>
                         </div>
-                        <div className="absolute top-[40%] left-[5%] h-2 w-2 group-hover:h-full group-hover:w-full rounded-lg bg-accent-foreground dark:bg-accent scale-[1] dark:group-hover:bg-accent group-hover:bg-accent-foreground group-hover:scale-[1.8] transition-all duration-300 group-hover:top-[0%] group-hover:left-[0%] "></div>
-                      </div>
-                      {/* </a> */}
+                      </a>
                       <a
                         href="#"
                         className="text-sm font-semibold leading-6 text-secondary-foreground"
@@ -124,12 +125,17 @@ const Home: React.FC = () => {
 
                 {/* iPhone 15 Pro mockup */}
                 <Iphone15Pro
-                  className="size-1/2 md:size-1/5"
+                  className="size-1/2 md:size-1/5 z-100"
                   src="/images/proficuus.png"
                 />
               </div>
             </div>
           </div>
+          <Ripple
+            mainCircleOpacity={0.2}
+            numCircles={40}
+            className="w-screen overflow-hidden  z-0 absolute"
+          />
         </section>
 
         {/* Blog Section */}
