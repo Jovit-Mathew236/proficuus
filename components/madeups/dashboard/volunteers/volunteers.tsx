@@ -21,7 +21,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -122,32 +122,40 @@ export function VolunteerDashboard() {
   }
 
   const columns: ColumnDef<Volunteer>[] = [
+    // {
+    //   id: "select",
+    //   header: ({ table }) => (
+    //     <Checkbox
+    //       checked={
+    //         table.getIsAllPageRowsSelected() ||
+    //         (table.getIsSomePageRowsSelected() && "indeterminate")
+    //       }
+    //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+    //       aria-label="Select all"
+    //     />
+    //   ),
+    //   cell: ({ row }) => (
+    //     <Checkbox
+    //       checked={row.getIsSelected()}
+    //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+    //       aria-label="Select row"
+    //     />
+    //   ),
+    //   enableSorting: false,
+    // },
     {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
+      accessorKey: "SI No",
+      header: () => <div>SI No</div>,
       cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
+        <div className="min-w-9 text-center">{row.index + 1}</div>
       ),
-      enableSorting: false,
     },
     {
       accessorKey: "name",
       header: ({ column }) => (
         <Button
           variant="ghost"
+          className="-ml-4"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Name
@@ -161,6 +169,7 @@ export function VolunteerDashboard() {
       header: ({ column }) => (
         <Button
           variant="ghost"
+          className="-ml-4"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Email
@@ -202,7 +211,16 @@ export function VolunteerDashboard() {
     },
     {
       accessorKey: "ministry",
-      header: () => <div>Ministry</div>,
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          className="-ml-4"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Ministry
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      ),
       cell: ({ row }) => <div>{row.getValue("ministry")}</div>,
     },
     {
@@ -246,12 +264,9 @@ export function VolunteerDashboard() {
   React.useEffect(() => {
     const fetchVolunteers = async () => {
       try {
-        const response = await fetch(
-          "/api/registration/proficuus24/dashboard",
-          {
-            cache: "no-store",
-          }
-        );
+        const response = await fetch("/api/dashboard/proficuus24/volunteers", {
+          cache: "no-store",
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch volunteers.");
         }

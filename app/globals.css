@@ -154,6 +154,7 @@ body {
   :first-child {
     @apply mt-0;
   }
+
   ul,
   ol {
     padding: 0 1rem;
@@ -200,10 +201,12 @@ body {
   h6 {
     font-size: 1rem;
   }
+
   img {
     @apply max-w-full h-auto w-full object-contain;
     /* Responsive image */
   }
+
   /* Code and preformatted text styles */
   code {
     background-color: var(--purple-light);
@@ -230,7 +233,7 @@ body {
   }
 
   blockquote {
-    border-left: 3px solid var(--gray-3);
+    @apply border-l-4 border-foreground text-muted-foreground;
     margin: 1.5rem 0;
     padding-left: 1rem;
   }

@@ -21,7 +21,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -152,31 +152,18 @@ export function ParticipantsDashboard() {
 
   const columns: ColumnDef<Participant>[] = [
     {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
+      accessorKey: "SI No",
+      header: () => <div>SI No</div>,
       cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
+        <div className="min-w-9 text-center">{row.index + 1}</div>
       ),
-      enableSorting: false,
     },
     {
       accessorKey: "name",
       header: ({ column }) => (
         <Button
           variant="ghost"
+          className="-ml-4"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Name
@@ -192,7 +179,16 @@ export function ParticipantsDashboard() {
     },
     {
       accessorKey: "collage",
-      header: () => <div>Collage</div>,
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          className="-ml-4"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          College
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      ),
       cell: ({ row }) => <div>{row.getValue("collage")}</div>,
     },
     {
@@ -270,7 +266,7 @@ export function ParticipantsDashboard() {
     const fetchParticipants = async () => {
       try {
         const response = await fetch(
-          "/api/registration/proficuus24/participants",
+          "/api/dashboard/proficuus24/participants",
           {
             cache: "no-store",
           }
