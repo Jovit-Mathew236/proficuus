@@ -11,10 +11,17 @@ interface BlogCardProps {
   image: string;
   date: string;
   title: string;
+  description: string;
   link: string;
 }
 
-const BlogCard: React.FC<BlogCardProps> = ({ image, date, title, link }) => {
+const BlogCard: React.FC<BlogCardProps> = ({
+  image,
+  date,
+  title,
+  description,
+  link,
+}) => {
   return (
     <div className="w-full sm:w-80 md:w-96 h-[450px] relative mt-4 group mx-auto dark:bg-black bg-white dark:border-0 border overflow-hidden rounded-xl dark:text-white text-black">
       <BlurVignette
@@ -35,6 +42,7 @@ const BlogCard: React.FC<BlogCardProps> = ({ image, date, title, link }) => {
           <article className="py-5 px-3">
             <span className="text-sm">{date}</span>
             <h1 className="text-lg font-medium capitalize">{title}</h1>
+            <p className="text-sm">{description}</p>
             <a
               href={link}
               className="bg-green-400 text-base dark:text-white rounded-md font-normal p-2 flex justify-center mt-2"

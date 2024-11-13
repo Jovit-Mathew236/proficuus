@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate a unique ID for the Firestore document
-    const blogDocRef = doc(db, "blogs", title);
+    const blogDocRef = doc(db, "blogs", title.replace(/\s+/g, "_"));
 
     // Prepare the blog data
     const blogData = {

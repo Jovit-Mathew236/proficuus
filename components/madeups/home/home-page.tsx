@@ -1,7 +1,7 @@
 "use client";
 // pages/index.tsx
 import Iphone15Pro from "@/components/ui/iphone-15-pro";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BlogCard from "./modules/BlogCard";
 import EventsCarousel from "./modules/EventsCarousel";
 import Footer from "./modules/Footer";
@@ -20,8 +20,16 @@ interface Event {
   description: string;
   image: string;
 }
-
+type Blog = {
+  title: string;
+  updatedAt: string;
+  thumbnailUrl: string;
+  description: string;
+  link: string;
+  id: string;
+};
 const Home: React.FC = () => {
+  const [blogs, setBlogs] = useState<Blog[]>([]);
   const [events] = useState<Event[]>([
     {
       title: "Proficuus '24 Registration Open",
@@ -45,7 +53,24 @@ const Home: React.FC = () => {
         "https://images.jdmagicbox.com/comp/ernakulam/m4/0484px484.x484.140206113128.a9m4/catalogue/we-create-events-panampilly-nagar-ernakulam-event-management-companies-nsobpzm660.jpg?clr=",
     },
   ]);
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await fetch("/api/dashboard/mest/blog/get", {
+          cache: "no-store",
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch participants.");
+        }
+        const data = await response.json();
+        setBlogs(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
+    fetchBlogs();
+  }, []);
   return (
     <>
       {/* Dark mode toggle */}
@@ -146,7 +171,17 @@ const Home: React.FC = () => {
             </h2>
             <div className="flex flex-wrap justify-center gap-8">
               {/* Example Blog Cards */}
-              <BlogCard
+              {blogs.map((blog) => (
+                <BlogCard
+                  key={blog.id}
+                  image={blog.thumbnailUrl}
+                  date={blog.updatedAt}
+                  title={blog.title}
+                  description={blog.description}
+                  link={`/blog/${blog.id}`}
+                />
+              ))}
+              {/* <BlogCard
                 image="https://images.unsplash.com/photo-1565759732117-a48f0bedbbfd?q=80&w=1000&auto=format&fit=crop"
                 date="9 Dec 2023"
                 title="Learn why UI/UX is Important and How to Implement it Well in Your Site"
@@ -163,7 +198,7 @@ const Home: React.FC = () => {
                 date="10 Dec 2023"
                 title="The Best Practices for Responsive Web Design"
                 link="/blog/responsive-web-design"
-              />
+              /> */}
             </div>
           </div>
         </section>
