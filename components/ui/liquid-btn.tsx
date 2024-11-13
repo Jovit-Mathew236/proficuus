@@ -59,7 +59,7 @@ const GitHubButton: React.FC<Props> = ({ title, onClick, Icon }) => {
             ></span>
           ))}
           <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-[40%] w-[70.8%] h-[42.85%] rounded-lg filter blur-[15px] bg-[#006]"></span>
-          <span className="absolute flex items-center justify-between px-4 gap-2 top-[7%] left-[5%] w-[90%] h-[85%] rounded-lg  text-white text-xl font-semibold tracking-wide whitespace-nowrap">
+          <span className="absolute flex items-center justify-between px-4 gap-2 top-[7%] left-[5%] w-[90%] h-[85%] rounded-lg  text-white  font-semibold tracking-wide whitespace-nowrap">
             <Icon className=" fill-white w-6 h-6 flex-shrink-0" />{" "}
             {/* Render dynamic icon */}
             {title} {/* Display dynamic title */}

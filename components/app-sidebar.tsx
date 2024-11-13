@@ -5,6 +5,7 @@ import {
   ChevronUp,
   Home,
   ListTreeIcon,
+  Rss,
   ShieldPlus,
   User2,
   Users,
@@ -36,11 +37,27 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 import { usePathname } from "next/navigation";
 
-// Menu items.
-const items = [
+// List of events
+const events = [
+  {
+    title: "Mest",
+    link: "/dashboard/mest",
+  },
+  {
+    title: "Proficuus'24",
+    link: "/dashboard/proficuus24",
+  },
+];
+// List of menu
+const eventMenuItems = [
+  {
+    title: "Blog",
+    url: "/dashboard/mest/blog",
+    icon: Rss,
+  },
   {
     title: "Home",
-    url: "/dashboard",
+    url: "/dashboard/proficuus24",
     icon: Home,
   },
   {
@@ -54,11 +71,14 @@ const items = [
     icon: Users,
   },
 ];
-
 export function AppSidebar() {
   const { user } = useAuth();
   const { toggleSidebar, state } = useSidebar();
   const pathname = usePathname();
+
+  const handleEventSelect = (eventLink: string) => {
+    window.location.href = eventLink; // Navigate to the selected event route
+  };
 
   const logout = () => {
     signOut(auth);
@@ -77,14 +97,19 @@ export function AppSidebar() {
                     size={30}
                     className="bg-blue-400 w-8 h-8 text-white p-1 rounded-lg"
                   />
-                  Select Program
+                  Select Event
                   <ChevronDown className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-[--radix-popper-anchor-width]">
-                <DropdownMenuItem>
-                  <span>Proficuus&apos;24</span>
-                </DropdownMenuItem>
+                {events.map((event) => (
+                  <DropdownMenuItem
+                    key={event.title}
+                    onClick={() => handleEventSelect(event.link)}
+                  >
+                    <span>{event.title}</span>
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
@@ -105,16 +130,29 @@ export function AppSidebar() {
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname === item.url}>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {eventMenuItems
+                .filter((item) => {
+                  console.log(
+                    item.url.split("/")[2],
+                    " | ",
+                    window.location.pathname.split("/")[2]
+                  );
+
+                  return (
+                    item.url.split("/")[2] ===
+                    window.location.pathname.split("/")[2]
+                  );
+                })
+                .map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild isActive={pathname === item.url}>
+                      <a href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

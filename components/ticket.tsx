@@ -88,25 +88,25 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
 
           {/* Right/Bottom Section with Subtract Effect */}
           <div className="relative w-full md:w-[35%] bg-white">
-            {/* Top Subtract (for mobile) */}
+            {/* Mobile Top Subtract */}
             <div className="block md:hidden">
               <div className="absolute z-20 -top-4 left-0 -translate-x-1/2">
-                <div className="w-8 h-8 bg-primary-foreground rounded-full" />
+                <div className="w-8 h-8 bg-foreground dark:bg-primary-foreground rounded-full" />
               </div>
               <div className="absolute z-20 -top-4 right-0 translate-x-1/2">
-                <div className="w-8 h-8 bg-primary-foreground rounded-full" />
+                <div className="w-8 h-8 bg-foreground dark:bg-primary-foreground rounded-full" />
               </div>
               <div className="absolute -top-[2px] left-0 right-0 border-t-8 border-dashed border-blue-900/30" />
             </div>
 
-            {/* Left Subtract (for desktop) */}
+            {/* Desktop Left Subtract */}
             <div className="hidden md:block">
               <div className="absolute left-0 top-0 w-8 h-full">
                 <div className="absolute z-20 -left-4 -top-4">
-                  <div className="w-8 h-8 bg-primary-foreground rounded-full" />
+                  <div className="w-8 h-8 bg-foreground dark:bg-primary-foreground rounded-full" />
                 </div>
                 <div className="absolute z-20 -left-4 -bottom-4">
-                  <div className="w-8 h-8 bg-primary-foreground rounded-full" />
+                  <div className="w-8 h-8 bg-foreground dark:bg-primary-foreground rounded-full" />
                 </div>
                 <div className="absolute left-0 top-0 w-full h-full border-l-8 border-dashed border-blue-900/30" />
               </div>
