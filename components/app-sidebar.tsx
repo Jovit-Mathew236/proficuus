@@ -35,7 +35,7 @@ import { Button } from "./ui/button";
 import { ModeToggle } from "./theme-mode";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 // List of events
 const events = [
@@ -75,14 +75,15 @@ export function AppSidebar() {
   const { user } = useAuth();
   const { toggleSidebar, state } = useSidebar();
   const pathname = usePathname();
+  const router = useRouter();
 
   const handleEventSelect = (eventLink: string) => {
-    window.location.href = eventLink; // Navigate to the selected event route
+    router.push(eventLink); // Navigate to the selected event route
   };
 
   const logout = () => {
     signOut(auth);
-    window.location.href = "/proficuus24/login";
+    router.push("/proficuus24/login");
   };
 
   return (
@@ -132,24 +133,15 @@ export function AppSidebar() {
             <SidebarMenu>
               {eventMenuItems
                 .filter((item) => {
-                  console.log(
-                    item.url.split("/")[2],
-                    " | ",
-                    window.location.pathname.split("/")[2]
-                  );
-
-                  return (
-                    item.url.split("/")[2] ===
-                    window.location.pathname.split("/")[2]
-                  );
+                  return item.url.split("/")[2] === pathname.split("/")[2];
                 })
                 .map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={pathname === item.url}>
-                      <a href={item.url}>
+                      <button onClick={() => router.push(item.url)}>
                         <item.icon />
                         <span>{item.title}</span>
-                      </a>
+                      </button>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
