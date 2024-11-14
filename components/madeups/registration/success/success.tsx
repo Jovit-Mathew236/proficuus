@@ -58,8 +58,8 @@ const Success = () => {
         </Button>
       </div>
       <Image
-        src="/images/bgwelcome.png"
-        // src={`${basePath}/images/bgwelcome.png`}
+        src="/images/bgwelcome.webp"
+        // src={`${basePath}/images/bgwelcome.webp`}
         alt="success background"
         layout="fill"
         objectFit="cover"
