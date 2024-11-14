@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 
-type BlogData = {
+export type BlogData = {
   id: string;
   keywords: string[];
   createdAt: string;
