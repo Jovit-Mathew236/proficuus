@@ -175,30 +175,12 @@ const Home: React.FC = () => {
                 <BlogCard
                   key={blog.id}
                   image={blog.thumbnailUrl}
-                  date={blog.updatedAt}
+                  date={new Date(blog.updatedAt).toLocaleDateString()}
                   title={blog.title}
                   description={blog.description}
                   link={`/blog/${blog.id}`}
                 />
               ))}
-              {/* <BlogCard
-                image="https://images.unsplash.com/photo-1565759732117-a48f0bedbbfd?q=80&w=1000&auto=format&fit=crop"
-                date="9 Dec 2023"
-                title="Learn why UI/UX is Important and How to Implement it Well in Your Site"
-                link="/blog/learn-ui-ux"
-              />
-              <BlogCard
-                image="https://images.unsplash.com/photo-1565759732117-a48f0bedbbfd?q=80&w=1000&auto=format&fit=crop"
-                date="10 Dec 2023"
-                title="The Best Practices for Responsive Web Design"
-                link="/blog/responsive-web-design"
-              />
-              <BlogCard
-                image="https://images.unsplash.com/photo-1565759732117-a48f0bedbbfd?q=80&w=1000&auto=format&fit=crop"
-                date="10 Dec 2023"
-                title="The Best Practices for Responsive Web Design"
-                link="/blog/responsive-web-design"
-              /> */}
             </div>
           </div>
         </section>

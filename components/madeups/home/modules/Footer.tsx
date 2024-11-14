@@ -1,5 +1,5 @@
 import { InstagramLogoIcon } from "@radix-ui/react-icons";
-import { FacebookIcon, YoutubeIcon } from "lucide-react";
+// import { FacebookIcon, YoutubeIcon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
@@ -21,13 +21,14 @@ const Footer: React.FC = () => {
           <div className="w-fit">
             <h3 className="text-xl font-semibold mb-4">Follow Us</h3>
             <a
-              href="https://www.instagram.com/jy_mest"
+              target="_blank"
+              href=" https://www.instagram.com/jymest_official/"
               className="flex items-center gap-2 md:justify-start mb-2"
             >
               <InstagramLogoIcon />
               Instagram
             </a>
-            <a
+            {/* <a
               href="https://youtube.com/@jy_mest"
               className="flex items-center gap-2 md:justify-start mb-2"
             >
@@ -39,45 +40,45 @@ const Footer: React.FC = () => {
             >
               <FacebookIcon size={15} />
               Facebook
-            </a>
+            </a> */}
           </div>
 
           {/* Contact Us Section */}
           <div>
             <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
             <p className="mb-2 font-thin">
-              <strong>Steve Paul</strong> - Proficuus&apos;24 Coordinator
+              <strong>Steve Paul</strong> Proficuus General Coordinator
             </p>
             <p className="mb-2 font-thin">
               <a
-                href="tel:++919400038737"
+                href="tel:+919400038737"
                 className="text-yellow-500 hover:underline"
               >
                 9400038737
               </a>
             </p>
-            {/* <p className="mb-2 font-thin">
-              <strong>Don Benny</strong> - KCC General Coordinator
+            <p className="mb-2 font-thin">
+              <strong>Adithyan S</strong> Proficuus Mobilisation Coordinator
             </p>
             <p className="mb-2 font-thin">
               <a
-                href="tel:+918848762429"
+                href="tel:+919188682039"
                 className="text-yellow-500 hover:underline"
               >
-                8848762429
+                9188682039
               </a>
             </p>
             <p className="mb-2 font-thin">
-              <strong>Alwin Thomas</strong> - KCC Mobilization Coordinator
+              <strong>Shaijal Devassia</strong> MEST Coordinator
             </p>
             <p className="mb-2 font-thin">
               <a
-                href="tel:+918606721186"
+                href="tel:+919447624608"
                 className="text-yellow-500 hover:underline"
               >
-                8606721186
+                9447624608
               </a>
-            </p> */}
+            </p>
           </div>
         </div>
 
