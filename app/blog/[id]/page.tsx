@@ -34,7 +34,7 @@ export async function generateMetadata({
           title: blogData.title,
           description: blogData.description,
           images: blogData.thumbnailUrl,
-          url: `https://yourdomain.com/blog/${params.id}`,
+          url: `https://www.jymest.com/blog/${params.id}`,
           type: "article",
         },
       };

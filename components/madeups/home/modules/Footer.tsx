@@ -1,20 +1,28 @@
+"use client";
 import { InstagramLogoIcon } from "@radix-ui/react-icons";
+import { useTheme } from "next-themes";
 // import { FacebookIcon, YoutubeIcon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
 const Footer: React.FC = () => {
+  const { theme } = useTheme();
   return (
     <footer className="py-10 dark:bg-gray-800 bg-slate-50/90 bg-opacity-30 backdrop-blur-md dark:text-white  rounded-tr-2xl rounded-tl-2xl">
       <div className="container mx-auto px-6 md:px-12 lg:px-24">
-        <div className="flex flex-col items-center mb-8">
+        <div className="flex flex-col md:items-center gap-4 mb-8">
           <Image
-            src="/images/logo.png"
+            src="/images/jymestlogo.png"
             alt="KCC Logo"
             width={200}
             height={200}
-            className="w-44 mb-4"
+            className="w-16 h-16 mb-4"
           />
+          <p className="max-w-md text-gray-500 dark:text-gray-400 text-sm">
+            Jesus Youth Medical Engineering Students Team is a stream team under
+            the Kerala campus ministry that addresses medical engineering
+            campuses.
+          </p>
         </div>
         <div className="flex flex-col md:flex-row gap-8 justify-center md:text-left">
           {/* Follow Us Section */}
@@ -84,13 +92,23 @@ const Footer: React.FC = () => {
 
         {/* Footer Bottom Section */}
         <div className="mt-8 text-center">
-          <Image
-            src="/images/logo.png"
-            alt="KCC Logo"
-            width={100}
-            height={100}
-            className="m-auto mb-2 w-8 h-auto"
-          />
+          {theme === "dark" ? (
+            <Image
+              src="/images/jy-logo-white.png"
+              alt="KCC Logo"
+              width={100}
+              height={100}
+              className="m-auto mb-2 w-8 h-auto"
+            />
+          ) : (
+            <Image
+              src="/images/jy-logo-black.png"
+              alt="KCC Logo"
+              width={100}
+              height={100}
+              className="m-auto mb-2 w-8 h-auto"
+            />
+          )}
           <p className="mt-4 text-sm font-thin">
             Copyright © Jesus Youth Medical Engineering Students Team - All
             Rights Reserved

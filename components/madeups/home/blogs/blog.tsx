@@ -26,10 +26,6 @@ const BlogPage = (props: Props) => {
         const queryParam = `id=${props.id}`;
         const response = await fetch(`/api/dashboard/mest/blog?${queryParam}`, {
           method: "GET",
-          headers: {
-            "Cache-Control": "no-cache",
-            Pragma: "no-cache",
-          },
         });
 
         if (!response.ok) {

@@ -19,6 +19,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { TagsInput } from "@/components/ui/tags-input";
 import { Progress } from "@/components/ui/progress";
 import imageCompression from "browser-image-compression";
+import { useToast } from "@/hooks/use-toast";
 
 const FormSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -39,6 +40,7 @@ const FormSchema = z.object({
 type FormSchema = z.infer<typeof FormSchema>;
 
 const BlogCreate: React.FC = () => {
+  const { toast } = useToast();
   const [content, setContent] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -206,7 +208,13 @@ const BlogCreate: React.FC = () => {
     const result = await response.json();
     if (response.ok) {
       console.log("Blog post created:", result);
-      setContent(""); // Reset content after successful submission
+      toast({
+        title: "Blog created",
+        description: "Your blog has been created successfully",
+        duration: 3000,
+      });
+      form.reset();
+      setContent("");
     } else {
       alert(`Error: ${result.message}`);
     }

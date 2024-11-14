@@ -3,8 +3,8 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 
 // Disable caching and ISR
-export const fetchCache = "force-no-store";
-export const revalidate = 0;
+// export const fetchCache = "force-no-store";
+// export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
   try {
