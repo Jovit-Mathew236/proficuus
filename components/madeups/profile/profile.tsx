@@ -71,7 +71,7 @@ export const Profile = () => {
             {userData?.email || "Loading..."}
           </p>
           <Badge className="mt-2">
-            {userData?.uid ? "Participant" : "Coordinator"}
+            {userData?.isCoordinator ? "Coordinator" : "Participant"}
           </Badge>
         </div>
         <div className="mt-6 gap-4">
