@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase/config";
+import { auth, db } from "@/lib/firebase/config";
 import cloudinary from "cloudinary";
 import { EmailTemplate } from "@/components/email-template";
 import { Resend } from "resend";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -70,6 +71,8 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    const userCredential = await signInWithEmailAndPassword(auth, email, phone);
+    const user = userCredential.user;
     // Generate a unique ID for the Firestore document
     const userDocRef = doc(db, "volunteers", email);
 
@@ -92,36 +95,41 @@ export async function POST(request: NextRequest) {
     };
 
     // Save user details to Firestore
-    await setDoc(userDocRef, userData);
+    if (user) {
+      await setDoc(userDocRef, userData);
 
-    // Send email notification
-    try {
-      const { data, error } = await resend.emails.send({
-        from: "Proficuus <onboarding@proficuus.jymest.com>",
-        to: [email],
-        subject: "Registration Successful",
-        react: EmailTemplate({ firstName: name }),
-      });
+      try {
+        const { data, error } = await resend.emails.send({
+          from: "Proficuus <onboarding@proficuus.jymest.com>",
+          to: [email],
+          subject: "Registration Successful",
+          react: EmailTemplate({ firstName: name }),
+        });
 
-      if (error) {
-        return Response.json(
-          { error, message: "Error on sending email" },
+        if (error) {
+          return Response.json(
+            { error, message: "Error on sending email" },
+            { status: 500 }
+          );
+        }
+        if (!error) {
+          return Response.json({ data }, { status: 200 });
+        }
+        return NextResponse.json(
+          { message: "Registration completed", imageUrl },
+          { status: 201 }
+        );
+      } catch (error) {
+        return NextResponse.json(
+          { error, message: "Error on sending email 2" },
           { status: 500 }
         );
       }
-      if (!error) {
-        return Response.json({ data }, { status: 200 });
-      }
-      return NextResponse.json(
-        { message: "Registration completed", imageUrl },
-        { status: 201 }
-      );
-    } catch (error) {
-      return NextResponse.json(
-        { error, message: "Error on sending email 2" },
-        { status: 500 }
-      );
+    } else {
+      throw new Error("User already registered");
     }
+
+    // Send email notification
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
