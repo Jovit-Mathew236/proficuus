@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     type: "website", // Can also be "article", "video", etc., depending on the content type
     images: [
       {
-        url: "https://www.jymest.com/jymestlogo.png", // The URL to an image you want to display for social sharing
+        url: "https://www.jymest.com/images/jymestlogo.png", // The URL to an image you want to display for social sharing
         width: 1200,
         height: 630,
         alt: "JY MEST Community Image", // Alt text for the image
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     title: "JY MEST - Jesus Youth Medical and Engineering Student Team",
     description:
       "A community of medical and engineering students united by faith and service in the Jesus Youth movement.",
-    images: "https://www.jymest.com/jymestlogo.png", // Image to display on Twitter
+    images: "https://www.jymest.com/images/jymestlogo.png", // Image to display on Twitter
   },
   viewport: "width=device-width, initial-scale=1", // Mobile responsive setting
 

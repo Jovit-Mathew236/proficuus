@@ -38,37 +38,38 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const sitemap: MetadataRoute.Sitemap = [
     {
       url: "https://jymest.com",
-      lastModified: new Date(),
+      lastModified: new Date().toISOString(),
       changeFrequency: "daily",
       priority: 1,
     },
     {
       url: "https://jymest.com/proficuus24/register",
-      lastModified: new Date(),
+      lastModified: new Date().toISOString(),
       changeFrequency: "daily",
       priority: 0.8,
     },
     {
       url: "https://jymest.com/proficuus24/login",
-      lastModified: new Date(),
+      lastModified: new Date().toISOString(),
       changeFrequency: "daily",
       priority: 0.8,
     },
     {
       url: "https://jymest.com/blog/",
-      lastModified: new Date(),
+      lastModified: new Date().toISOString(),
       changeFrequency: "daily",
       priority: 0.5,
     },
   ];
 
-  // Add dynamic blog URLs
+  // Add dynamic blog URLs with image metadata
   const dynamicBlogUrls = blogs.map(
-    (blog: { id: string; updatedAt: string }) => ({
+    (blog: { id: string; updatedAt: string; thumbnailUrl: string }) => ({
       url: `https://jymest.com/blog/${blog.id}`,
-      lastModified: new Date(blog.updatedAt),
-      changeFrequency: "monthly",
+      lastModified: new Date(blog.updatedAt).toISOString(),
+      changeFrequency: "daily",
       priority: 0.7,
+      image: blog.thumbnailUrl ? [blog.thumbnailUrl] : [], // Add image metadata
     })
   );
 
