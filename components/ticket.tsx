@@ -49,8 +49,17 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-500/20 to-transparent rounded-full -translate-y-32 translate-x-32" />
 
             <div className="relative">
-              <div className="text-white/80 text-sm mb-3">
-                An awakening call for budding professionals
+              <div className="flex justify-between w-full items-center">
+                <div className="text-white/80 text-sm mb-3">
+                  An awakening call for budding professionals
+                </div>
+                <Image
+                  src="/images/jy-logo-white.png"
+                  alt="logo"
+                  width={100}
+                  height={100}
+                  className="w-10"
+                />
               </div>
 
               <div className="text-4xl md:text-5xl mb-3 font-bold text-white">
@@ -83,6 +92,9 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
                   </div>
                 </div>
               </div>
+              <p className="mt-4 text-sm">
+                Jesus Youth Medical Engineering Students Team
+              </p>
             </div>
           </div>
 
