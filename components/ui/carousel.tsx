@@ -271,7 +271,7 @@ const Carousel: React.FC<CarouselProps> = ({
 
 interface SliderProps {
   children: React.ReactNode;
-  thumnailSrc?: string;
+  thumbnailSrc?: string;
   className?: string;
 }
 
@@ -294,14 +294,14 @@ export const SliderContainer = ({
 export const Slider: React.FC<SliderProps> = ({
   children,
   className,
-  thumnailSrc,
+  thumbnailSrc,
 }) => {
   const { isScale, setSlidesArr } = useCarouselContext();
-  console.log(thumnailSrc);
+  // console.log(thumnailSrc);
 
   const addImgToSlider = useCallback(() => {
-    setSlidesArr((prev: any) => [...prev, thumnailSrc]);
-  }, [setSlidesArr, thumnailSrc]);
+    setSlidesArr((prev: any) => [...prev, thumbnailSrc]);
+  }, [setSlidesArr, thumbnailSrc]);
   useEffect(() => {
     addImgToSlider();
   }, [addImgToSlider]);

@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     siteName: "JYMEST",
     images: [
       {
-        url: "https://jymest.com/images/proficuus.png",
+        url: "https://jymest.com/images/proficuuspreview.png",
         width: 1280,
         height: 791,
         alt: "Proficuus Registration",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     title: "PROFICUUS'24 | Participants Registration | JYMEST",
     description:
       "Join PROFICUUS'24 at JYMEST! Register now for the ultimate event experience.",
-    images: "https://jymest.com/images/proficuus.png",
+    images: "https://jymest.com/images/proficuuspreview.png",
   },
 };
 

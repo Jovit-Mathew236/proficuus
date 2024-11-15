@@ -29,7 +29,7 @@ const EventsCarousel: React.FC<EventsCarouselProps> = ({ events }) => {
       <Carousel options={OPTIONS} isAutoPlay={true} className="w-4/5 mx-auto">
         <SliderContainer className="gap-2">
           {events.map((event, index) => (
-            <Slider key={index} className="w-full">
+            <Slider key={index} className="w-full" thumbnailSrc={event.image}>
               <div className="dark:bg-black bg-white h-[400px] w-full">
                 <Image
                   src={event.image}
