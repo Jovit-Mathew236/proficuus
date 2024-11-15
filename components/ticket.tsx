@@ -44,22 +44,13 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
         {/* Ticket Content */}
         <div className="flex flex-col md:flex-row rounded-2xl overflow-hidden">
           {/* Left/Top Section */}
-          <div className="relative w-full md:w-[65%] bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 p-6 md:p-8">
+          <div className="relative w-full md:w-[65%] bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 p-6 md:p-6">
             {/* Decorative Circle */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-500/20 to-transparent rounded-full -translate-y-32 translate-x-32" />
 
             <div className="relative">
-              <div className="flex justify-between w-full items-center">
-                <div className="text-white/80 text-sm mb-3">
-                  An awakening call for budding professionals
-                </div>
-                <Image
-                  src="/images/jy-logo-white.png"
-                  alt="logo"
-                  width={100}
-                  height={100}
-                  className="w-10 mb-3"
-                />
+              <div className="text-white/80 text-sm mb-3">
+                An awakening call for budding professionals
               </div>
 
               <div className="text-4xl md:text-5xl mb-3 font-bold text-white">
@@ -92,9 +83,18 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
                   </div>
                 </div>
               </div>
-              <p className="mt-4 text-sm">
-                Jesus Youth Medical Engineering Students Team
-              </p>
+              <div className="flex gap-3 mt-4 items-center">
+                <Image
+                  src="/images/jy-logo-white.png"
+                  alt="logo"
+                  width={100}
+                  height={100}
+                  className="w-7 h-7"
+                />
+                <p className=" text-sm">
+                  Jesus Youth Medical Engineering Students Team
+                </p>
+              </div>
             </div>
           </div>
 
@@ -125,7 +125,7 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
             </div>
 
             {/* Content */}
-            <div className="p-6 md:p-8 flex flex-col items-center md:items-start gap-6">
+            <div className="p-6 md:p-6 flex flex-col items-center md:items-start gap-6">
               <div className="ml-0 md:ml-8 text-center md:text-left">
                 <div className="text-xl font-bold text-blue-900">{name}</div>
                 <div className="text-sm text-gray-600">{collage}</div>
