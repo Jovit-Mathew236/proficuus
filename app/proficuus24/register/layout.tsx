@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 
 // Metadata for the registration page with keyword optimization
 export const metadata: Metadata = {
-  title: "PROFICUUS'24 | Participants Registration | JYMEST",
+  title: "PROFICUUS'24 | Registration | JYMEST",
   description:
     "Register for PROFICUUS'24 at JYMEST. Join the ultimate event and secure your spot today!",
   keywords: [
@@ -22,11 +22,12 @@ export const metadata: Metadata = {
     "Volunteer registration PROFICUUS'24",
   ],
   openGraph: {
-    title: "PROFICUUS'24 | Participants Registration | JYMEST",
+    title: "PROFICUUS'24 | Registration | JYMEST",
     description:
       "Sign up for PROFICUUS'24, the most awaited event of the year at JYMEST. Register today to secure your spot!",
     url: "https://jymest.com/proficuus24/register",
     siteName: "JYMEST",
+    type: "website",
     images: [
       {
         url: "https://jymest.com/images/proficuuspreview.png",
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "PROFICUUS'24 | Participants Registration | JYMEST",
+    title: "PROFICUUS'24 | Registration | JYMEST",
     description:
       "Join PROFICUUS'24 at JYMEST! Register now for the ultimate event experience.",
     images: "https://jymest.com/images/proficuuspreview.png",
