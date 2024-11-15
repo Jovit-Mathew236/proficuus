@@ -38,5 +38,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="flex-1 px-4">{children}</div>;
+  return <div className="flex-1">{children}</div>;
 }

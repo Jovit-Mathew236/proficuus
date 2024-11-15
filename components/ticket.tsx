@@ -58,7 +58,7 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
                   alt="logo"
                   width={100}
                   height={100}
-                  className="w-10"
+                  className="w-10 mb-3"
                 />
               </div>
 
