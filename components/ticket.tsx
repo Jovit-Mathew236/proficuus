@@ -61,7 +61,7 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
                 Sahrdaya College of Engineering and Technology (Autonomous){" "}
               </p>
               <div className="flex items-center mb-4 text-base md:text-lg text-white/90">
-                <span>TRISSUR</span>
+                <span>IRINJALAKKUDA</span>
                 <div className="w-1.5 h-1.5 mx-3 rounded-full bg-purple-400" />
                 <span>DEC 20 - 23, 2024</span>
               </div>
