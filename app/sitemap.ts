@@ -1,0 +1,77 @@
+import type { MetadataRoute } from "next";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  // Fetch the list of blogs
+  const response = await fetch(`${apiBaseUrl}/api/dashboard/mest/blog/get`);
+
+  if (!response.ok) {
+    // Log the error and return an empty or fallback sitemap if the API request fails
+    console.error("Error fetching blog data:", response.statusText);
+    return [
+      {
+        url: "https://jymest.com",
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 1,
+      },
+      {
+        url: "https://jymest.com/proficuus24/register",
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 0.8,
+      },
+      {
+        url: "https://jymest.com/blog/",
+        lastModified: new Date(),
+        changeFrequency: "daily",
+        priority: 0.5,
+      },
+    ];
+  }
+
+  // If the fetch is successful, parse the JSON response
+  const blogs = await response.json();
+
+  // Construct static part of the sitemap
+  const sitemap: MetadataRoute.Sitemap = [
+    {
+      url: "https://jymest.com",
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 1,
+    },
+    {
+      url: "https://jymest.com/proficuus24/register",
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.8,
+    },
+    {
+      url: "https://jymest.com/proficuus24/login",
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.8,
+    },
+    {
+      url: "https://jymest.com/blog/",
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.5,
+    },
+  ];
+
+  // Add dynamic blog URLs
+  const dynamicBlogUrls = blogs.map(
+    (blog: { id: string; updatedAt: string }) => ({
+      url: `https://jymest.com/blog/${blog.id}`,
+      lastModified: new Date(blog.updatedAt),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    })
+  );
+
+  // Combine static and dynamic URLs
+  return [...sitemap, ...dynamicBlogUrls];
+}
