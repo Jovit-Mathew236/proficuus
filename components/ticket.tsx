@@ -71,7 +71,7 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
                   <div className="bg-white p-1 rounded-full shadow-inner">
                     <Image
                       className="object-contain rounded-full"
-                      src="/favicon.ico"
+                      src="/images/logo.png"
                       alt={collage}
                       width={32}
                       height={32}

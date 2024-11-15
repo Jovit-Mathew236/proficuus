@@ -1,13 +1,13 @@
 export const fetchCache = "force-no-store";
 export const revalidate = 0; // To disable ISR.
 import { NextResponse } from "next/server";
-import { collection, getDocs, query, limit } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 
 export async function GET() {
   try {
     // Create a query with a limit higher than your expected document count
-    const q = query(collection(db, "volunteers"), limit(100));
+    const q = query(collection(db, "volunteers"));
 
     const querySnapshot = await getDocs(q);
     const volunteers = querySnapshot.docs.map((doc) => ({
