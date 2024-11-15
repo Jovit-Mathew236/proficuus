@@ -1,17 +1,48 @@
-/* eslint-disable react/no-unescaped-entities */
 import { Metadata } from "next";
-import Image from "next/image";
-import { Separator } from "@/components/ui/separator";
 import { ModeToggle } from "@/components/theme-mode";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { Card, CardContent } from "@/components/ui/card";
-// import getConfig from "next/config";
+import Image from "next/image";
+import { Separator } from "@/components/ui/separator";
 
-// const { publicRuntimeConfig } = getConfig();
-// const { basePath } = publicRuntimeConfig;
+// Metadata for the registration page with keyword optimization
 export const metadata: Metadata = {
-  title: "PROFICUUS | Participants registration",
-  description: "Volunteer registration Form",
+  title: "PROFICUUS'24 | Participants Registration | JYMEST",
+  description:
+    "Register for PROFICUUS'24 at JYMEST. Join the ultimate event and secure your spot today!",
+  keywords: [
+    "Proficuus24 register",
+    "Proficuus register",
+    "JYMEST register",
+    "Proficuus registration",
+    "Register for Proficuus",
+    "JYMEST Proficuus registration",
+    "Proficuus event 2024",
+    "Sign up for Proficuus",
+    "Volunteer registration PROFICUUS'24",
+  ],
+  openGraph: {
+    title: "PROFICUUS'24 | Participants Registration | JYMEST",
+    description:
+      "Sign up for PROFICUUS'24, the most awaited event of the year at JYMEST. Register today to secure your spot!",
+    url: "https://jymest.com/proficuus24/register",
+    siteName: "JYMEST",
+    images: [
+      {
+        url: "https://jymest.com/images/proficuus.png",
+        width: 1280,
+        height: 791,
+        alt: "Proficuus Registration",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PROFICUUS'24 | Participants Registration | JYMEST",
+    description:
+      "Join PROFICUUS'24 at JYMEST! Register now for the ultimate event experience.",
+    images: "https://jymest.com/images/proficuus.png",
+  },
 };
 
 interface SettingsLayoutProps {
@@ -28,12 +59,12 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
             <div className="flex justify-between items-start">
               <div className="max-w-3xl">
                 <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-4">
-                  "Be dressed ready for service and keep your lamps
-                  burning"🪔(LUKE 12:35)
+                  &quot;Be dressed ready for service and keep your lamps
+                  burning&quot;🪔(LUKE 12:35)
                 </h2>
                 <div className="prose prose-sm dark:prose-invert">
                   <p className="text-muted-foreground leading-relaxed">
-                    Hello there ,Young lantern!! Yeah you!📸🤩
+                    Hello there, Young lantern!! Yeah you!📸🤩
                   </p>
 
                   <div className="mt-6 space-y-4">
@@ -46,7 +77,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
                     </p>
                     <p className="text-muted-foreground">
                       <span className="font-bold text-foreground">
-                        𝙋𝙧𝙤𝙛𝙞𝙘𝙪𝙪𝙨'24 is 𝗵𝗲𝗿𝗲...
+                        𝙋𝙧𝙤𝙛𝙞𝙘𝙪𝙪𝙨&apos;24 is 𝗵𝗲𝗿𝗲...
                       </span>
                       Time to get your skates on!! <br />
                       <span className="font-bold text-foreground">
@@ -60,7 +91,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
                     </p>
                     <br />
                     <p className="font-semibold text-foreground">
-                      PROFICUUS'24 - December 20-23
+                      PROFICUUS&apos;24 - December 20-23
                     </p>
                   </div>
                 </div>
@@ -79,7 +110,6 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
                 <div className="relative rounded-lg overflow-hidden">
                   <Image
                     src="/images/proficuus.png"
-                    // src={`${basePath}/images/proficuus.png`}
                     width={1280}
                     height={791}
                     alt="Proficuus"
