@@ -56,7 +56,7 @@ const BlogPage = (props: Props) => {
         <meta property="og:image" content={blogData.thumbnailUrl} />
         <meta
           property="og:url"
-          content={`https://yourwebsite.com/blog/${props.id}`}
+          content={`https://www.jymest.com/blog/${props.id}`}
         />
         <meta property="og:type" content="article" />
       </Head>
