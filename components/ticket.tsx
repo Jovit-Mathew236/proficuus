@@ -7,6 +7,7 @@ interface TicketProps {
   zone: string;
   collage: string;
   userId: string;
+  isDownloading: boolean;
 }
 
 export const Ticket: React.FC<Readonly<TicketProps>> = ({
@@ -14,6 +15,7 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
   zone,
   collage,
   userId,
+  isDownloading,
 }) => {
   const qrCodeRef = useRef<HTMLDivElement>(null);
 
@@ -40,11 +42,23 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-blue-900 blur-xl opacity-20 rounded-3xl" />
 
       {/* Main Ticket Container */}
-      <div className="relative bg-transparent">
+      <div
+        className={`relative bg-transparent ${
+          isDownloading ? "min-w-[800px] md:min-w-full" : ""
+        }`}
+      >
         {/* Ticket Content */}
-        <div className="flex flex-col md:flex-row rounded-2xl overflow-hidden">
+        <div
+          className={`flex md:flex-row rounded-2xl overflow-hidden ${
+            isDownloading ? "flex-row" : "flex-col"
+          }`}
+        >
           {/* Left/Top Section */}
-          <div className="relative w-full md:w-[65%] bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 p-6 md:p-6">
+          <div
+            className={`relative ${
+              isDownloading ? "w-[65%]" : "w-full"
+            } md:w-[65%] bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 p-6 md:p-6`}
+          >
             {/* Decorative Circle */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-500/20 to-transparent rounded-full -translate-y-32 translate-x-32" />
 
@@ -99,9 +113,13 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
           </div>
 
           {/* Right/Bottom Section with Subtract Effect */}
-          <div className="relative w-full md:w-[35%] bg-white">
+          <div
+            className={`relative ${
+              isDownloading ? "w-[35%]" : "w-full"
+            } md:w-[35%] bg-white`}
+          >
             {/* Mobile Top Subtract */}
-            <div className="block md:hidden">
+            <div className={`${isDownloading ? "hidden" : "block"} md:hidden`}>
               <div className="absolute z-20 -top-4 left-0 -translate-x-1/2">
                 <div className="w-8 h-8 bg-foreground dark:bg-primary-foreground rounded-full" />
               </div>
@@ -112,7 +130,7 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
             </div>
 
             {/* Desktop Left Subtract */}
-            <div className="hidden md:block">
+            <div className={`${isDownloading ? "block" : "hidden"} md:block`}>
               <div className="absolute left-0 top-0 w-8 h-full">
                 <div className="absolute z-20 -left-4 -top-4">
                   <div className="w-8 h-8 bg-foreground dark:bg-primary-foreground rounded-full" />
@@ -125,8 +143,16 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
             </div>
 
             {/* Content */}
-            <div className="p-6 md:p-6 flex flex-col items-center md:items-start gap-6">
-              <div className="ml-0 md:ml-8 text-center md:text-left">
+            <div
+              className={`p-6 md:p-6 flex flex-col ${
+                isDownloading ? "items-start" : "items-center"
+              } md:items-start gap-6`}
+            >
+              <div
+                className={`ml-0 md:ml-8  ${
+                  isDownloading ? "text-left" : "text-center"
+                } md:text-left`}
+              >
                 <div className="text-xl font-bold text-blue-900">{name}</div>
                 <div className="text-sm text-gray-600">{collage}</div>
                 <div className="text-sm text-purple-600">{zone}</div>
