@@ -82,7 +82,7 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
 
               <div className="bg-purple-500 rounded-xl p-3 shadow-lg max-w-[400px]">
                 <div className="flex items-center gap-3">
-                  <div className="bg-white p-1 rounded-full shadow-inner">
+                  <div className="bg-white p-1 rounded-full shadow-inner w-16">
                     <Image
                       className="object-contain rounded-full"
                       src="/images/logo.png"
@@ -105,7 +105,7 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
                   height={100}
                   className="w-7 h-7"
                 />
-                <p className=" text-sm">
+                <p className="text-white text-sm">
                   Jesus Youth Medical Engineering Students Team
                 </p>
               </div>
@@ -121,10 +121,10 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
             {/* Mobile Top Subtract */}
             <div className={`${isDownloading ? "hidden" : "block"} md:hidden`}>
               <div className="absolute z-20 -top-4 left-0 -translate-x-1/2">
-                <div className="w-8 h-8 bg-foreground dark:bg-primary-foreground rounded-full" />
+                <div className="w-8 h-8 bg-[#e3e6eb] dark:bg-primary-foreground rounded-full" />
               </div>
               <div className="absolute z-20 -top-4 right-0 translate-x-1/2">
-                <div className="w-8 h-8 bg-foreground dark:bg-primary-foreground rounded-full" />
+                <div className="w-8 h-8 bg-[#e3e6eb] dark:bg-primary-foreground rounded-full" />
               </div>
               <div className="absolute -top-[2px] left-0 right-0 border-t-8 border-dashed border-blue-900/30" />
             </div>
