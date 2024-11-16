@@ -37,7 +37,11 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
   }, [userId]);
 
   return (
-    <div className="relative w-full max-w-[800px] mx-auto sm:p-4">
+    <div
+      className={`relative ${
+        isDownloading ? "scale-90" : ""
+      } w-full max-w-[800px] mx-auto sm:p-4`}
+    >
       {/* Background Element */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-blue-900 blur-xl opacity-20 rounded-3xl" />
 
@@ -87,8 +91,8 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
                       className="object-contain rounded-full"
                       src="/images/logo.png"
                       alt={collage}
-                      width={32}
-                      height={32}
+                      width={54}
+                      height={54}
                     />
                   </div>
                   <div className="text-sm text-white leading-snug">
