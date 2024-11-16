@@ -1,4 +1,5 @@
 export const fetchCache = "force-no-store";
+export const revalidate = 0; // To disable ISR.
 import { NextResponse } from "next/server";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";

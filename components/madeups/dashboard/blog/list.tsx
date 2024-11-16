@@ -93,7 +93,7 @@ const BlogList = () => {
                       {new Date(blog.updatedAt).toLocaleDateString()}
                     </TableCell>
                     <TableCell>
-                      <ListActions payment={blog} setBlogs={setBlogs} />
+                      <ListActions blog={blog} setBlogs={setBlogs} />
                     </TableCell>
                   </TableRow>
                 ))

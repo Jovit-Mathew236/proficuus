@@ -6,6 +6,7 @@ import MetaDataForm from "./modules/MetaDataForm";
 import { FormSchemaType } from "./modules/MetaDataForm";
 import { useToast } from "@/hooks/use-toast";
 import { BlogData } from "../../home/blogs/blog";
+import { useRouter } from "next/navigation";
 
 type Props = {
   id: string;
@@ -13,6 +14,7 @@ type Props = {
 
 const EditPage = ({ id }: Props) => {
   const { toast } = useToast();
+  const router = useRouter();
   const [blogData, setBlogData] = useState<BlogData>();
   const [content, setContent] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -83,6 +85,7 @@ const EditPage = ({ id }: Props) => {
           description: "Your blog has been updated successfully",
           duration: 3000,
         });
+        router.push("/dashboard/mest/blog");
       } else {
         setErrorMessage(result.message || "An error occurred");
       }

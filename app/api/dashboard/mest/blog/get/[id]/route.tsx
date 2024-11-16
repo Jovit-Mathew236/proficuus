@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 
-export const fetchCache = "force-no-store";
-
 export async function GET(
   req: Request,
   { params }: { params: { id: string } }
