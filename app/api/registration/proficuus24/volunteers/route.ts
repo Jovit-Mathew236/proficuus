@@ -4,7 +4,7 @@ import { auth, db } from "@/lib/firebase/config";
 import cloudinary from "cloudinary";
 import { EmailTemplate } from "@/components/email-template";
 import { Resend } from "resend";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -31,6 +31,13 @@ export async function POST(request: NextRequest) {
       ministry,
       image,
     } = await request.json();
+
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      phone
+    );
+    const user = userCredential.user;
 
     let imageUrl: string | undefined;
 
@@ -70,32 +77,29 @@ export async function POST(request: NextRequest) {
         stream.end(imageBuffer);
       });
     }
-
-    const userCredential = await signInWithEmailAndPassword(auth, email, phone);
-    const user = userCredential.user;
-    // Generate a unique ID for the Firestore document
-    const userDocRef = doc(db, "volunteers", email);
-
-    // Prepare the data to save
-    const userData = {
-      name,
-      collage,
-      year,
-      zone,
-      phone,
-      alternativephone,
-      program_availability,
-      meeting_availability,
-      experience,
-      email,
-      ministry,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      ...(imageUrl ? { imageUrl } : {}),
-    };
-
     // Save user details to Firestore
     if (user) {
+      // Generate a unique ID for the Firestore document
+      const userDocRef = doc(db, "volunteers", email);
+
+      // Prepare the data to save
+      const userData = {
+        name,
+        collage,
+        year,
+        zone,
+        phone,
+        alternativephone,
+        program_availability,
+        meeting_availability,
+        experience,
+        email,
+        ministry,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        ...(imageUrl ? { imageUrl } : {}),
+      };
+
       await setDoc(userDocRef, userData);
 
       try {
