@@ -86,13 +86,13 @@ export const Ticket: React.FC<Readonly<TicketProps>> = ({
 
               <div className="bg-purple-500 rounded-xl p-3 shadow-lg max-w-[400px]">
                 <div className="flex items-center gap-3">
-                  <div className="bg-white p-1 rounded-full shadow-inner w-16">
+                  <div className="bg-white p-1 rounded-full shadow-inner w-fit max-w-10">
                     <Image
                       className="object-contain rounded-full"
                       src="/images/logo.png"
                       alt={collage}
-                      width={54}
-                      height={54}
+                      width={50}
+                      height={50}
                     />
                   </div>
                   <div className="text-sm text-white leading-snug">
