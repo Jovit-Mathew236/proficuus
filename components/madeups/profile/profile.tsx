@@ -32,6 +32,7 @@ export const Profile = () => {
         try {
           const canvas = await html2canvas(ticketRef.current, {
             useCORS: true,
+            scale: 2,
             scrollX: 0,
             scrollY: 0,
             x: 0,
