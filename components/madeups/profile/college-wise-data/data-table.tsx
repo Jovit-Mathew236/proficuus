@@ -36,7 +36,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Participant } from "../../dashboard/participents/participants";
+import { Participant } from "../../dashboard/proficuus24/participents/participants";
 import { useUser } from "@/lib/context/userContext";
 
 export function CollegeData() {

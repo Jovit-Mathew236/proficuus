@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useUser } from "@/lib/context/userContext";
 import { Ticket } from "@/components/ticket";
-import { Participant } from "../dashboard/participents/participants";
+import { Participant } from "../dashboard/proficuus24/participents/participants";
 import html2canvas from "html2canvas";
 import GitHubButton from "@/components/ui/liquid-btn";
 import { Download } from "lucide-react";
