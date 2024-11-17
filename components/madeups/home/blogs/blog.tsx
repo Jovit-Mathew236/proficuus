@@ -84,7 +84,7 @@ const BlogPage = (props: Props) => {
 
         {/* Blog Content (HTML injected) */}
         <div
-          className="mt-8 blog-content tiptap"
+          className="mt-8 blog-content prose prose-sm tiptap ProseMirror"
           dangerouslySetInnerHTML={{ __html: blogData.content }}
         />
 

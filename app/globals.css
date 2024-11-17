@@ -237,7 +237,7 @@ body {
   }
 
   blockquote {
-    @apply border-l-4 border-foreground text-muted-foreground;
+    @apply border-l-4 border-muted-foreground text-foreground my-6 pl-4;
     margin: 1.5rem 0;
     padding-left: 1rem;
   }
@@ -248,15 +248,16 @@ body {
     margin: 2rem 0;
   }
 
-  /* Blockquote styling */
-  blockquote {
-    @apply border-l-4;
-    @apply border-foreground;
-    /* Use theme-based color */
-    @apply my-6 pl-4;
-    /* Apply margin and padding */
-    @apply text-muted-foreground;
-    /* Apply muted foreground color */
+  table {
+    @apply border-collapse border-solid border-[var(--border)] m-0 overflow-hidden table-fixed w-full;
+    border: solid 1px;
+    border-color: var(--border);
+  }
+
+  table td,
+  table th {
+    border: solid 1px;
+    border-color: var(--border);
   }
 
   /* ProseMirror specific styles */
@@ -267,13 +268,15 @@ body {
 
   /* Table styles inside ProseMirror */
   .ProseMirror table {
-    @apply border-collapse m-0 overflow-hidden table-fixed w-full;
+    @apply border-collapse border-solid border-[var(--border)] m-0 overflow-hidden table-fixed w-full;
     /* Table utilities */
+    border: solid 1px black;
   }
 
   .ProseMirror table td,
   .ProseMirror table th {
     @apply border-2 border-[var(--border)] box-border p-1.5 relative align-top;
+    border: solid 1px black;
     /* Table cell styles with border, padding, and alignment */
   }
 
@@ -291,8 +294,8 @@ body {
 
   /* Blockquote inside ProseMirror */
   .ProseMirror blockquote {
-    @apply border-l-4 border-[var(--foreground)] my-4 pl-4;
-    @apply text-[var(--muted-foreground)];
+    @apply border-l-4 border-[var(--muted-foreground)] my-4 pl-4;
+    @apply text-[var(--foreground)];
   }
 }
 

@@ -53,7 +53,9 @@ import {
   Table as TableIcon,
   Video,
   Unlink,
+  ListEnd,
 } from "lucide-react";
+import HardBreak from "@tiptap/extension-hard-break";
 
 interface MenuBarProps {
   editor: ReturnType<typeof useEditor> | null;
@@ -295,6 +297,17 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
           <Quote size={16} />
         </button>
         <button
+          onClick={() => editor.chain().focus().setHardBreak().run()}
+          className={`px-2 py-1 rounded ${
+            editor.isActive("blockquote")
+              ? "bg-foreground text-background"
+              : "bg-accent text-foreground"
+          } hover:bg-foreground hover:text-background`}
+          title="Blockquote"
+        >
+          <ListEnd size={16} />
+        </button>
+        <button
           onClick={() => editor.chain().focus().toggleCode().run()}
           className={`px-2 py-1 rounded ${
             editor.isActive("code")
@@ -395,6 +408,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       Document,
       Paragraph,
       Text,
+      HardBreak,
       Bold,
       Italic,
       Strike,
@@ -423,7 +437,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       Table.configure({
         resizable: true,
         HTMLAttributes: {
-          class: "border-collapse table-auto w-full",
+          class:
+            "border-collapse border-solid border-foreground table-auto w-full",
+          border: "solid 1px black",
         },
       }),
       TableRow,
