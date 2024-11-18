@@ -1,7 +1,7 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+// import { TrendingUp } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 
 import {
   Card,
@@ -17,14 +17,18 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-];
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Participant } from "../../participents/participants";
+import { useMemo, useState } from "react";
+import { zone } from "@/lib/constants";
 
 const chartConfig = {
   desktop: {
@@ -33,39 +37,101 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function CollageWiseChart() {
+type Props = {
+  participantsData: Participant[];
+};
+export function CollageWiseChart({ participantsData }: Props) {
+  const [selectedZone, setSelectedZone] = useState<string>("");
+
+  const filteredParticipants = useMemo(() => {
+    if (!selectedZone) {
+      return participantsData;
+    }
+    return participantsData.filter(
+      (participant) => participant.zone === selectedZone
+    );
+  }, [selectedZone, participantsData]);
+
+  const collegeWiseData = filteredParticipants.reduce((acc, participant) => {
+    const college = participant.collage;
+    if (!acc[college]) {
+      acc[college] = 0;
+    }
+    acc[college] += 1;
+    return acc;
+  }, {} as Record<string, number>);
+
+  const chartData = Object.keys(collegeWiseData).map((college) => ({
+    college,
+    participants: collegeWiseData[college],
+  }));
+
   return (
-    <Card>
+    <Card className="w-full">
       <CardHeader>
-        <CardTitle>Bar Chart</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Zone wise Participants Chart</CardTitle>
+        <CardDescription>
+          Total number of participants{" "}
+          {Object.values(collegeWiseData).reduce(
+            (total, count) => total + count,
+            0
+          )}
+        </CardDescription>
       </CardHeader>
       <CardContent>
+        <div className="mb-4">
+          <Select onValueChange={(zone) => setSelectedZone(zone)}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select a Zone" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Zone</SelectLabel>
+                {zone.map((zone, i) => (
+                  <SelectItem key={i} value={zone.value}>
+                    {zone.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
+          <BarChart
+            data={chartData}
+            width={100}
+            height={300}
+            margin={{
+              top: 20,
+            }}
+          >
+            {" "}
+            {/* Adjust height here */}
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="college"
               tickLine={false}
               tickMargin={10}
+              className="text-xs text-wrap w-full"
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => {
+                return value.length > 15 ? `${value.slice(0, 15)}...` : value;
+              }}
             />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+            <Bar dataKey="participants" fill="var(--color-desktop)" radius={8}>
+              <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+            </Bar>
           </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
+        {/* Optional footer content */}
       </CardFooter>
     </Card>
   );

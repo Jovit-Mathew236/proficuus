@@ -42,6 +42,7 @@ import { z } from "zod";
 
 import { useToast } from "@/hooks/use-toast";
 import ParticipantActions, { FormSchema } from "./participant-actions";
+import { useParticipants } from "@/lib/context/participantContext";
 
 export type Participant = {
   name: string;
@@ -62,7 +63,8 @@ export type Participant = {
 
 export function ParticipantsDashboard() {
   const tableRef = useRef(null);
-  const [participants, setParticipants] = React.useState<Participant[]>([]);
+  const { setParticipants, participantsData, loading, error } =
+    useParticipants();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -262,30 +264,9 @@ export function ParticipantsDashboard() {
   ];
 
   // Fetch participant data
-  React.useEffect(() => {
-    const fetchParticipants = async () => {
-      try {
-        const response = await fetch(
-          "/api/dashboard/proficuus24/participants",
-          {
-            cache: "no-store",
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch participants.");
-        }
-        const data = await response.json();
-        setParticipants(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchParticipants();
-  }, []);
 
   const table = useReactTable({
-    data: participants,
+    data: participantsData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -301,12 +282,18 @@ export function ParticipantsDashboard() {
       columnVisibility,
       rowSelection,
     },
-    pageCount: Math.ceil(participants.length / 10),
+    pageCount: Math.ceil(participantsData.length / 10),
     manualPagination: true,
   });
 
   const { state } = useSidebar();
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
   return (
     <div className="w-full h-full pb-4">
       <div className="flex items-center py-4">

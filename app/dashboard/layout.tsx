@@ -21,7 +21,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
         {/* <BackgroundBeamsWithCollision className="h-full w-full"> */}
         <SidebarProvider>
           <AppSidebar />
-          <main>
+          <main className="w-full">
             <div className="flex sm:hidden bg-secondary h-10  justify-between w-screen px-5 py-2">
               <SidebarTrigger className="" />
               <p>Admin dashboard</p>

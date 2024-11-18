@@ -138,7 +138,12 @@ export function AppSidebar() {
                 .map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={pathname === item.url}>
-                      <button onClick={() => router.push(item.url)}>
+                      <button
+                        onClick={() => {
+                          router.push(item.url);
+                          toggleSidebar();
+                        }}
+                      >
                         <item.icon />
                         <span>{item.title}</span>
                       </button>
