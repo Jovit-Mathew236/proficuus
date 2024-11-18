@@ -1,4 +1,4 @@
-import EditPage from "@/components/madeups/dashboard/blog/edit";
+import EditPage from "@/components/madeups/dashboard/mest/blog/edit";
 import React from "react";
 export default async function BlogEditPage({
   params,

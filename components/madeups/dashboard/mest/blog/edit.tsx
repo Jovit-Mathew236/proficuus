@@ -5,7 +5,7 @@ import { RichTextEditor } from "./modules/RichText";
 import MetaDataForm from "./modules/MetaDataForm";
 import { FormSchemaType } from "./modules/MetaDataForm";
 import { useToast } from "@/hooks/use-toast";
-import { BlogData } from "../../home/blogs/blog";
+import { BlogData } from "@/components/madeups/home/blogs/blog";
 import { useRouter } from "next/navigation";
 
 type Props = {

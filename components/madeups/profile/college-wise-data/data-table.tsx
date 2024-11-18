@@ -162,7 +162,7 @@ export function CollegeData() {
     };
 
     fetchParticipants();
-  }, [userData?.collage, userData?.uid]);
+  }, [userData?.collage, userData?.email, userData?.uid]);
 
   const table = useReactTable({
     data: participants,
