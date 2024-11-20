@@ -1,5 +1,4 @@
 "use client";
-// pages/index.tsx
 import Iphone15Pro from "@/components/ui/iphone-15-pro";
 import { useEffect, useState } from "react";
 import BlogCard from "./modules/BlogCard";
@@ -14,6 +13,9 @@ import { RandomizedTextEffect } from "@/components/ui/text-randomized.tsx";
 import { ArrowRight } from "lucide-react";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 import Ripple from "@/components/ui/ripple";
+import { Participant } from "../dashboard/proficuus24/participents/participants";
+import { CollageWiseChart } from "../dashboard/proficuus24/home/modules/collage-wise-chart";
+
 // Define types for events
 interface Event {
   title: string;
@@ -28,9 +30,14 @@ type Blog = {
   link: string;
   id: string;
 };
+
 const Home: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [events] = useState<Event[]>([
+  const [participants, setParticipants] = useState<Participant[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const events: Event[] = [
     {
       title: "Proficuus '24 Registration Open",
       description:
@@ -52,31 +59,54 @@ const Home: React.FC = () => {
       image:
         "https://images.jdmagicbox.com/comp/ernakulam/m4/0484px484.x484.140206113128.a9m4/catalogue/we-create-events-panampilly-nagar-ernakulam-event-management-companies-nsobpzm660.jpg?clr=",
     },
-  ]);
+  ];
+
   useEffect(() => {
-    const fetchBlogs = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch("/api/dashboard/mest/blog/get", {
-          cache: "no-store",
-        });
-        if (!response.ok) {
+        setLoading(true);
+        const [blogsResponse, participantsResponse] = await Promise.all([
+          fetch("/api/dashboard/mest/blog/get", { cache: "no-store" }),
+          fetch("/api/dashboard/proficuus24/participants", {
+            cache: "no-store",
+          }),
+        ]);
+
+        if (!blogsResponse.ok) {
+          throw new Error("Failed to fetch blogs.");
+        }
+        if (!participantsResponse.ok) {
           throw new Error("Failed to fetch participants.");
         }
-        const data = await response.json();
-        setBlogs(data);
+
+        const blogsData = await blogsResponse.json();
+        const participantsData = await participantsResponse.json();
+
+        setBlogs(blogsData);
+        setParticipants(participantsData);
       } catch (err) {
-        console.error(err);
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchBlogs();
-  }, []);
+    fetchData();
+  }, []); // Empty dependency array ensures this runs only once when the component mounts
+
+  // Loading spinner component
+  const LoadingSpinner = () => (
+    <div className="flex justify-center items-center w-full h-64">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+    </div>
+  );
+
   return (
     <>
       {/* Dark mode toggle */}
       <ReactLenis root>
-        <section className=" h-auto  w-full sticky -top-36">
-          <ModeToggle className="right-10 top-10 absolute z-50" />{" "}
+        <section className=" h-auto w-full sticky -top-36">
+          <ModeToggle className="right-10 top-10 absolute z-50" />
           <div className="">
             {/* Hero Section */}
             <div className="relative isolate px-6 pt-14 lg:px-8">
@@ -115,18 +145,8 @@ const Home: React.FC = () => {
                       duration={1}
                       className="mt-8 text-pretty text-lg font-thin md:font-medium text-gray-500 sm:text-xl/8"
                     />
-                    {/* <p className="mt-8 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8">
-                      Jesus Youth Medical Engineering Students Team is a stream
-                      team under the Kerala campus ministry that addresses
-                      medical engineering campuses. The main programs initiated
-                      by the MEST team are Proficuus, Footprints, Discovery,
-                      Insight and Catalyst
-                    </p> */}
                     <div className="mt-10 flex flex-wrap justify-center sm:justify-normal items-center gap-x-6">
-                      <a
-                        href="/proficuus24/register"
-                        // className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                      >
+                      <a href="/proficuus24/register">
                         <div className="group relative cursor-pointer p-2 w-60 border bg-primary rounded-full overflow-hidden text-white text-center font-semibold">
                           <span className="translate-x-1 group-hover:translate-x-12 group-hover:opacity-0 transition-all duration-300 inline-block">
                             Register For Proficuus
@@ -135,7 +155,6 @@ const Home: React.FC = () => {
                             <span>Register For Proficuus</span>
                             <ArrowRight />
                           </div>
-                          <div className="absolute top-[40%] left-[5%] h-2 w-2 group-hover:h-full group-hover:w-full rounded-lg bg-background dark:bg-background scale-[1] dark:group-hover:bg-background group-hover:bg-background group-hover:scale-[1.8] transition-all duration-300 group-hover:top-[0%] group-hover:left-[0%] "></div>
                         </div>
                       </a>
                       <a
@@ -148,7 +167,6 @@ const Home: React.FC = () => {
                   </div>
                 </div>
 
-                {/* iPhone 15 Pro mockup */}
                 <Iphone15Pro
                   className="size-1/2 md:size-1/5 z-100"
                   src="/images/proficuus.png"
@@ -170,17 +188,23 @@ const Home: React.FC = () => {
               Our Latest Blog Posts
             </h2>
             <div className="flex flex-wrap justify-center gap-8">
-              {/* Example Blog Cards */}
-              {blogs.map((blog) => (
-                <BlogCard
-                  key={blog.id}
-                  image={blog.thumbnailUrl}
-                  date={new Date(blog.updatedAt).toLocaleDateString()}
-                  title={blog.title}
-                  description={blog.description}
-                  link={`/blog/${blog.id}`}
-                />
-              ))}
+              {/* Show loading spinner if blogs are still being fetched */}
+              {loading ? (
+                <LoadingSpinner />
+              ) : error ? (
+                <div className="text-center text-red-500">{error}</div>
+              ) : (
+                blogs.map((blog) => (
+                  <BlogCard
+                    key={blog.id}
+                    image={blog.thumbnailUrl}
+                    date={new Date(blog.updatedAt).toLocaleDateString()}
+                    title={blog.title}
+                    description={blog.description}
+                    link={`/blog/${blog.id}`}
+                  />
+                ))
+              )}
             </div>
           </div>
         </section>
@@ -200,7 +224,7 @@ const Home: React.FC = () => {
           <MainEvents />
         </section>
 
-        <section className="bg-gray-900 text-black grid place-content-center h-[600px] sticky top-0 overflow-hidden">
+        <section className="bg-gray-900 text-black grid place-content-center h-screen sticky top-0 overflow-hidden">
           <h1 className="text-white text-xl font-semibold m-auto">
             Proficuus&apos;24 is coming soon
           </h1>
@@ -210,6 +234,9 @@ const Home: React.FC = () => {
             targetDate={new Date("2024-12-19T23:59:59")}
             // labels={["Days", "Hours", "Minutes", "Seconds"]}
           />
+          <div className="w-11/12 sm:w-[600px] m-auto z-10">
+            <CollageWiseChart participantsData={participants} />
+          </div>
           <div className="absolute bottom-0 z-[2] h-[500px] w-screen overflow-hidden [mask-image:radial-gradient(100%_50%,white,transparent)] before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,#3273ff,transparent_90%)] before:opacity-40 after:absolute">
             <Sparkles
               density={1800}
