@@ -73,6 +73,7 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "image/*";
+
     input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
@@ -80,16 +81,20 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
         reader.onloadend = () => {
           const base64Url = reader.result as string;
 
-          // Insert base64 image temporarily
+          // Extract the file name without the extension
+          const fileName = file.name.split(".")[0];
+
+          // Insert base64 image with the file name as the alt text
           editor
             .chain()
             .focus()
-            .setImage({ src: base64Url, alt: "Uploaded Image" })
+            .setImage({ src: base64Url, alt: fileName }) // Set alt to the file name
             .run();
         };
         reader.readAsDataURL(file);
       }
     };
+
     input.click();
   };
 
