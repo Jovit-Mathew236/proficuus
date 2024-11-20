@@ -128,7 +128,10 @@ const Home: React.FC = () => {
                   <div className="hidden sm:mb-8 sm:flex sm:justify-center">
                     <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
                       Announcing Proficuus&apos;24{" "}
-                      <a href="#" className="font-semibold text-indigo-600">
+                      <a
+                        href="https://www.jymest.com/blog/Get_Ready_for_PROFICUUS_'24!_"
+                        className="font-semibold text-indigo-600"
+                      >
                         <span aria-hidden="true" className="absolute inset-0" />
                         Read more <span aria-hidden="true">&rarr;</span>
                       </a>
@@ -158,7 +161,7 @@ const Home: React.FC = () => {
                         </div>
                       </a>
                       <a
-                        href="#"
+                        href="#blogs"
                         className="text-sm font-semibold leading-6 text-secondary-foreground"
                       >
                         Learn more <span aria-hidden="true">→</span>
@@ -182,7 +185,10 @@ const Home: React.FC = () => {
         </section>
 
         {/* Blog Section */}
-        <section className="bg-gray-100 dark:bg-gray-900 py-20 text-black sticky rounded-tr-2xl rounded-tl-2xl">
+        <section
+          id="blogs"
+          className="bg-gray-100 dark:bg-gray-900 py-20 text-black sticky rounded-tr-2xl rounded-tl-2xl"
+        >
           <div className="container mx-auto p-8">
             <h2 className="text-3xl font-semibold text-center text-gray-900 dark:text-white mb-10">
               Our Latest Blog Posts
