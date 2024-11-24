@@ -1,13 +1,19 @@
+import { NextResponse } from "next/server";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { db } from "@/lib/firebase/config";
+
 export const fetchCache = "force-no-store";
 export const revalidate = 0; // To disable ISR.
-import { NextResponse } from "next/server";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase/config";
 
 export async function GET() {
   try {
     const participantsRef = collection(db, "participants");
-    const snapshot = await getDocs(participantsRef);
+
+    // Create a query to order the documents by 'updatedAt'
+    const participantsQuery = query(participantsRef, orderBy("createdAt"));
+
+    // Fetch the data based on the query
+    const snapshot = await getDocs(participantsQuery);
 
     const participants = snapshot.docs.map((doc) => ({
       id: doc.id,
