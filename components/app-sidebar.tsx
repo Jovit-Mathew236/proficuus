@@ -85,7 +85,15 @@ export function AppSidebar() {
     signOut(auth);
     router.push("/proficuus24/login");
   };
+  const handleClick = (item: (typeof eventMenuItems)[number]) => {
+    // Navigate to the desired URL
+    router.push(item.url);
 
+    // Toggle the sidebar if the screen width is less than 768px
+    if (window.innerWidth < 768) {
+      toggleSidebar();
+    }
+  };
   return (
     <Sidebar variant="floating" collapsible="icon">
       <SidebarHeader>
@@ -138,12 +146,8 @@ export function AppSidebar() {
                 .map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={pathname === item.url}>
-                      <button
-                        onClick={() => {
-                          router.push(item.url);
-                          toggleSidebar();
-                        }}
-                      >
+                      {/* Use an arrow function to pass the item parameter */}
+                      <button onClick={() => handleClick(item)}>
                         <item.icon />
                         <span>{item.title}</span>
                       </button>

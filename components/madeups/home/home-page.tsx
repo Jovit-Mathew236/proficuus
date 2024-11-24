@@ -154,12 +154,14 @@ const Home: React.FC = () => {
                           <span className="translate-x-1 group-hover:translate-x-12 group-hover:opacity-0 transition-all duration-300 inline-block">
                             Register For Proficuus
                           </span>
-                          <div className="flex gap-2 text-foreground z-10 items-center absolute top-0 h-full w-full justify-center translate-x-12 opacity-0 group-hover:-translate-x-1 group-hover:opacity-100 transition-all duration-300">
+                          <div className="flex gap-2 text-white dark:text-black z-10 items-center absolute top-0 h-full w-full justify-center translate-x-12 opacity-0 group-hover:-translate-x-1 group-hover:opacity-100 transition-all duration-300">
                             <span>Register For Proficuus</span>
                             <ArrowRight />
                           </div>
+                          <div className="absolute top-[40%] left-[5%] h-2 w-2 group-hover:h-full group-hover:w-full rounded-lg bg-[#263381] dark:bg-white scale-[1] dark:group-hover:bg-[#fff] group-hover:bg-[#263381] group-hover:scale-[1.8] transition-all duration-300 group-hover:top-[0%] group-hover:left-[0%] "></div>
                         </div>
                       </a>
+
                       <a
                         href="#blogs"
                         className="text-sm font-semibold leading-6 text-secondary-foreground"
