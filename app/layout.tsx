@@ -4,10 +4,14 @@ import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Transition from "@/components/framer/transition";
-import { Montserrat } from "next/font/google";
+import { Montserrat, Molle } from "next/font/google";
 const montserrat = Montserrat({
   subsets: ["latin"],
   display: "swap",
+});
+const molle = Molle({
+  weight: "400",
+  subsets: ["latin", "latin-ext"], // Add subsets for Molle (you can use both 'latin' and 'latin-ext' or just 'latin')
 });
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -69,7 +73,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={montserrat.className}>
+    <html lang="en" className={`${montserrat.className} ${molle.className}`}>
       <body
       // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

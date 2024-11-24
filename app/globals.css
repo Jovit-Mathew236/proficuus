@@ -5,6 +5,9 @@
 body {
   font-family: "Montserrat", sans-serif;
 }
+.molle {
+  font-family: "Molle";
+}
 
 @layer utilities {
   .text-balance {
