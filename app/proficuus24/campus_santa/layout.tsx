@@ -17,12 +17,7 @@ export default function RootLayout({
       <div className="absolute top-0 left-0 w-full h-full bg-black opacity-10"></div>{" "}
       {/* Dark overlay */}
       {/* Main content */}
-      <div className="w-11/12 md:w-auto relative z-10 p-4 rounded-lg bg-background/90 bg-opacity-50 backdrop-blur-sm shadow-lg">
-        <h1 className="text-center text-4xl font-bold text-red-950 mb-6 molle">
-          Merry Christmas and Give your gift
-        </h1>
-        {children}
-      </div>
+      {children}
       {/* Sparkles background with opacity */}
       <div className="absolute bottom-0 z-[2] h-screen w-screen overflow-hidden before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_bottom_center,#ffffff,transparent_90%)] before:opacity-10 after:absolute">
         <Sparkles

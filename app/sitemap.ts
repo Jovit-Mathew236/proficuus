@@ -11,19 +11,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("Error fetching blog data:", response.statusText);
     return [
       {
-        url: "https://jymest.com",
+        url: "https://www.jymest.com",
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: 1,
       },
       {
-        url: "https://jymest.com/proficuus24/register",
+        url: "https://www.jymest.com/proficuus24/register",
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: 0.8,
       },
       {
-        url: "https://jymest.com/blog/",
+        url: "https://www.jymest.com/blog/",
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: 0.5,
@@ -37,25 +37,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Construct static part of the sitemap
   const sitemap: MetadataRoute.Sitemap = [
     {
-      url: "https://jymest.com",
+      url: "https://www.jymest.com",
       lastModified: new Date().toISOString(),
       changeFrequency: "daily",
       priority: 1,
     },
     {
-      url: "https://jymest.com/proficuus24/register",
+      url: "https://wwww.jymest.com/proficuus24/register",
       lastModified: new Date().toISOString(),
       changeFrequency: "daily",
       priority: 0.8,
     },
     {
-      url: "https://jymest.com/proficuus24/login",
+      url: "https://wwww.jymest.com/proficuus24/login",
       lastModified: new Date().toISOString(),
       changeFrequency: "daily",
       priority: 0.8,
     },
     {
-      url: "https://jymest.com/blog/",
+      url: "https://www.jymest.com/blog/",
       lastModified: new Date().toISOString(),
       changeFrequency: "daily",
       priority: 0.5,
@@ -65,7 +65,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Add dynamic blog URLs with image metadata
   const dynamicBlogUrls = blogs.map(
     (blog: { id: string; updatedAt: string; thumbnailUrl: string }) => ({
-      url: `https://jymest.com/blog/${blog.id}`,
+      url: `https://www.jymest.com/blog/${blog.id}`,
       lastModified: new Date(blog.updatedAt).toISOString(),
       changeFrequency: "daily",
       priority: 0.7,

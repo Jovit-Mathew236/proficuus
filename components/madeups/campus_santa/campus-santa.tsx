@@ -128,113 +128,124 @@ export default function CampusSanta() {
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 max-w-3xl mx-auto py-10 molle"
-      >
-        <FormField
-          control={form.control}
-          name="collage"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Collage</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your Collage" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {collage.map((collage, i) => (
-                    <SelectItem key={i} value={collage.value}>
-                      {collage.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Your name" type="" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="Your Email" type="email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="year"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Year</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your Year" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {year
-                    .filter((year) => year.value != "passout")
-                    .map((year, i) => (
-                      <SelectItem key={i} value={year.value}>
-                        {year.label}
+    <div className="w-11/12 md:w-auto relative z-10 p-4 rounded-lg bg-background/90 bg-opacity-50 backdrop-blur-sm shadow-lg">
+      <h1 className="text-center text-4xl font-bold text-red-950 mb-6 molle">
+        Merry Christmas and Give your gift
+      </h1>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 max-w-3xl mx-auto py-10 molle"
+        >
+          <FormField
+            control={form.control}
+            name="collage"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Collage</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your Collage" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {collage.map((collage, i) => (
+                      <SelectItem key={i} value={collage.value}>
+                        {collage.label}
                       </SelectItem>
                     ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Phone</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="your phone number"
-                  type="number"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button
-          type="submit"
-          className="bg-gradient-to-r from-red-500 to-red-700 text-white font-bold py-2 px-6 rounded-sm shadow-lg hover:from-red-400 hover:to-red-600 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50 transition duration-300 ease-in-out"
-        >
-          Register
-        </Button>
-      </form>
-    </Form>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your name" type="" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your Email" type="email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="year"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Year</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select your Year" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {year
+                      .filter((year) => year.value != "passout")
+                      .map((year, i) => (
+                        <SelectItem key={i} value={year.value}>
+                          {year.label}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="your phone number"
+                    type="number"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button
+            type="submit"
+            className="bg-gradient-to-r from-red-500 to-red-700 text-white font-bold py-2 px-6 rounded-sm shadow-lg hover:from-red-400 hover:to-red-600 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50 transition duration-300 ease-in-out"
+          >
+            Register
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 }
