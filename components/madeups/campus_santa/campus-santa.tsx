@@ -70,7 +70,7 @@ export default function CampusSanta() {
     try {
       console.log(data);
       const response = await fetch(
-        "/api/registration/proficuus24/campus-santa",
+        "/api/registration/proficuus24/campus_santa",
         {
           method: "POST",
           headers: {
