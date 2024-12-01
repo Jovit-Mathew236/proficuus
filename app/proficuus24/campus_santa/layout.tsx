@@ -5,7 +5,22 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "Proficuus | Campus",
+  title: "Proficuus | Campus Santa",
+  description: "Campus Santa Form",
+  openGraph: {
+    title: "Proficuus | Campus Santa",
+    description: "Campus Santa Form",
+    url: "https://www.jymest.com/proficuus24/campus_santa", // The canonical URL of the page
+    type: "website", // Can also be "article", "video", etc., depending on the content type
+    images: [
+      {
+        url: "https://www.jymest.com/images/campus_santa.jpg", // The URL to an image you want to display for social sharing
+        width: 1200,
+        height: 630,
+        alt: "Proficuus Campus Santa", // Alt text for the image
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
