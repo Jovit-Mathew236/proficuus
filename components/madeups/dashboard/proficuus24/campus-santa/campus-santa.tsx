@@ -24,7 +24,6 @@ import {
 import {
   Table,
   TableBody,
-  // TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -59,6 +58,7 @@ export default function CampusSanta() {
   const { toast } = useToast();
   const [colleges, setColleges] = useState<string[]>([]);
   const [collegeData, setCollegeData] = useState<collageData[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Fetch colleges data when the component mounts
   useEffect(() => {
@@ -119,6 +119,7 @@ export default function CampusSanta() {
 
   // Handle "Mark as Done" button click
   const handleMarkAsDone = (college: string, date: string) => {
+    setLoading(true); // Set loading state to true
     const formattedDate = date.split("-").reverse().join("-");
 
     fetch(`/api/campus_santa/update_status`, {
@@ -136,6 +137,7 @@ export default function CampusSanta() {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
+          // Update the table data by marking the item as 'Done' immediately
           setCollegeData((prevData) =>
             prevData.map((item) =>
               item.college === college && item.date === date
@@ -162,6 +164,9 @@ export default function CampusSanta() {
           description: "An error occurred while updating the status.",
           variant: "destructive",
         });
+      })
+      .finally(() => {
+        setLoading(false); // Set loading state to false after the operation completes
       });
   };
 
@@ -285,7 +290,6 @@ export default function CampusSanta() {
 
       {/* Table to display fetched data */}
       <Table className="mt-6 w-[90%] overflow-scroll">
-        {/* <TableCaption>College Data</TableCaption> */}
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Date</TableHead>
@@ -308,8 +312,9 @@ export default function CampusSanta() {
                     handleMarkAsDone(college.college, college.date)
                   }
                   className="w-full sm:w-auto"
+                  disabled={loading}
                 >
-                  Mark as Done
+                  {loading ? "Loading..." : "Mark as Done"}
                 </Button>
               </TableCell>
             </TableRow>
