@@ -43,13 +43,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: "https://wwww.jymest.com/proficuus24/register",
+      url: "https://www.jymest.com/proficuus24/register",
       lastModified: new Date().toISOString(),
       changeFrequency: "daily",
       priority: 0.8,
     },
     {
-      url: "https://wwww.jymest.com/proficuus24/login",
+      url: "https://www.jymest.com/proficuus24/login",
       lastModified: new Date().toISOString(),
       changeFrequency: "daily",
       priority: 0.8,
