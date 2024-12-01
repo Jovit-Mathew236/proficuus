@@ -1,4 +1,4 @@
-import CampusSanta from "@/components/madeups/campus_santa/campus-santa";
+import CampusSanta from "@/components/madeups/dashboard/proficuus24/campus-santa/campus-santa";
 import React from "react";
 
 const Home = () => {
