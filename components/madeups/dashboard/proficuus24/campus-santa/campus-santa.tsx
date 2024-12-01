@@ -24,7 +24,7 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
+  // TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -193,7 +193,8 @@ export default function CampusSanta() {
                             ? colleges.find(
                                 (college) => college === field.value
                               )
-                            : "Select College"}
+                            : "All Colleges"}{" "}
+                          {/* Show 'All Colleges' by default */}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -204,6 +205,15 @@ export default function CampusSanta() {
                         <CommandList>
                           <CommandEmpty>No College found.</CommandEmpty>
                           <CommandGroup>
+                            {/* Pre-select "All Colleges" item */}
+                            <CommandItem
+                              value="All Colleges"
+                              onSelect={() => {
+                                form.setValue("college", "All Colleges");
+                              }}
+                            >
+                              All Colleges
+                            </CommandItem>
                             {colleges.map((college, i) => (
                               <CommandItem
                                 value={college}
@@ -275,7 +285,7 @@ export default function CampusSanta() {
 
       {/* Table to display fetched data */}
       <Table className="mt-6 w-[90%] overflow-scroll">
-        <TableCaption>College Data</TableCaption>
+        {/* <TableCaption>College Data</TableCaption> */}
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Date</TableHead>

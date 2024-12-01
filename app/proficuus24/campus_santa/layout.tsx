@@ -1,3 +1,4 @@
+import { ModeToggle } from "@/components/theme-mode";
 import AudioPlayer from "@/components/ui/audio-player";
 import { Sparkles } from "@/components/ui/sparkles";
 import type { Metadata } from "next";
@@ -13,7 +14,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex h-screen w-full justify-center items-center bg-[url('/images/christmas-background.jpg')] bg-cover bg-center">
+    <div className="flex min-h-screen w-full justify-center items-center  bg-cover bg-center">
+      <div className="absolute top-10 right-4 flex gap-4 items-center justify-center h-3 z-10">
+        <ModeToggle />
+      </div>
+      {/* <div className="flex h-screen w-full justify-center items-center bg-[url('/images/christmas-background.jpg')] bg-cover bg-center"> */}
       <div className="absolute top-0 left-0 w-full h-full bg-black opacity-10"></div>{" "}
       {/* Dark overlay */}
       {/* Main content */}
