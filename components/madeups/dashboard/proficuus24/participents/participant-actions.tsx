@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -57,8 +57,38 @@ const ParticipantActions = ({ participant, onSubmit }: Props) => {
     defaultValues: { pin: "" },
   });
 
+  const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+
   const handleSubmit = async (data: z.infer<typeof FormSchema>) => {
     await onSubmit(data, participant);
+  };
+
+  const handleDelete = async () => {
+    // Close the confirmation dialog
+    setDeleteConfirmationOpen(false);
+
+    try {
+      const response = await fetch(
+        `/api/dashboard/proficuus24/participants/delete`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id: participant.uid }), // Send participant ID for deletion
+        }
+      );
+
+      if (response.ok) {
+        alert("Participant deleted successfully");
+        // You can add logic to remove the participant from the UI list if needed
+      } else {
+        alert("Failed to delete participant");
+      }
+    } catch (error) {
+      console.error("Error deleting participant:", error);
+      alert("Error deleting participant");
+    }
   };
 
   return (
@@ -92,8 +122,36 @@ const ParticipantActions = ({ participant, onSubmit }: Props) => {
                 : "Mark as Coordinator"}
             </DropdownMenuItem>
           </DialogTrigger>
+          {/* Trigger confirmation dialog on delete click */}
+          <DropdownMenuItem onClick={() => setDeleteConfirmationOpen(true)}>
+            Delete
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={isDeleteConfirmationOpen}
+        onOpenChange={setDeleteConfirmationOpen}
+      >
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Are you sure?</DialogTitle>
+            <DialogDescription>
+              This action will permanently delete the participant.
+            </DialogDescription>
+          </DialogHeader>
+          <Button variant="destructive" onClick={handleDelete}>
+            Yes, Delete
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => setDeleteConfirmationOpen(false)}
+          >
+            Cancel
+          </Button>
+        </DialogContent>
+      </Dialog>
 
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -101,7 +159,6 @@ const ParticipantActions = ({ participant, onSubmit }: Props) => {
           <DialogDescription>For extra security</DialogDescription>
         </DialogHeader>
         <FormProvider {...form}>
-          {" "}
           {/* Provide form context here */}
           <form
             onSubmit={form.handleSubmit(handleSubmit)}

@@ -50,6 +50,7 @@ export type Participant = {
   year: number;
   zone: string;
   phone: string;
+  gender: string;
   alternativephone: string;
   expectation: string;
   experience: string;
@@ -178,6 +179,11 @@ export function ParticipantsDashboard() {
       accessorKey: "email",
       header: () => <div>Email</div>,
       cell: ({ row }) => <div>{row.getValue("email")}</div>,
+    },
+    {
+      accessorKey: "gender",
+      header: () => <div>Gender</div>,
+      cell: ({ row }) => <div>{row.getValue("gender")}</div>,
     },
     {
       accessorKey: "collage",
