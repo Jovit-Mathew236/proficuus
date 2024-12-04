@@ -127,17 +127,20 @@ export function ParticipantsDashboard() {
     participant: Participant
   ) {
     try {
-      const response = await fetch("/api/profile/update-participant", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uid: participant.uid,
-          collage: data.collage,
-          zone: data.zone,
-        }),
-      });
+      const response = await fetch(
+        "/api/dashboard/proficuus24/participants/edit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            uid: participant.uid,
+            collage: data.collage,
+            zone: data.zone,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to update payment verification.");

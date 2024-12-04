@@ -256,7 +256,7 @@ export function Participant() {
       // Add success notification or redirect here
       toast({
         title: "Registration completed successfully",
-        description: "We've completed your volunteer registration.",
+        description: "We've completed your registration.",
         variant: "default",
       });
       console.log("Registration completed successfully:", result);
