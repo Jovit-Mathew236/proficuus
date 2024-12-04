@@ -41,7 +41,10 @@ import {
 import { z } from "zod";
 
 import { useToast } from "@/hooks/use-toast";
-import ParticipantActions, { FormSchema } from "./participant-actions";
+import ParticipantActions, {
+  EditFormSchema,
+  FormSchema,
+} from "./participant-actions";
 import { useParticipants } from "@/lib/context/participantContext";
 
 export type Participant = {
@@ -117,6 +120,38 @@ export function ParticipantsDashboard() {
         variant: "destructive",
         duration: 2000,
       });
+    }
+  }
+  async function onEditFormSubmit(
+    data: z.infer<typeof EditFormSchema>,
+    participant: Participant
+  ) {
+    try {
+      const response = await fetch("/api/profile/update-participant", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: participant.uid,
+          collage: data.collage,
+          zone: data.zone,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update payment verification.");
+      }
+
+      setParticipants((prevParticipants) =>
+        prevParticipants.map((p) =>
+          p.email === participant.email
+            ? { ...p, collage: data.collage, zone: data.zone }
+            : p
+        )
+      );
+    } catch (err) {
+      console.error(err);
     }
   }
 
@@ -262,6 +297,7 @@ export function ParticipantsDashboard() {
           <ParticipantActions
             participant={participant}
             onSubmit={onSubmit} // Pass the onSubmit function here
+            onEditFormSubmit={onEditFormSubmit}
           />
           // <></>
         );

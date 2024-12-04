@@ -74,12 +74,20 @@ export const EditFormSchema = z.object({
 type Props = {
   participant: Participant;
   onSubmit: (
-    data: z.infer<typeof FormSchema> | z.infer<typeof EditFormSchema>,
+    data: z.infer<typeof FormSchema> | z.infer<typeof FormSchema>,
+    participant: Participant
+  ) => void;
+  onEditFormSubmit: (
+    data: z.infer<typeof EditFormSchema> | z.infer<typeof EditFormSchema>,
     participant: Participant
   ) => void;
 };
 
-const ParticipantActions = ({ participant, onSubmit }: Props) => {
+const ParticipantActions = ({
+  participant,
+  onSubmit,
+  onEditFormSubmit,
+}: Props) => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: { pin: "" },
@@ -102,7 +110,7 @@ const ParticipantActions = ({ participant, onSubmit }: Props) => {
   };
 
   const handleEditFormSubmit = async (data: z.infer<typeof EditFormSchema>) => {
-    await onSubmit(data, participant);
+    await onEditFormSubmit(data, participant);
   };
 
   const handleDelete = async () => {
