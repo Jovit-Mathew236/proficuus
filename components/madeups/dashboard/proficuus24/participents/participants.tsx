@@ -141,7 +141,7 @@ export function ParticipantsDashboard() {
           }),
         }
       );
-
+      const Resdata: { message: string } = await response.json();
       if (!response.ok) {
         throw new Error("Failed to update payment verification.");
       }
@@ -153,6 +153,14 @@ export function ParticipantsDashboard() {
             : p
         )
       );
+      console.log(Resdata.message, Resdata);
+
+      toast({
+        title: "Success",
+        description: Resdata.message,
+        variant: "default",
+        duration: 2000,
+      });
     } catch (err) {
       console.error(err);
     }

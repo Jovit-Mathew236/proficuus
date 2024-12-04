@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
-        message: "Payment verified successfully",
+        message: "User data edited successfully",
       },
       { status: 200 }
     );
