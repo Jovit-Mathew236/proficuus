@@ -307,25 +307,34 @@ const ParticipantActions = ({
                           <CommandList>
                             <CommandEmpty>No Collage found.</CommandEmpty>
                             <CommandGroup>
-                              {collage.map((collage) => (
-                                <CommandItem
-                                  value={collage.label}
-                                  key={collage.value}
-                                  onSelect={() => {
-                                    editForm.setValue("collage", collage.value);
-                                    setCollageOpen(false);
-                                  }}
-                                >
-                                  <CheckIcon
-                                    className={cn(
-                                      "mr-2 h-4 w-4",
-                                      collage.value === field.value &&
-                                        "opacity-100"
-                                    )}
-                                  />
-                                  {collage.label}
-                                </CommandItem>
-                              ))}
+                              {collage
+                                .filter(
+                                  (c) =>
+                                    c.zone.toUpperCase() ===
+                                    editForm.watch("zone")
+                                )
+                                .map((collage) => (
+                                  <CommandItem
+                                    value={collage.label}
+                                    key={collage.value}
+                                    onSelect={() => {
+                                      editForm.setValue(
+                                        "collage",
+                                        collage.value
+                                      );
+                                      setCollageOpen(false);
+                                    }}
+                                  >
+                                    <CheckIcon
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        collage.value === field.value &&
+                                          "opacity-100"
+                                      )}
+                                    />
+                                    {collage.label}
+                                  </CommandItem>
+                                ))}
                             </CommandGroup>
                           </CommandList>
                         </Command>
