@@ -81,12 +81,14 @@ type Props = {
     data: z.infer<typeof EditFormSchema> | z.infer<typeof EditFormSchema>,
     participant: Participant
   ) => void;
+  handleDelete: (participant: Participant) => void;
 };
 
 const ParticipantActions = ({
   participant,
   onSubmit,
   onEditFormSubmit,
+  handleDelete,
 }: Props) => {
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -112,33 +114,39 @@ const ParticipantActions = ({
   const handleEditFormSubmit = async (data: z.infer<typeof EditFormSchema>) => {
     await onEditFormSubmit(data, participant);
   };
-
-  const handleDelete = async () => {
+  const onHandleDelete = async () => {
     setDeleteConfirmationOpen(false);
-
-    // try {
-    //   const response = await fetch(
-    //     `/api/dashboard/proficuus24/participants/delete`,
-    //     {
-    //       method: "DELETE",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify({ id: participant.uid }),
-    //     }
-    //   );
-
-    //   if (response.ok) {
-    //     alert("Participant deleted successfully");
-    //   } else {
-    //     alert("Failed to delete participant");
-    //   }
-    // } catch (error) {
-    //   console.error("Error deleting participant:", error);
-    //   alert("Error deleting participant");
-    // }
+    await handleDelete(participant);
   };
 
+  // const handleDelete = async () => {
+  //   setDeleteConfirmationOpen(false);
+
+  //   try {
+  //     const response = await fetch(
+  //       `/api/dashboard/proficuus24/participants/delete?id=${participant.uid}`,
+  //       {
+  //         method: "DELETE",
+  //       }
+  //     );
+
+  //     const data = await response.json();
+
+  //     if (response.ok) {
+  //       console.log(data.message);
+  //       // Additional success handling (e.g., removing from local state)
+  //       // router.refresh() or update UI
+  //       // delete the result form the local state
+
+  //     } else {
+  //       console.error("Failed to delete:", data.message || response.statusText);
+  //       // Show error to user
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     // Handle network or other errors
+  //   }
+  // };
   return (
     <Dialog>
       <DropdownMenu>
@@ -190,7 +198,7 @@ const ParticipantActions = ({
               This action will permanently delete the participant.
             </DialogDescription>
           </DialogHeader>
-          <Button variant="destructive" onClick={handleDelete}>
+          <Button variant="destructive" onClick={onHandleDelete}>
             Yes, Delete
           </Button>
           <Button

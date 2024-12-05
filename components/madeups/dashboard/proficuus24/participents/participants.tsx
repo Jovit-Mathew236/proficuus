@@ -165,7 +165,44 @@ export function ParticipantsDashboard() {
       console.error(err);
     }
   }
+  const handleDelete = async (participant: Participant) => {
+    // setDeleteConfirmationOpen(false);
 
+    try {
+      const response = await fetch(
+        `/api/dashboard/proficuus24/participants/delete?id=${participant.uid}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log(data.message);
+        setParticipants((prevParticipants) =>
+          prevParticipants.filter((p) => p.email !== participant.email)
+        );
+        toast({
+          title: "Success",
+          description: data.message,
+          variant: "default",
+          duration: 5000,
+        });
+      } else {
+        console.error("Failed to delete:", data.message || response.statusText);
+        toast({
+          title: "Error",
+          description: data.error || response.statusText,
+          variant: "destructive",
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      // Handle network or other errors
+    }
+  };
   // const handleTogglePaymentVerified = async (participant: Participant) => {
   //   if (participant.paymentUpload) {
   //     // const updatedValue = !participant.paymentVerified;
@@ -309,6 +346,7 @@ export function ParticipantsDashboard() {
             participant={participant}
             onSubmit={onSubmit} // Pass the onSubmit function here
             onEditFormSubmit={onEditFormSubmit}
+            handleDelete={handleDelete}
           />
           // <></>
         );
