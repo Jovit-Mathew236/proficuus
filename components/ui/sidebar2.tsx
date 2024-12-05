@@ -3,7 +3,9 @@ import { cn } from "@/lib/utils";
 import Link, { LinkProps } from "next/link";
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { IconMenu2, IconX } from "@tabler/icons-react";
+import { IconX } from "@tabler/icons-react";
+import Image from "next/image";
+import { PanelRightClose } from "lucide-react";
 
 interface Links {
   label: string;
@@ -89,7 +91,11 @@ export const DesktopSidebar = ({
   return (
     <motion.div
       className={cn(
-        "h-full px-4 py-4 hidden md:flex md:flex-col bg-gray-50 dark:bg-gray-900 w-[300px] flex-shrink-0 md:rounded-lg", // Added rounded-lg for border radius
+        "fixed left-0 top-0 bottom-0 z-50", // Stick to the left, full height
+        "bg-white/70 dark:bg-background/50 backdrop-blur-md",
+        "border-neutral-200 dark:border-neutral-700",
+        // "transition-all duration-300 ease-in-out",
+        "h-full px-4 py-4 hidden md:flex md:flex-col w-[300px] flex-shrink-0 ", // Added rounded-lg for border radius
         className
       )}
       animate={{
@@ -113,14 +119,22 @@ export const MobileSidebar = ({
   return (
     <div
       className={cn(
-        "h-10 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-gray-50 dark:bg-gray-900 w-full md:rounded-lg", // Added rounded-lg for border radius
+        "h-14 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-background w-full md:rounded-lg", // Added rounded-lg for border radius
         className
       )}
       {...props}
     >
-      <div className="flex justify-end z-20 w-full">
-        <IconMenu2
+      <div className="flex justify-between items-center z-20 w-full">
+        <Image
+          src="/images/logo.png"
+          alt="logo"
+          width={20}
+          height={20}
+          className="w-8 h-8"
+        />
+        <PanelRightClose
           className="text-gray-800 dark:text-gray-200"
+          size={20}
           onClick={() => setOpen(!open)}
         />
       </div>

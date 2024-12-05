@@ -107,7 +107,7 @@ export const Profile = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-1 grid md:grid-cols-3 gap-6">
+    <div className="container mx-auto px-1 md:px-4 py-4 grid md:grid-cols-3 gap-6">
       {/* Profile Card */}
       <Card className="md:col-span-1">
         <CardHeader className="items-center">
