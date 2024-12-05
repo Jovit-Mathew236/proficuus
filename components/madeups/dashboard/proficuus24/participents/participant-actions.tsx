@@ -181,7 +181,11 @@ const ParticipantActions = ({
           <DropdownMenuItem onClick={() => setEditFormOpen(true)}>
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setDeleteConfirmationOpen(true)}>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="text-red-600"
+            onClick={() => setDeleteConfirmationOpen(true)}
+          >
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
