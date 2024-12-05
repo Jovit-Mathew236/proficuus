@@ -109,7 +109,7 @@ export const Profile = () => {
   return (
     <div className="container mx-auto px-1 md:px-4 py-4 grid md:grid-cols-3 gap-6">
       {/* Profile Card */}
-      <Card className="md:col-span-1">
+      <Card className="md:col-span-1 rounded-2xl">
         <CardHeader className="items-center">
           <div className="relative">
             <Image
@@ -143,20 +143,20 @@ export const Profile = () => {
               : "Volunteer"}
           </Badge>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4 bg-neutral-100/50 dark:bg-neutral-800/50 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
+        <CardContent className="px-2 py-3 md:p-6">
+          <div className="grid grid-cols-2 gap-4 bg-neutral-100/10  backdrop-blur-sm rounded-xl p-4 shadow-xl">
             {Object.keys(fieldMapping).map((field) => (
               <div
                 key={field}
                 className={cn(
                   "group",
-                  "bg-white dark:bg-neutral-900",
-                  "border border-neutral-200 dark:border-neutral-700",
+                  "bg-white/30 dark:bg-background/30",
+                  "border border-neutral-300 dark:border-neutral-600/10",
                   "rounded-xl p-4",
                   "text-center",
                   "transition-all duration-300",
-                  "hover:shadow-md hover:scale-[1.02]",
-                  "hover:border-blue-200 dark:hover:border-blue-800",
+                  "hover:shadow-lg hover:scale-[1.03]",
+                  "hover:border-blue-300 dark:hover:border-blue-700",
                   "transform origin-center"
                 )}
               >
@@ -175,7 +175,7 @@ export const Profile = () => {
                 <p
                   className={cn(
                     "text-base",
-                    "font-thin",
+                    "font-light",
                     "text-neutral-900 dark:text-neutral-100",
                     "group-hover:text-blue-800 dark:group-hover:text-blue-300"
                   )}
