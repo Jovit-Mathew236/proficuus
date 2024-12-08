@@ -120,7 +120,44 @@ export function VolunteerDashboard() {
       });
     }
   }
+  const handleDelete = async (volunteers: Volunteer) => {
+    // setDeleteConfirmationOpen(false);
 
+    try {
+      const response = await fetch(
+        `/api/dashboard/proficuus24/volunteers/delete?email=${volunteers.email}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log(data.message);
+        setVolunteers((prevVolunteers) =>
+          prevVolunteers.filter((p) => p.email !== volunteers.email)
+        );
+        toast({
+          title: "Success",
+          description: data.message,
+          variant: "default",
+          duration: 5000,
+        });
+      } else {
+        console.error("Failed to delete:", data.message || response.statusText);
+        toast({
+          title: "Error",
+          description: data.error || response.statusText,
+          variant: "destructive",
+          duration: 5000,
+        });
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      // Handle network or other errors
+    }
+  };
   const columns: ColumnDef<Volunteer>[] = [
     // {
     //   id: "select",
@@ -254,6 +291,7 @@ export function VolunteerDashboard() {
           <VolunteersActions
             volunteer={volunteer}
             onSubmit={onSubmit} // Pass the onSubmit function here
+            handleDelete={handleDelete}
           />
         );
       },

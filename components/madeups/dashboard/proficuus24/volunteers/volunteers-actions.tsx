@@ -65,9 +65,11 @@ export const FormSchema = z.object({
 type Props = {
   volunteer: Volunteer;
   onSubmit: (data: z.infer<typeof FormSchema>, volunteer: Volunteer) => void;
+  handleDelete: (volunteer: Volunteer) => void;
 };
 
-const VolunteersActions = ({ volunteer, onSubmit }: Props) => {
+const VolunteersActions = ({ volunteer, onSubmit, handleDelete }: Props) => {
+  const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [collageOpen, setCollageOpen] = useState(false);
   const [isOtherSelected, setIsOtherSelected] = useState(false);
   const [otherCollage, setOtherCollage] = useState("");
@@ -80,7 +82,10 @@ const VolunteersActions = ({ volunteer, onSubmit }: Props) => {
   const handleSubmit = async (data: z.infer<typeof FormSchema>) => {
     await onSubmit(data, volunteer);
   };
-
+  const onHandleDelete = async () => {
+    setDeleteConfirmationOpen(false);
+    await handleDelete(volunteer);
+  };
   return (
     <Dialog>
       <DropdownMenu>
@@ -110,8 +115,37 @@ const VolunteersActions = ({ volunteer, onSubmit }: Props) => {
               {volunteer.isCoordinator ? "Coordinator" : "Mark as Coordinator"}
             </DropdownMenuItem>
           </DialogTrigger>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="text-red-600"
+            onClick={() => setDeleteConfirmationOpen(true)}
+          >
+            Delete
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <Dialog
+        open={isDeleteConfirmationOpen}
+        onOpenChange={setDeleteConfirmationOpen}
+      >
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Are you sure?</DialogTitle>
+            <DialogDescription>
+              This action will permanently delete the participant.
+            </DialogDescription>
+          </DialogHeader>
+          <Button variant="destructive" onClick={onHandleDelete}>
+            Yes, Delete
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => setDeleteConfirmationOpen(false)}
+          >
+            Cancel
+          </Button>
+        </DialogContent>
+      </Dialog>
 
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

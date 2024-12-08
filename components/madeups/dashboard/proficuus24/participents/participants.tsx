@@ -170,7 +170,7 @@ export function ParticipantsDashboard() {
 
     try {
       const response = await fetch(
-        `/api/dashboard/proficuus24/participants/delete?id=${participant.uid}`,
+        `/api/dashboard/proficuus24/participants/delete?id=${participant.email}`,
         {
           method: "DELETE",
         }

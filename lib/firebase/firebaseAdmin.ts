@@ -52,15 +52,15 @@ export async function initAdmin() {
   return app;
 }
 
-// New method to authenticate and verify a user
-export async function authenticateAndVerifyUser(uid: string) {
+// New method to authenticate and verify a user by email
+export async function authenticateAndVerifyUserByEmail(email: string) {
   try {
     // Initialize Firebase Admin
     const app = await initAdmin();
     const auth = getAuth(app);
 
-    // Verify the user exists and get their details
-    const userRecord = await auth.getUser(uid);
+    // Get user by email
+    const userRecord = await auth.getUserByEmail(email);
 
     return {
       user: userRecord,
@@ -76,7 +76,7 @@ export async function authenticateAndVerifyUser(uid: string) {
   }
 }
 
-// Method to delete a user by admin
+// Method to delete a user by admin (no changes needed here)
 export async function deleteUserByAdmin(uid: string) {
   try {
     // Initialize Firebase Admin

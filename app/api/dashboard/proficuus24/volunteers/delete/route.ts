@@ -5,23 +5,24 @@ import {
   deleteUserByAdmin,
 } from "@/lib/firebase/firebaseAdmin";
 import { db } from "@/lib/firebase/config";
-import { deleteImageFromCloudinary } from "@/lib/cloudinary";
+import { deleteImageFromCloudinary } from "@/lib/cloudinary"; // Import Cloudinary delete function
 
 export async function DELETE(request: Request) {
   try {
-    // Parse the request URL and get the UID from query parameters
+    // Parse the request URL and get the email from query parameters
     const url = new URL(request.url);
-    const uid = url.searchParams.get("id");
+    const email = url.searchParams.get("email");
 
-    if (!uid) {
+    // Check if the email is valid (not undefined or null)
+    if (!email) {
       return NextResponse.json(
-        { message: "Document ID (UID) is required" },
+        { message: "Email is required" },
         { status: 400 }
       );
     }
 
-    // Authenticate and verify the user using the UID
-    const authResult = await authenticateAndVerifyUserByEmail(uid);
+    // Authenticate and verify the user using the email
+    const authResult = await authenticateAndVerifyUserByEmail(email);
 
     // Handle the case where authentication fails
     if (!authResult.isAuthenticated) {
@@ -46,13 +47,13 @@ export async function DELETE(request: Request) {
     }
 
     // Get the imageUrl from the user's Firestore document
-    const participantDocRef = doc(db, "participants", user.uid);
-    const participantDocSnap = await getDoc(participantDocRef);
-    const participantData = participantDocSnap.data();
+    const volunteerDocRef = doc(db, "volunteers", email);
+    const volunteerDocSnap = await getDoc(volunteerDocRef);
+    const volunteerData = volunteerDocSnap.data();
 
-    if (participantData?.imageUrl) {
+    if (volunteerData?.imageUrl) {
       // Delete the image from Cloudinary
-      await deleteImageFromCloudinary(participantData.imageUrl);
+      await deleteImageFromCloudinary(volunteerData.imageUrl);
     }
 
     // Delete user from Firebase Authentication using email
@@ -68,22 +69,22 @@ export async function DELETE(request: Request) {
       );
     }
 
-    // Delete the participant document from Firestore using UID
-    await deleteDoc(participantDocRef);
+    // Delete the volunteer document from Firestore using email
+    await deleteDoc(volunteerDocRef);
 
     return NextResponse.json(
-      { message: "Participant and image deleted successfully" },
+      { message: "Volunteer and image deleted successfully" },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error deleting participant:", error);
+    console.error("Error deleting volunteer:", error);
 
     const errorMessage =
       error instanceof Error ? error.message : JSON.stringify(error);
 
     return NextResponse.json(
       {
-        message: "Error deleting participant",
+        message: "Error deleting volunteer",
         error: errorMessage,
       },
       { status: 500 }
