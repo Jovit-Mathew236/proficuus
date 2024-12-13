@@ -3,12 +3,28 @@ import { NextRequest, NextResponse } from "next/server";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { auth, db, updateUser } from "@/lib/firebase/config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { authenticateAndVerifyUserByEmail } from "@/lib/firebase/firebaseAdmin";
 
 export async function POST(request: NextRequest) {
   try {
     const { email, phone, collage } = await request.json();
-    await createUserWithEmailAndPassword(auth, email, phone);
-    updateUser(email);
+    const authResult = await authenticateAndVerifyUserByEmail(email);
+
+    // Handle the case where authentication fails
+    if (!authResult.isAuthenticated) {
+      return NextResponse.json(
+        {
+          message: "Authentication failed",
+          error: authResult.error,
+        },
+        { status: 401 }
+      );
+    }
+    const user = authResult.user;
+    if (!user) {
+      await createUserWithEmailAndPassword(auth, email, phone);
+      updateUser(email);
+    }
     // const user = userCredential.user;
     // First, check if the document exists
     const userDocRef = doc(db, "volunteers", email);
@@ -21,7 +37,7 @@ export async function POST(request: NextRequest) {
     // Update only the necessary fields
     const updateData = {
       collage: collage,
-      isCoordinator: true, // Set paymentVerified to true
+      isCoordinator: true, // Set isCoordinator to true
       updatedAt: new Date().toISOString(),
     };
 
@@ -30,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
-        message: "Payment verified successfully",
+        message: "User updated successfully",
       },
       { status: 200 }
     );
