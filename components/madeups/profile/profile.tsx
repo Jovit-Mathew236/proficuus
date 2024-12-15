@@ -32,6 +32,7 @@ export const Profile = () => {
   const imgRef = useRef<HTMLImageElement>(null);
   // const previewCanvasRef = useRef<HTMLCanvasElement>(null);
   const [completedCrop, setCompletedCrop] = useState<Crop>();
+  const [isCropping, setIsCropping] = useState(false);
 
   const fieldMapping: Record<string, keyof Participant> = {
     Zone: "zone",
@@ -72,10 +73,42 @@ export const Profile = () => {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      // Check file size and type
+      // if (file.size > 10 * 1024 * 1024) {
+      //   // 10MB limit
+      //   alert("File is too large. Please choose an image under 10MB.");
+      //   return;
+      // }
+
+      if (!file.type.startsWith("image/")) {
+        alert("Please upload an image file.");
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = () => {
-        setUploadedImage(reader.result as string);
-        setShowCropModal(true);
+        // Create an image element to get natural dimensions
+        const img = new window.Image() as HTMLImageElement;
+        img.onload = () => {
+          // If image is too large, scale it down
+          if (img.width > 4096 || img.height > 4096) {
+            const canvas = document.createElement("canvas");
+            const scale = Math.min(4096 / img.width, 4096 / img.height);
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            const ctx = canvas.getContext("2d");
+            if (ctx) {
+              ctx.imageSmoothingEnabled = true;
+              ctx.imageSmoothingQuality = "high";
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              setUploadedImage(canvas.toDataURL("image/png", 1.0));
+            }
+          } else {
+            setUploadedImage(reader.result as string);
+          }
+          setShowCropModal(true);
+        };
+        img.src = reader.result as string;
       };
       reader.readAsDataURL(file);
     }
@@ -112,43 +145,58 @@ export const Profile = () => {
     };
   }
 
-  const getCroppedImg = (image: HTMLImageElement, crop: Crop) => {
-    const canvas = document.createElement("canvas");
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
-    const ctx = canvas.getContext("2d");
+  const getCroppedImg = (
+    image: HTMLImageElement,
+    crop: Crop
+  ): Promise<string> => {
+    return new Promise((resolve) => {
+      const canvas = document.createElement("canvas");
+      const scaleX = image.naturalWidth / image.width;
+      const scaleY = image.naturalHeight / image.height;
 
-    if (!ctx) {
-      throw new Error("No 2d context");
-    }
+      // Set canvas dimensions to match the crop size
+      canvas.width = crop.width;
+      canvas.height = crop.height;
 
-    const pixelRatio = window.devicePixelRatio;
-    canvas.width = crop.width * scaleX;
-    canvas.height = crop.height * scaleY;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        throw new Error("No 2d context");
+      }
 
-    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-    ctx.imageSmoothingQuality = "high";
+      // Draw the cropped image
+      ctx.drawImage(
+        image,
+        crop.x * scaleX,
+        crop.y * scaleY,
+        crop.width * scaleX,
+        crop.height * scaleY,
+        0,
+        0,
+        crop.width,
+        crop.height
+      );
 
-    ctx.drawImage(
-      image,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
-      0,
-      0,
-      crop.width * scaleX,
-      crop.height * scaleY
-    );
-
-    return canvas.toDataURL("image/jpeg");
+      // Convert to base64 with maximum quality
+      resolve(canvas.toDataURL("image/jpeg", 1.0));
+    });
   };
 
-  const handleCropComplete = () => {
+  const handleCropComplete = async () => {
     if (imgRef.current && completedCrop?.width && completedCrop?.height) {
-      const croppedImageUrl = getCroppedImg(imgRef.current, completedCrop);
-      setUploadedImage(croppedImageUrl);
-      setShowCropModal(false);
+      setIsCropping(true);
+      try {
+        const croppedImageUrl = await getCroppedImg(
+          imgRef.current,
+          completedCrop
+        );
+        setUploadedImage(croppedImageUrl);
+        setShowCropModal(false);
+      } catch (error) {
+        console.error("Error cropping image:", error);
+        alert("Failed to crop image. Please try again.");
+      } finally {
+        setIsCropping(false);
+      }
     }
   };
 
@@ -347,13 +395,15 @@ export const Profile = () => {
                   alt="Profile pic"
                   layout="fill"
                   objectFit="cover"
+                  quality={100}
+                  unoptimized
                   className="absolute z-10"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = "/images/logo.png";
                   }}
                 />
               </div>
-              <div className="flex gap-4">
+              <div className="flex flex-col md:flex-row gap-4">
                 <Button
                   onClick={() =>
                     document.getElementById("imageUpload")?.click()
@@ -407,7 +457,9 @@ export const Profile = () => {
               <Button variant="outline" onClick={() => setShowCropModal(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleCropComplete}>Apply</Button>
+              <Button onClick={handleCropComplete} disabled={isCropping}>
+                {isCropping ? "Processing..." : "Apply"}
+              </Button>
             </div>
           </div>
         </div>
