@@ -73,10 +73,12 @@ const eventMenuItems = [
       {
         title: "Participants",
         url: "/dashboard/proficuus24/onboarding/participants",
+        icon: Users,
       },
       {
         title: "Volunteers",
         url: "/dashboard/proficuus24/onboarding/volunteers",
+        icon: ShieldPlus,
       },
     ],
   },
@@ -191,6 +193,7 @@ export function AppSidebar() {
                                   <button
                                     onClick={() => router.push(subItem.url)}
                                   >
+                                    <subItem.icon />
                                     <span>{subItem.title}</span>
                                   </button>
                                 </SidebarMenuButton>
