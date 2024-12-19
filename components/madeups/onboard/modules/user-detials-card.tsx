@@ -15,7 +15,7 @@ interface UserDetailsCardProps {
     phone: string;
     attendanceStatus?: boolean;
   };
-  type: "participant" | "volunteers";
+  type: "participants" | "volunteers";
 }
 
 export function UserDetailsCard({

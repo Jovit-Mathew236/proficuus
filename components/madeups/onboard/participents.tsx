@@ -113,7 +113,7 @@ export default function OnboardParticipants() {
         isOpen={showUserDetails}
         onClose={() => setShowUserDetails(false)}
         userDetails={userDetails!}
-        type="participant"
+        type="participants"
       />
     </main>
   );

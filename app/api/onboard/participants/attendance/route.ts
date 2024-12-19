@@ -6,6 +6,7 @@ import {
   where,
   getDocs,
   updateDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 
@@ -54,37 +55,52 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const encoder = new TextEncoder();
+
   try {
-    // Query the participants collection where attendanceStatus is true
-    const participantsRef = collection(db, "participants");
-    const q = query(participantsRef, where("attendanceStatus", "==", true));
-    const querySnapshot = await getDocs(q);
+    // Create a ReadableStream for SSE
+    const stream = new ReadableStream({
+      start(controller) {
+        // Query the participants collection where attendanceStatus is true
+        const participantsRef = collection(db, "participants");
+        const q = query(participantsRef, where("attendanceStatus", "==", true));
 
-    if (querySnapshot.empty) {
-      return NextResponse.json(
-        { message: "No attendees found" },
-        { status: 404 }
-      );
-    }
+        // Set up real-time listener
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+          const attendees = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
 
-    // Map the documents to an array of user data
-    const attendees = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+          // Send the data as a SSE event
+          const data = `data: ${JSON.stringify({ attendees })}\n\n`;
+          controller.enqueue(encoder.encode(data));
+        });
 
+        // Clean up listener when the connection closes
+        request.signal.addEventListener("abort", () => {
+          unsubscribe();
+        });
+      },
+    });
+
+    // Return the stream as a Server-Sent Events response
+    return new Response(stream, {
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        Connection: "keep-alive",
+      },
+    });
+  } catch (error) {
+    console.error("Error setting up real-time connection:", error);
     return NextResponse.json(
       {
-        message: "Attendees fetched successfully",
-        attendees,
+        message: `Error setting up real-time connection: ${
+          (error as Error).message
+        }`,
       },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Error fetching attendees:", error);
-    return NextResponse.json(
-      { message: `Error fetching attendees: ${(error as Error).message}` },
       { status: 500 }
     );
   }

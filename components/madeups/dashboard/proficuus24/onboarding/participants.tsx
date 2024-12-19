@@ -148,22 +148,30 @@ const ConfirmedParticipants = () => {
   ];
 
   useEffect(() => {
-    const fetchAttendees = async () => {
+    const eventSource = new EventSource("/api/onboard/participants/attendance");
+
+    eventSource.onmessage = (event) => {
       try {
-        const response = await fetch("/api/onboard/participants/attendance");
-        if (!response.ok) {
-          throw new Error("Failed to fetch attendees");
-        }
-        const data = await response.json();
+        const data = JSON.parse(event.data);
         setAttendees(data.attendees);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
+        setLoading(false);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (err: any) {
+        setError("Failed to parse attendees data" + (err as Error).message);
         setLoading(false);
       }
     };
 
-    fetchAttendees();
+    eventSource.onerror = () => {
+      setError("Failed to connect to server");
+      setLoading(false);
+      eventSource.close();
+    };
+
+    // Cleanup function to close the SSE connection
+    return () => {
+      eventSource.close();
+    };
   }, []);
 
   const handlePaymentStatus = async (attendee: Attendee) => {
