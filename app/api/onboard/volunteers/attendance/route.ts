@@ -53,3 +53,39 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    // Query the participants collection where attendanceStatus is true
+    const participantsRef = collection(db, "volunteers");
+    const q = query(participantsRef, where("attendanceStatus", "==", true));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      return NextResponse.json(
+        { message: "No attendees found" },
+        { status: 404 }
+      );
+    }
+
+    // Map the documents to an array of user data
+    const attendees = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return NextResponse.json(
+      {
+        message: "Attendees fetched successfully",
+        attendees,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error fetching attendees:", error);
+    return NextResponse.json(
+      { message: `Error fetching attendees: ${(error as Error).message}` },
+      { status: 500 }
+    );
+  }
+}

@@ -9,6 +9,7 @@ import {
   ShieldPlus,
   User2,
   Users,
+  UserPlus,
 } from "lucide-react";
 
 import {
@@ -36,6 +37,11 @@ import { ModeToggle } from "./theme-mode";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 import { usePathname, useRouter } from "next/navigation";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./ui/collapsible";
 
 // List of events
 const events = [
@@ -59,6 +65,20 @@ const eventMenuItems = [
     title: "Home",
     url: "/dashboard/proficuus24",
     icon: Home,
+  },
+  {
+    title: "Onboarding",
+    icon: UserPlus,
+    items: [
+      {
+        title: "Participants",
+        url: "/dashboard/proficuus24/onboarding/participants",
+      },
+      {
+        title: "Volunteers",
+        url: "/dashboard/proficuus24/onboarding/volunteers",
+      },
+    ],
   },
   {
     title: "Volunteers",
@@ -87,7 +107,7 @@ export function AppSidebar() {
   };
   const handleClick = (item: (typeof eventMenuItems)[number]) => {
     // Navigate to the desired URL
-    router.push(item.url);
+    router.push(item.url ?? "");
 
     // Toggle the sidebar if the screen width is less than 768px
     if (window.innerWidth < 768) {
@@ -140,18 +160,57 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {eventMenuItems
-                .filter((item) => {
-                  return item.url.split("/")[2] === pathname.split("/")[2];
-                })
+                .filter(
+                  (item) =>
+                    item.url?.split("/")[2] === pathname.split("/")[2] ||
+                    !item.url
+                )
                 .map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={pathname === item.url}>
-                      {/* Use an arrow function to pass the item parameter */}
-                      <button onClick={() => handleClick(item)}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </button>
-                    </SidebarMenuButton>
+                    {item.items ? (
+                      // New collapsible implementation
+                      <Collapsible
+                        defaultOpen
+                        className="group/collapsible w-full"
+                      >
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton>
+                            <item.icon />
+                            <span>{item.title}</span>
+                            <ChevronDown className="ml-auto transition-transform duration-150 group-data-[state=open]/collapsible:rotate-180" />
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <SidebarMenu className="pl-4 mt-1">
+                            {item.items.map((subItem) => (
+                              <SidebarMenuItem key={subItem.title}>
+                                <SidebarMenuButton
+                                  asChild
+                                  isActive={pathname === subItem.url}
+                                >
+                                  <button
+                                    onClick={() => router.push(subItem.url)}
+                                  >
+                                    <span>{subItem.title}</span>
+                                  </button>
+                                </SidebarMenuButton>
+                              </SidebarMenuItem>
+                            ))}
+                          </SidebarMenu>
+                        </CollapsibleContent>
+                      </Collapsible>
+                    ) : (
+                      // Existing code for regular menu items
+                      <SidebarMenuButton
+                        asChild
+                        isActive={pathname === item.url}
+                      >
+                        <button onClick={() => handleClick(item)}>
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </button>
+                      </SidebarMenuButton>
+                    )}
                   </SidebarMenuItem>
                 ))}
             </SidebarMenu>

@@ -282,7 +282,11 @@ export function VolunteerDashboard() {
         <div>{row.getValue("isCoordinator") ? "Yes" : "No"}</div>
       ),
     },
-
+    // {
+    //   accessorKey: "imageUrl",
+    //   header: () => <div>Profile image</div>,
+    //   cell: ({ row }) => <div>{row.getValue("imageUrl")}</div>,
+    // },
     {
       id: "actions",
       cell: ({ row }) => {
