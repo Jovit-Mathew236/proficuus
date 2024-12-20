@@ -10,7 +10,8 @@ import { db } from "@/lib/firebase/config";
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, paymentStatus, paymentAmount } = await request.json();
+    const { email, paymentStatus, paymentAmount, remarks } =
+      await request.json();
 
     if (!email || paymentStatus === undefined || !paymentAmount) {
       return NextResponse.json(
@@ -33,10 +34,21 @@ export async function POST(request: NextRequest) {
 
     // Update the first matching document
     const participantDoc = querySnapshot.docs[0];
-    await updateDoc(participantDoc.ref, {
+    const updateData: {
+      paymentStatus: boolean;
+      paymentAmount: number;
+      remarks?: string;
+    } = {
       paymentStatus,
       paymentAmount,
-    });
+    };
+
+    // Only add remarks if it's provided
+    if (remarks !== undefined) {
+      updateData.remarks = remarks;
+    }
+
+    await updateDoc(participantDoc.ref, updateData);
 
     return NextResponse.json(
       {

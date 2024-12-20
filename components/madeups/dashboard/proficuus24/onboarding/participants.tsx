@@ -26,6 +26,13 @@ import { CaretSortIcon } from "@radix-ui/react-icons";
 import { toast } from "@/hooks/use-toast";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import { FileSpreadsheet } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontal } from "lucide-react";
 
 type Attendee = {
   name: string;
@@ -37,6 +44,98 @@ type Attendee = {
   paymentStatus?: boolean;
   paymentAmount?: number;
   uid: string;
+  remarks?: string;
+};
+
+const PaymentCell = ({
+  attendee,
+  onPaymentUpdate,
+}: {
+  attendee: Attendee;
+  onPaymentUpdate: (attendee: Attendee, amount: number) => void;
+}) => {
+  const [localAmount, setLocalAmount] = useState<number | "">(
+    attendee.paymentAmount || 800
+  );
+  const [isEditing, setIsEditing] = useState(false);
+
+  if (attendee.paymentStatus && !isEditing) {
+    return (
+      <div className="flex items-center gap-2">
+        <Button variant="secondary" disabled>
+          Paid ₹{attendee.paymentAmount}
+        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setIsEditing(true)}>
+              Edit Payment
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <Input
+        type="number"
+        value={localAmount}
+        onChange={(e) =>
+          setLocalAmount(e.target.value === "" ? "" : Number(e.target.value))
+        }
+        className="w-24"
+        placeholder="Amount"
+      />
+      <Button
+        variant="default"
+        onClick={() => {
+          onPaymentUpdate(attendee, Number(localAmount) || 0);
+          setIsEditing(false);
+        }}
+      >
+        {isEditing ? "Update" : "Mark as Paid"}
+      </Button>
+      {isEditing && (
+        <Button variant="ghost" onClick={() => setIsEditing(false)}>
+          Cancel
+        </Button>
+      )}
+    </div>
+  );
+};
+
+const RemarksCell = ({
+  attendee,
+  onRemarksUpdate,
+}: {
+  attendee: Attendee;
+  onRemarksUpdate: (attendee: Attendee, remarks: string) => void;
+}) => {
+  const [remarks, setRemarks] = useState(attendee.remarks || "");
+
+  return (
+    <div className="flex items-center gap-2">
+      <Input
+        value={remarks}
+        onChange={(e) => setRemarks(e.target.value)}
+        className="w-40"
+        placeholder="Add remarks"
+      />
+      <Button
+        variant="outline"
+        onClick={() => onRemarksUpdate(attendee, remarks)}
+        size="sm"
+      >
+        Save
+      </Button>
+    </div>
+  );
 };
 
 const ConfirmedParticipants = () => {
@@ -47,7 +146,6 @@ const ConfirmedParticipants = () => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [paymentAmount, setPaymentAmount] = useState<number>(800);
   const [activeFilter, setActiveFilter] = useState<"name" | "collage" | "zone">(
     "name"
   );
@@ -122,28 +220,22 @@ const ConfirmedParticipants = () => {
     {
       id: "actions",
       header: () => <div>Actions</div>,
-      cell: ({ row }) => {
-        const attendee = row.original;
-        return (
-          <div className="flex items-center gap-2">
-            <Input
-              type="number"
-              value={paymentAmount}
-              onChange={(e) => setPaymentAmount(Number(e.target.value))}
-              className="w-24"
-              placeholder="Amount"
-              disabled={attendee.paymentStatus}
-            />
-            <Button
-              variant={attendee.paymentStatus ? "secondary" : "default"}
-              onClick={() => handlePaymentStatus(attendee)}
-              disabled={attendee.paymentStatus}
-            >
-              {attendee.paymentStatus ? "Paid" : "Mark as Paid"}
-            </Button>
-          </div>
-        );
-      },
+      cell: ({ row }) => (
+        <PaymentCell
+          attendee={row.original}
+          onPaymentUpdate={handlePaymentStatus}
+        />
+      ),
+    },
+    {
+      accessorKey: "remarks",
+      header: () => <div>Remarks</div>,
+      cell: ({ row }) => (
+        <RemarksCell
+          attendee={row.original}
+          onRemarksUpdate={handleRemarksUpdate}
+        />
+      ),
     },
   ];
 
@@ -168,13 +260,12 @@ const ConfirmedParticipants = () => {
       eventSource.close();
     };
 
-    // Cleanup function to close the SSE connection
     return () => {
       eventSource.close();
     };
   }, []);
 
-  const handlePaymentStatus = async (attendee: Attendee) => {
+  const handlePaymentStatus = async (attendee: Attendee, amount: number) => {
     try {
       const response = await fetch("/api/onboard/participants/payment", {
         method: "POST",
@@ -184,7 +275,8 @@ const ConfirmedParticipants = () => {
         body: JSON.stringify({
           email: attendee.email,
           paymentStatus: true,
-          paymentAmount: paymentAmount,
+          paymentAmount: amount,
+          remarks: attendee.remarks,
         }),
       });
 
@@ -195,7 +287,7 @@ const ConfirmedParticipants = () => {
       setAttendees((prev) =>
         prev.map((p) =>
           p.email === attendee.email
-            ? { ...p, paymentStatus: true, paymentAmount: paymentAmount }
+            ? { ...p, paymentStatus: true, paymentAmount: amount }
             : p
         )
       );
@@ -211,6 +303,46 @@ const ConfirmedParticipants = () => {
       toast({
         title: "Error",
         description: "Failed to update payment status",
+        variant: "destructive",
+        duration: 2000,
+      });
+    }
+  };
+
+  const handleRemarksUpdate = async (attendee: Attendee, remarks: string) => {
+    try {
+      const response = await fetch("/api/onboard/participants/payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: attendee.email,
+          paymentStatus: attendee.paymentStatus || false,
+          paymentAmount: attendee.paymentAmount || 0,
+          remarks: remarks,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update remarks");
+      }
+
+      setAttendees((prev) =>
+        prev.map((p) => (p.email === attendee.email ? { ...p, remarks } : p))
+      );
+
+      toast({
+        title: "Success",
+        description: "Remarks updated successfully",
+        variant: "default",
+        duration: 2000,
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "Failed to update remarks",
         variant: "destructive",
         duration: 2000,
       });
