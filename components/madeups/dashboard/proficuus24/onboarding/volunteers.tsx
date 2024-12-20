@@ -240,28 +240,32 @@ const ConfirmedVolunteers = () => {
   ];
 
   useEffect(() => {
-    const eventSource = new EventSource("/api/onboard/volunteers/attendance");
-
-    eventSource.onmessage = (event) => {
+    const fetchAttendees = async () => {
       try {
-        const data = JSON.parse(event.data);
+        const response = await fetch("/api/onboard/volunteers/attendance");
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to fetch attendees");
+        }
+
         setAttendees(data.attendees);
         setLoading(false);
       } catch (err) {
-        setError("Failed to parse attendees data: " + (err as Error).message);
+        setError("Failed to fetch attendees: " + (err as Error).message);
         setLoading(false);
       }
     };
 
-    eventSource.onerror = () => {
-      setError("Failed to connect to server");
-      setLoading(false);
-      eventSource.close();
-    };
+    // Initial fetch
+    fetchAttendees();
 
-    // Cleanup function to close the SSE connection
+    // Set up polling every 5 seconds
+    const intervalId = setInterval(fetchAttendees, 5000);
+
+    // Cleanup function
     return () => {
-      eventSource.close();
+      clearInterval(intervalId);
     };
   }, []);
 
