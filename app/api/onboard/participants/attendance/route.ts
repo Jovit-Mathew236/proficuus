@@ -62,6 +62,14 @@ export async function GET(request: NextRequest) {
     // Create a ReadableStream for SSE
     const stream = new ReadableStream({
       start(controller) {
+        // Send initial heartbeat
+        controller.enqueue(encoder.encode(": heartbeat\n\n"));
+
+        // Set up heartbeat interval
+        const heartbeat = setInterval(() => {
+          controller.enqueue(encoder.encode(": heartbeat\n\n"));
+        }, 30000); // Send heartbeat every 30 seconds
+
         // Query the participants collection where attendanceStatus is true
         const participantsRef = collection(db, "participants");
         const q = query(participantsRef, where("attendanceStatus", "==", true));
@@ -80,6 +88,7 @@ export async function GET(request: NextRequest) {
 
         // Clean up listener when the connection closes
         request.signal.addEventListener("abort", () => {
+          clearInterval(heartbeat);
           unsubscribe();
         });
       },
@@ -91,6 +100,8 @@ export async function GET(request: NextRequest) {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         Connection: "keep-alive",
+        "Access-Control-Allow-Origin": "*",
+        "X-Accel-Buffering": "no", // Disable Nginx buffering
       },
     });
   } catch (error) {

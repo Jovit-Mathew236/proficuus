@@ -240,28 +240,79 @@ const ConfirmedParticipants = () => {
   ];
 
   useEffect(() => {
-    const eventSource = new EventSource("/api/onboard/participants/attendance");
+    let eventSource: EventSource | null = null;
+    let pollingInterval: NodeJS.Timeout | null = null;
+    const POLLING_INTERVAL = 5000; // 5 seconds
 
-    eventSource.onmessage = (event) => {
+    // Function to fetch data using regular HTTP request
+    const fetchData = async () => {
       try {
-        const data = JSON.parse(event.data);
+        const response = await fetch(
+          "/api/onboard/participants/attendance/poll"
+        );
+        if (!response.ok) throw new Error("HTTP Error");
+        const data = await response.json();
         setAttendees(data.attendees);
         setLoading(false);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: any) {
-        setError("Failed to parse attendees data" + (err as Error).message);
-        setLoading(false);
+        setError(null);
+      } catch (err) {
+        console.error("Polling error:", err);
+        setError("Connection issues - Retrying...");
       }
     };
 
-    eventSource.onerror = () => {
-      setError("Failed to connect to server");
-      setLoading(false);
-      eventSource.close();
+    // Try SSE first
+    const connectSSE = () => {
+      try {
+        eventSource = new EventSource("/api/onboard/participants/attendance");
+
+        eventSource.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            setAttendees(data.attendees);
+            setLoading(false);
+            setError(null);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          } catch (err) {
+            fallbackToPolling();
+          }
+        };
+
+        eventSource.onerror = () => {
+          fallbackToPolling();
+        };
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (err) {
+        fallbackToPolling();
+      }
     };
 
+    // Fallback to polling if SSE fails
+    const fallbackToPolling = () => {
+      if (eventSource) {
+        eventSource.close();
+        eventSource = null;
+      }
+
+      // Initial fetch
+      fetchData();
+
+      // Set up polling
+      if (!pollingInterval) {
+        pollingInterval = setInterval(fetchData, POLLING_INTERVAL);
+      }
+    };
+
+    // Start with SSE
+    connectSSE();
+
     return () => {
-      eventSource.close();
+      if (eventSource) {
+        eventSource.close();
+      }
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+      }
     };
   }, []);
 
