@@ -17,7 +17,6 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -40,6 +39,7 @@ type Attendee = {
   phone: string;
   collage: string;
   zone: string;
+  year: string;
   attendanceStatus: boolean;
   paymentStatus?: boolean;
   paymentAmount?: number;
@@ -146,9 +146,9 @@ const ConfirmedParticipants = () => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [activeFilter, setActiveFilter] = useState<"name" | "collage" | "zone">(
-    "name"
-  );
+  const [activeFilter, setActiveFilter] = useState<
+    "name" | "collage" | "zone" | "year"
+  >("name");
   const tableRef = useRef(null);
 
   const columns: ColumnDef<Attendee>[] = [
@@ -200,6 +200,20 @@ const ConfirmedParticipants = () => {
         </Button>
       ),
       cell: ({ row }) => <div>{row.getValue("collage")}</div>,
+    },
+    {
+      accessorKey: "year",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          className="-ml-4"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Year
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => <div>{row.getValue("year")}</div>,
     },
     {
       accessorKey: "zone",
@@ -348,7 +362,6 @@ const ConfirmedParticipants = () => {
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     state: {
@@ -370,6 +383,7 @@ const ConfirmedParticipants = () => {
               setActiveFilter("name");
               table.getColumn("collage")?.setFilterValue("");
               table.getColumn("zone")?.setFilterValue("");
+              table.getColumn("year")?.setFilterValue("");
             }}
             className="flex-1 sm:flex-none"
           >
@@ -381,10 +395,23 @@ const ConfirmedParticipants = () => {
               setActiveFilter("collage");
               table.getColumn("name")?.setFilterValue("");
               table.getColumn("zone")?.setFilterValue("");
+              table.getColumn("year")?.setFilterValue("");
             }}
             className="flex-1 sm:flex-none"
           >
             By College
+          </Button>
+          <Button
+            variant={activeFilter === "year" ? "secondary" : "outline"}
+            onClick={() => {
+              setActiveFilter("year");
+              table.getColumn("name")?.setFilterValue("");
+              table.getColumn("collage")?.setFilterValue("");
+              table.getColumn("zone")?.setFilterValue("");
+            }}
+            className="flex-1 sm:flex-none"
+          >
+            By Year
           </Button>
           <Button
             variant={activeFilter === "zone" ? "secondary" : "outline"}
@@ -392,6 +419,7 @@ const ConfirmedParticipants = () => {
               setActiveFilter("zone");
               table.getColumn("name")?.setFilterValue("");
               table.getColumn("collage")?.setFilterValue("");
+              table.getColumn("year")?.setFilterValue("");
             }}
             className="flex-1 sm:flex-none"
           >
@@ -425,7 +453,7 @@ const ConfirmedParticipants = () => {
           </DownloadTableExcel>
         </div>
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border py-4">
         <Table ref={tableRef}>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -469,24 +497,6 @@ const ConfirmedParticipants = () => {
             )}
           </TableBody>
         </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
       </div>
     </div>
   );
