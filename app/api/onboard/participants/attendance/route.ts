@@ -6,7 +6,6 @@ import {
   where,
   getDocs,
   updateDoc,
-  onSnapshot,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 
@@ -55,62 +54,27 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
-  const encoder = new TextEncoder();
-
+export async function GET() {
   try {
-    // Create a ReadableStream for SSE
-    const stream = new ReadableStream({
-      start(controller) {
-        // Send initial heartbeat
-        controller.enqueue(encoder.encode(": heartbeat\n\n"));
+    // Query the participants collection where attendanceStatus is true
+    const participantsRef = collection(db, "participants");
+    const q = query(participantsRef, where("attendanceStatus", "==", true));
 
-        // Set up heartbeat interval
-        const heartbeat = setInterval(() => {
-          controller.enqueue(encoder.encode(": heartbeat\n\n"));
-        }, 30000); // Send heartbeat every 30 seconds
+    // Get documents once instead of setting up a real-time listener
+    const querySnapshot = await getDocs(q);
 
-        // Query the participants collection where attendanceStatus is true
-        const participantsRef = collection(db, "participants");
-        const q = query(participantsRef, where("attendanceStatus", "==", true));
+    const attendees = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
-        // Set up real-time listener
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-          const attendees = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-
-          // Send the data as a SSE event
-          const data = `data: ${JSON.stringify({ attendees })}\n\n`;
-          controller.enqueue(encoder.encode(data));
-        });
-
-        // Clean up listener when the connection closes
-        request.signal.addEventListener("abort", () => {
-          clearInterval(heartbeat);
-          unsubscribe();
-        });
-      },
-    });
-
-    // Return the stream as a Server-Sent Events response
-    return new Response(stream, {
-      headers: {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        Connection: "keep-alive",
-        "Access-Control-Allow-Origin": "*",
-        "X-Accel-Buffering": "no", // Disable Nginx buffering
-      },
-    });
+    // Return regular JSON response instead of SSE
+    return NextResponse.json({ attendees }, { status: 200 });
   } catch (error) {
-    console.error("Error setting up real-time connection:", error);
+    console.error("Error fetching attendees:", error);
     return NextResponse.json(
       {
-        message: `Error setting up real-time connection: ${
-          (error as Error).message
-        }`,
+        message: `Error fetching attendees: ${(error as Error).message}`,
       },
       { status: 500 }
     );

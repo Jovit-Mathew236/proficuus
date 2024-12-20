@@ -240,80 +240,22 @@ const ConfirmedParticipants = () => {
   ];
 
   useEffect(() => {
-    let eventSource: EventSource | null = null;
-    let pollingInterval: NodeJS.Timeout | null = null;
-    const POLLING_INTERVAL = 5000; // 5 seconds
-
-    // Function to fetch data using regular HTTP request
-    const fetchData = async () => {
+    const fetchAttendees = async () => {
       try {
-        const response = await fetch(
-          "/api/onboard/participants/attendance/poll"
-        );
-        if (!response.ok) throw new Error("HTTP Error");
+        const response = await fetch("/api/onboard/participants/attendance");
+        if (!response.ok) {
+          throw new Error("Failed to fetch attendees");
+        }
         const data = await response.json();
         setAttendees(data.attendees);
         setLoading(false);
-        setError(null);
       } catch (err) {
-        console.error("Polling error:", err);
-        setError("Connection issues - Retrying...");
+        setError("Failed to fetch attendees: " + (err as Error).message);
+        setLoading(false);
       }
     };
 
-    // Try SSE first
-    const connectSSE = () => {
-      try {
-        eventSource = new EventSource("/api/onboard/participants/attendance");
-
-        eventSource.onmessage = (event) => {
-          try {
-            const data = JSON.parse(event.data);
-            setAttendees(data.attendees);
-            setLoading(false);
-            setError(null);
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          } catch (err) {
-            fallbackToPolling();
-          }
-        };
-
-        eventSource.onerror = () => {
-          fallbackToPolling();
-        };
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (err) {
-        fallbackToPolling();
-      }
-    };
-
-    // Fallback to polling if SSE fails
-    const fallbackToPolling = () => {
-      if (eventSource) {
-        eventSource.close();
-        eventSource = null;
-      }
-
-      // Initial fetch
-      fetchData();
-
-      // Set up polling
-      if (!pollingInterval) {
-        pollingInterval = setInterval(fetchData, POLLING_INTERVAL);
-      }
-    };
-
-    // Start with SSE
-    connectSSE();
-
-    return () => {
-      if (eventSource) {
-        eventSource.close();
-      }
-      if (pollingInterval) {
-        clearInterval(pollingInterval);
-      }
-    };
+    fetchAttendees();
   }, []);
 
   const handlePaymentStatus = async (attendee: Attendee, amount: number) => {
